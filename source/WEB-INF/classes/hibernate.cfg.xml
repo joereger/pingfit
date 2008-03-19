@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+
+        <mapping resource="com/pingfit/dao/Balance.hbm.xml" />
+        <mapping resource="com/pingfit/dao/Balancetransaction.hbm.xml" />
+        <mapping resource="com/pingfit/dao/Betainvite.hbm.xml" />
+
+        <mapping resource="com/pingfit/dao/Blogpost.hbm.xml" />
+        <mapping resource="com/pingfit/dao/Blogpostcomment.hbm.xml" />
+
+        <mapping resource="com/pingfit/dao/Creditcard.hbm.xml" />
+
+        <mapping resource="com/pingfit/dao/Error.hbm.xml" />
+        <mapping resource="com/pingfit/dao/Eula.hbm.xml" />
+        <mapping resource="com/pingfit/dao/Exercise.hbm.xml" />
+        <mapping resource="com/pingfit/dao/Facebookpendingreferredby.hbm.xml" />
+
+        <mapping resource="com/pingfit/dao/Massemail.hbm.xml" />
+        <mapping resource="com/pingfit/dao/Pageperformance.hbm.xml" />
+        <mapping resource="com/pingfit/dao/Pingback.hbm.xml" />
+        <mapping resource="com/pingfit/dao/Supportissue.hbm.xml" />
+        <mapping resource="com/pingfit/dao/Supportissuecomm.hbm.xml" />
+        
+        <mapping resource="com/pingfit/dao/Systemprop.hbm.xml" />
+        <mapping resource="com/pingfit/dao/User.hbm.xml" />
+        <mapping resource="com/pingfit/dao/Usereula.hbm.xml" />
+        <mapping resource="com/pingfit/dao/Userpersistentlogin.hbm.xml" />
+        <mapping resource="com/pingfit/dao/Userrole.hbm.xml" />
+
+    </session-factory>
+</hibernate-configuration>
