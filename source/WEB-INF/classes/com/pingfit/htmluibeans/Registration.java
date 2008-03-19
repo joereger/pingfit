@@ -21,6 +21,7 @@ import com.pingfit.helpers.UserInputSafe;
 import com.pingfit.facebook.FacebookPendingReferrals;
 import com.pingfit.cache.providers.CacheFactory;
 import com.pingfit.api.SaveCompletedExercisesFromMemory;
+import com.pingfit.exercisechoosers.ExerciseChooserRandom;
 import com.octo.captcha.service.CaptchaServiceException;
 
 import javax.servlet.http.Cookie;
@@ -146,6 +147,11 @@ public class Registration implements Serializable {
         user.setIsenabled(true);
         user.setFacebookappremoveddate(new Date());
         user.setIsfacebookappremoved(false);
+        user.setNextexercisetime(new Date());
+        user.setUpcomingexercises("1");
+        user.setExerciseeveryxminutes(20);
+        ExerciseChooserRandom rnd = new ExerciseChooserRandom();
+        user.setExercisechooserid(rnd.getId());
         try{
             user.save();
             userid = user.getUserid();

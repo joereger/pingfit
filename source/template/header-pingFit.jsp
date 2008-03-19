@@ -31,6 +31,15 @@
 
 <table width="786" cellspacing="0" border="0" cellpadding="0">
     <tr>
+        <td valign="top" bgcolor="#0000ff">
+            <img src="/images/clear.gif" width="10" height="1" align="left"/>
+            <font class="largefont" style="color: #ffffff">PRE-BETA</font>
+        </td>
+        <td valign="top" bgcolor="#0000ff">
+            <font class="smallfont" style="color: #ffffff; font-weight: bold;">This is PRE-BETA software.  It's highly experimental.  We welcome your usage.  Sign up, exercise, be healthy. Tell us what you think.  Your account may be deleted at any time.  We'll soon move to a real beta mode at which point features will change but your account won't.</font>
+        </td>
+    </tr>
+    <tr>
         <td valign="top">
             <img src="/images/clear.gif" width="10" height="1" align="left"/>
             <a href="/"><img src="/images/pingfit-logo.gif" border="0" align="left"/></a>

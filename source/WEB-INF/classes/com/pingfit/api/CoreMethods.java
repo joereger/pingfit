@@ -61,7 +61,7 @@ public class CoreMethods {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
             //Add the correct number of minutes
-            Calendar nexttime = Time.xMinutesAgoStart(Calendar.getInstance(), (-1)*exerciser.getExerciseeveryxminutes());
+            Calendar nexttime = Time.xMinutesAgo(Calendar.getInstance(), (-1)*exerciser.getExerciseeveryxminutes());
             exerciser.setNextexercisetime(nexttime);
             //Store in db if there's a user
             if (exerciser.getUserid()>0){
@@ -116,6 +116,7 @@ public class CoreMethods {
                 //Find the next exercise using the ExerciseChooser infrastructure
                 int nextexercise = ((ExerciseChooser)ExerciseChooserFactory.get(exercisechooserid)).getNextExercise(exerciser);
                 //Add to arraylist
+                logger.debug("adding one exercise: nextexercise = "+nextexercise);
                 upcomingexercises.add(nextexercise);
                 //See if we now have enough
                 if (upcomingexercises.size()>=numberofupcomingtostore){

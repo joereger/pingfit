@@ -10,6 +10,8 @@
 <%@ page import="com.pingfit.api.CompletedExercise" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.Iterator" %>
+<%@ page import="java.util.Date" %>
+<%@ page import="java.util.Calendar" %>
 
 <%
 Logger logger = Logger.getLogger(this.getClass().getName());
@@ -90,7 +92,7 @@ String acl = "public";
 
 <table cellpadding="5" cellspacing="0" border="0" width="100%">
         <tr>
-            <td valign="top" width="100">
+            <td valign="top">
                 <div class="rounded" style="padding: 5px; margin: 5px; background: #cccccc;">
                     <div class="rounded" style="padding: 15px; margin: 15px; background: #cccccc;">
                         <center><font class="formfieldnamefont" style="color: #e6e6e6;">Upcoming Exercises</font></center>
@@ -107,9 +109,14 @@ String acl = "public";
                             <%--<font class="largefont" style="font-size: 35px; color: #996699;">--%>
                                 <%--<span id="countdown1"><%=AjaxExercisePage.getNextExerciseTimeFormattedForCountdownJavascript(Pagez.getUserSession().getExerciser())%></span>--%>
                             <%--</font>--%>
-                            <div id="countdowncontainer" class="largefont" style="font-size: 60px; color: #996699;"></div>
+                            <%
+                                Calendar now = Calendar.getInstance();
+                                Calendar nextEx = Pagez.getUserSession().getExerciser().getNextexercisetime();
+                                double secondsuntilnextexercise = (nextEx.getTimeInMillis() - now.getTimeInMillis())/1000;
+                            %>
+                            <div id="countdowncontainer" class="largefont" style="font-size: 50px; color: #996699;"></div>
                             <script type="text/javascript">
-                            var futuredate=new cdtime("countdowncontainer", "<%=Time.dateformatmonthdayyearmiltime(Pagez.getUserSession().getExerciser().getNextexercisetime())%>")
+                            var futuredate=new cdtime("countdowncontainer", <%=String.valueOf(secondsuntilnextexercise)%>)
                             futuredate.displaycountdown("minutes", formatresults)
                             </script>
                         </center>
@@ -147,7 +154,7 @@ String acl = "public";
                     <img src="/images/clear.gif" alt="" width="1" height="5"/>
                     <div class="rounded" style="padding: 10px; margin: 5px; background: #e6e6e6;">
                         <form action="/index.jsp" method="post">
-                            <input type="hidden" name="action" value="completeexercise">
+                            <input type="hidden" name="action" value="skipexercise">
                             <center>
                             <input type="submit" class="formsubmitbutton" value="Skip this Exercise" style="font-size: 10px;">
                             </center>

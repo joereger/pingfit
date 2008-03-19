@@ -555,6 +555,15 @@ public class Time {
         return outCal;
     }
 
+    public static Calendar xMinutesAgo(Calendar indate, int minutesago){
+        Calendar outCal = (Calendar) indate.clone();
+
+        //Subtract the months
+        outCal.add(Calendar.MINUTE, (-1*minutesago));
+
+        return outCal;
+    }
+
     /**
      * Returns a calendar set to the latest time x minutes ago.  Send minutesago=0 for this minute
      */

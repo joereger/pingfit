@@ -10,7 +10,7 @@ String acl = "sysadmin";
 <%@ include file="/template/auth.jsp" %>
 <%
 SysadminInstanceProps sysadminInstanceProps = (SysadminInstanceProps)Pagez.getBeanMgr().get("SysadminInstanceProps");
-%>
+%>                 
 <%
     if (request.getParameter("action") != null && request.getParameter("action").equals("save")) {
         try {
@@ -20,7 +20,7 @@ SysadminInstanceProps sysadminInstanceProps = (SysadminInstanceProps)Pagez.getBe
             sysadminInstanceProps.setDbMaxIdle(Textbox.getValueFromRequest("dbMaxIdle", "dbMaxIdle", true, DatatypeString.DATATYPEID));
             sysadminInstanceProps.setDbMaxWait(Textbox.getValueFromRequest("dbMaxWait", "dbMaxWait", true, DatatypeString.DATATYPEID));
             sysadminInstanceProps.setDbMinIdle(Textbox.getValueFromRequest("dbMinIdle", "dbMinIdle", true, DatatypeString.DATATYPEID));
-            sysadminInstanceProps.setDbPassword(Textbox.getValueFromRequest("dbPassword", "dbPassword", true, DatatypeString.DATATYPEID));
+            sysadminInstanceProps.setDbPassword(TextboxSecret.getValueFromRequest("dbPassword", "dbPassword", true, DatatypeString.DATATYPEID));
             sysadminInstanceProps.setDbUsername(Textbox.getValueFromRequest("dbUsername", "dbUsername", true, DatatypeString.DATATYPEID));
             sysadminInstanceProps.setInstancename(Textbox.getValueFromRequest("instancename", "instancename", true, DatatypeString.DATATYPEID));
             sysadminInstanceProps.setRunScheduledTasksOnThisInstance(Textbox.getValueFromRequest("runScheduledTasksOnThisInstance", "runScheduledTasksOnThisInstance", true, DatatypeString.DATATYPEID));
@@ -72,7 +72,7 @@ SysadminInstanceProps sysadminInstanceProps = (SysadminInstanceProps)Pagez.getBe
                     <font class="formfieldnamefont">dbPassword</font>
                 </td>
                 <td valign="top">
-                    <%=Textbox.getHtml("dbPassword", sysadminInstanceProps.getDbPassword(), 255, 35, "", "")%>
+                    <%=TextboxSecret.getHtml("dbPassword", sysadminInstanceProps.getDbPassword(), 255, 35, "", "")%>
                 </td>
             </tr>
 
