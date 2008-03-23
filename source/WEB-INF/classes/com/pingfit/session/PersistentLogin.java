@@ -31,7 +31,7 @@ import org.apache.log4j.Logger;
 public class PersistentLogin {
 
     public static int daysToKeepPersistentRecordWithoutLogin = 365;
-    public static String cookieName = "keepmeloggedintodneero";
+    public static String cookieName = "keepmeloggedintopingfit";
 
 
     public static int checkPersistentLogin(javax.servlet.http.Cookie cookie){
@@ -84,7 +84,7 @@ public class PersistentLogin {
         if (!domainToSetCookieOn.equals("")){
             userCookie.setDomain("."+domainToSetCookieOn);
         }
-        //@todo implement sslison system property
+        //Implement sslison system property
         if (SystemProperty.getProp("PROP_SSLISON").equals("1")){
             userCookie.setSecure(true);
         }

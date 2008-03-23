@@ -109,6 +109,7 @@ public class Login implements Serializable {
                     Cookie[] cookies = PersistentLogin.getPersistentCookies(user.getUserid(), Pagez.getRequest());
                     //Add a cookies to the response
                     for (int j = 0; j < cookies.length; j++) {
+                        logger.debug("Setting persistent login cookie name="+cookies[j].getName()+" value="+cookies[j].getValue());
                         Pagez.getResponse().addCookie(cookies[j]);
                     }
                 }

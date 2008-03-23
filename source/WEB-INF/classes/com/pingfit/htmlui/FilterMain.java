@@ -118,6 +118,8 @@ public class FilterMain implements Filter {
                         if (cookies!=null && cookies.length>0){
                             logger.debug("cookies found.");
                             for (int i = 0; i < cookies.length; i++) {
+                                logger.debug("cookies[i].getName()="+cookies[i].getName());
+                                logger.debug("cookies[i].getValue()="+cookies[i].getValue());
                                 if (cookies[i].getName().equals(PersistentLogin.cookieName)){
                                     logger.debug("persistent cookie found.");
                                     int useridFromCookie = PersistentLogin.checkPersistentLogin(cookies[i]);

@@ -12,7 +12,7 @@
 <%@ page import="com.pingfit.util.Num" %>
 <%
 Logger logger = Logger.getLogger(this.getClass().getName());
-String pagetitle = "Exercises";
+String pagetitle = "Exercise";
 String navtab = "sysadmin";
 String acl = "sysadmin";
 %>

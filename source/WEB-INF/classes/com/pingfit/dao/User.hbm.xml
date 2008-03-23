@@ -82,8 +82,8 @@
         <property name="exerciselistid" type="int">
             <column name="exerciselistid" not-null="true" />
         </property>
-        <property name="currentexerciseid" type="int">
-            <column name="currentexerciseid" not-null="true" />
+        <property name="currentexercisenum" type="int">
+            <column name="currentexercisenum" not-null="true" />
         </property>
 
     </class>
