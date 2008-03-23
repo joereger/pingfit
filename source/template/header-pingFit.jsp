@@ -133,6 +133,8 @@
                     <a href="/sysadmin/hibernatecache.jsp"><font class="subnavfont" style=" color: #000000;">Cache</font></a>
                     <a href="/sysadmin/massemaillist.jsp"><font class="subnavfont" style=" color: #000000;">Email</font></a>
                     <a href="/sysadmin/pageperformance.jsp"><font class="subnavfont" style=" color: #000000;">Perf</font></a>
+                    <a href="/sysadmin/exerciselist.jsp"><font class="subnavfont" style=" color: #000000;">Exercises</font></a>
+                    <a href="/sysadmin/exerciselistlist.jsp"><font class="subnavfont" style=" color: #000000;">Exercise Lists</font></a>
                     <a href="/sysadmin/blogpost.jsp"><font class="subnavfont" style=" color: #000000;">Blog</font></a>
                 <%}%>
             <%}%>

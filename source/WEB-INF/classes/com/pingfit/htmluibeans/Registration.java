@@ -152,6 +152,8 @@ public class Registration implements Serializable {
         user.setExerciseeveryxminutes(20);
         ExerciseChooserRandom rnd = new ExerciseChooserRandom();
         user.setExercisechooserid(rnd.getId());
+        user.setExerciselistid(1);
+        user.setCurrentexercisenum(1);
         try{
             user.save();
             userid = user.getUserid();

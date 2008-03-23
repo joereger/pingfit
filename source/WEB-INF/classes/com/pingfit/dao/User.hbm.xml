@@ -79,6 +79,12 @@
         <property name="exercisechooserid" type="int">
             <column name="exercisechooserid" not-null="true" />
         </property>
+        <property name="exerciselistid" type="int">
+            <column name="exerciselistid" not-null="true" />
+        </property>
+        <property name="currentexerciseid" type="int">
+            <column name="currentexerciseid" not-null="true" />
+        </property>
 
     </class>
 </hibernate-mapping>

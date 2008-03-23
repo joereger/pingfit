@@ -18,6 +18,8 @@ public class Exerciser {
     private Calendar exercisesessionstarted=Calendar.getInstance();
     private int exerciseeveryxminutes=20;
     private int exercisechooserid=1;
+    private int exerciselistid=1;
+    private int currentexercisenum=1;
 
 
     public int getUserid() {
@@ -82,5 +84,21 @@ public class Exerciser {
 
     public void setExercisechooserid(int exercisechooserid) {
         this.exercisechooserid = exercisechooserid;
+    }
+
+    public int getExerciselistid() {
+        return exerciselistid;
+    }
+
+    public void setExerciselistid(int exerciselistid) {
+        this.exerciselistid = exerciselistid;
+    }
+
+    public int getCurrentexercisenum() {
+        return currentexercisenum;
+    }
+
+    public void setCurrentexercisenum(int currentexercisenum) {
+        this.currentexercisenum = currentexercisenum;
     }
 }

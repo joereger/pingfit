@@ -20,27 +20,13 @@ String acl = "sysadmin";
 
     
 
-    <div class="rounded" style="padding: 15px; margin: 8px; background: #BFFFBF;">
+    <div class="rounded" style="padding: 15px; margin: 8px; background: #e6e6e6;">
         <%=sysadminIndex.getServermemory()%>
     </div>
 
-    <div class="rounded" style="padding: 15px; margin: 8px; background: #BFFFBF;">
-        <font class="normalfont"><b>Pending Balance:</b> </font>
-        <font class="normalfont"><%=Str.formatForMoney(systemStats.getSystembalance())%></font>
-        <br/><font class="tinyfont">The amount of accrued balance that users are holding.  A positive number means we are holding this much money for people.  But keep in mind that this also includes money for researchers who are running surveys.</font>
-        <br/><br/>
-        <font class="normalfont"><b>System Balance Real World:</b> </font>
-        <font class="normalfont"><%=Str.formatForMoney(systemStats.getSystembalancerealworld())%></font>
-        <br/><font class="tinyfont">Total real world money taken in and sent out.   A negative number means that dNeero has not collected all the money it has sent out... which shouldn't happen.</font>
-        <br/><br/>
-        <font class="normalfont"><b>System Overall Balance:</b> </font>
-        <font class="normalfont"><%=Str.formatForMoney(systemStats.getSystembalancetotal())%></font>
-        <br/><font class="tinyfont">Estimate of gross income.</font>
-    </div>
 
-    <div class="rounded" style="padding: 15px; margin: 8px; background: #BFFFBF;">
-        <%=sysadminIndex.getFinancialStatsHtml()%>
-    </div>
+
+
 
 
 

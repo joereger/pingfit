@@ -38,6 +38,8 @@ public class User extends BasePersistentClass implements java.io.Serializable, A
      private Date nextexercisetime;
      private String upcomingexercises;
      private int exercisechooserid;
+     private int exerciselistid;
+     private int currentexercisenum;
 
      //Association
     private Set<Userrole> userroles = new HashSet<Userrole>();
@@ -260,5 +262,21 @@ public class User extends BasePersistentClass implements java.io.Serializable, A
 
     public void setExercisechooserid(int exercisechooserid) {
         this.exercisechooserid = exercisechooserid;
+    }
+
+    public int getExerciselistid() {
+        return exerciselistid;
+    }
+
+    public void setExerciselistid(int exerciselistid) {
+        this.exerciselistid = exerciselistid;
+    }
+
+    public int getCurrentexercisenum() {
+        return currentexercisenum;
+    }
+
+    public void setCurrentexercisenum(int currentexercisenum) {
+        this.currentexercisenum = currentexercisenum;
     }
 }

@@ -22,6 +22,12 @@ public class NumFromUniqueResult {
                 }
             }catch(Exception ex){logger.error("",ex); return 0;}
         }
+        if (obj!=null && obj instanceof Integer){
+            try{
+                Integer integer =  (Integer)obj;
+                return integer;
+            }catch(Exception ex){logger.error("",ex); return 0;}
+        }
         return 0;
     }
 
