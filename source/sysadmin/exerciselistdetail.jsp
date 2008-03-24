@@ -31,11 +31,17 @@ String acl = "sysadmin";
 <%
     if (request.getParameter("action") != null && request.getParameter("action").equals("save")) {
         try {
+            boolean redirectToList = true;
+            if (exerciselist.getExerciselistid()==0){
+                redirectToList = false;
+            }
             exerciselist.setTitle(Textbox.getValueFromRequest("title", "Title", true, DatatypeString.DATATYPEID));
             exerciselist.setDescription(Textarea.getValueFromRequest("description", "Description", true));
             exerciselist.save();
             Pagez.getUserSession().setMessage("Exercise list saved.");
-            Pagez.sendRedirect("/sysadmin/exerciselistlist.jsp");
+            if (redirectToList){
+                Pagez.sendRedirect("/sysadmin/exerciselistlist.jsp");
+            }
         } catch (ValidationException vex) {
             Pagez.getUserSession().setMessage(vex.getErrorsAsSingleString());
         } catch (Exception ex){
@@ -139,29 +145,31 @@ String acl = "sysadmin";
             </form>
         </td>
         <td valign="top">
-            <div class="rounded" style="padding: 15px; margin: 8px; background: #e6e6e6;">
-                <form action="/sysadmin/exerciselistdetail.jsp" method="post">
-                    <input type="hidden" name="dpage" value="/sysadmin/exerciselistdetail.jsp">
-                    <input type="hidden" name="action" value="addexercisetolist">
-                    <input type="hidden" name="exerciselistid" value="<%=exerciselist.getExerciselistid()%>">
-                    <select name="exerciseid">
-                    <%
-                        List<Exercise> exercises = HibernateUtil.getSession().createCriteria(Exercise.class)
-                                .addOrder(Order.desc("exerciseid"))
-                                .setCacheable(true)
-                                .list();
-                        if (exercises != null || exercises.size() > 0) {
-                            for (Iterator<Exercise> iterator = exercises.iterator(); iterator.hasNext();) {
-                                Exercise exercise = iterator.next();
-                                %><option value="<%=exercise.getExerciseid()%>"><%=exercise.getTitle()%></option><%
+            <%if (exerciselist.getExerciselistid()>0){%>
+                <div class="rounded" style="padding: 15px; margin: 8px; background: #e6e6e6;">
+                    <form action="/sysadmin/exerciselistdetail.jsp" method="post">
+                        <input type="hidden" name="dpage" value="/sysadmin/exerciselistdetail.jsp">
+                        <input type="hidden" name="action" value="addexercisetolist">
+                        <input type="hidden" name="exerciselistid" value="<%=exerciselist.getExerciselistid()%>">
+                        <select name="exerciseid">
+                        <%
+                            List<Exercise> exercises = HibernateUtil.getSession().createCriteria(Exercise.class)
+                                    .addOrder(Order.desc("exerciseid"))
+                                    .setCacheable(true)
+                                    .list();
+                            if (exercises != null || exercises.size() > 0) {
+                                for (Iterator<Exercise> iterator = exercises.iterator(); iterator.hasNext();) {
+                                    Exercise exercise = iterator.next();
+                                    %><option value="<%=exercise.getExerciseid()%>"><%=exercise.getTitle()%></option><%
+                                }
                             }
-                        }
-                    %>
-                    </select>
-                    X
-                    <%=Textbox.getHtml("reps", "10", 255, 2, "", "")%> Reps
-                    <input type="submit" class="formsubmitbutton" value="Add">
-                </form>
+                        %>
+                        </select>
+                        X
+                        <%=Textbox.getHtml("reps", "10", 255, 2, "", "")%> Reps
+                        <input type="submit" class="formsubmitbutton" value="Add">
+                    </form>
+                <%}%>
             </div>
             <div class="rounded" style="padding: 15px; margin: 8px; background: #e6e6e6;">
                 <font class="smallfont" style="font-weight: bold;">Exercises in this list:</font>

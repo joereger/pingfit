@@ -46,7 +46,7 @@ public class Pagez {
             //Web ui
             url = responseLocal.get().encodeRedirectURL(url);
             if (!responseLocal.get().isCommitted()){
-                responseLocal.get().reset();
+                responseLocal.get().resetBuffer();
                 try{responseLocal.get().sendRedirect(url);}catch(Exception ex){logger.error("", ex);}
             }
         } else {

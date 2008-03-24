@@ -74,8 +74,6 @@ public class ApplicationStartup implements ServletContextListener {
         //Refresh SystemStats
         SystemStats ss = new SystemStats();
         try{ss.execute(null);}catch(Exception ex){logger.error("",ex);}
-        //Make sure exercises are in db
-        SystemExercises.makeSureDatabaseHasAllSystemExercises();
         //Initialize Quartz
         initQuartz(cse.getServletContext());
         //Add Quartz listener

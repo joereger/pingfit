@@ -33,7 +33,7 @@ public class SysadminMassemailDetail implements Serializable {
         Logger logger = Logger.getLogger(this.getClass().getName());
         //logger.debug("beginView called:");
         String tmpMassemailid = Pagez.getRequest().getParameter("massemailid");
-        if (com.pingfit.util.Num.isinteger(tmpMassemailid)){
+        if (com.pingfit.util.Num.isinteger(tmpMassemailid) && Integer.parseInt(tmpMassemailid)>0){
             logger.debug("beginView called: found massemailid in request param="+tmpMassemailid);
             load(Integer.parseInt(tmpMassemailid));
         } else {
@@ -104,7 +104,6 @@ public class SysadminMassemailDetail implements Serializable {
         calculatePreviews();
         if (massemail.getStatus()==Massemail.STATUS_NEW){
             try{massemail.save();}catch(Exception ex){logger.error("",ex);}
-            //@todo setMassemail on SysadminMassemailSend bean
         } else {
             vex.addValidationError("Sorry, this mass email has already been sent!");
             throw vex;

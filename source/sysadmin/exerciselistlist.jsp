@@ -21,8 +21,8 @@ String acl = "sysadmin";
 
 
 
-        <a href="/sysadmin/exerciselistdetail.jsp">New Exercise List</a>
-        <br/>
+        <a href="/sysadmin/exerciselistdetail.jsp"><b>Create a New Exercise List</b></a>
+        <br/><br/>
 
         <%
             List<Exerciselist> exerciseLists = HibernateUtil.getSession().createCriteria(Exerciselist.class)
@@ -36,7 +36,7 @@ String acl = "sysadmin";
         <%} else {%>
             <%
                 ArrayList<GridCol> cols=new ArrayList<GridCol>();
-                cols.add(new GridCol("Exerciselistid", "<a href=\"/sysadmin/exerciselistdetail.jsp?exerciselistid=<$exerciselistid$>\"><$exerciselistid$></a>", false, "", "tinyfont"));
+                cols.add(new GridCol("Exerciselistid", "<a href=\"/sysadmin/exerciselistdetail.jsp?exerciselistid=<$exerciselistid$>\"><$exerciselistid$></a>", false, "", "tinyfont", "width: 20px;", ""));
                 cols.add(new GridCol("Title", "<a href=\"/sysadmin/exerciselistdetail.jsp?exerciselistid=<$exerciselistid$>\"><$title$></a>", false, "", "tinyfont"));
             %>
             <%=Grid.render(exerciseLists, cols, 200, "/sysadmin/exerciselistlist.jsp", "page")%>

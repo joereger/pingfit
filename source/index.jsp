@@ -170,12 +170,14 @@ String acl = "public";
                         <%--</div>--%>
                         <%--<div class="rounded" style="padding: 5px; margin: 5px; background: #e6e6e6;">--%>
                             <%--<div class="rounded" style="padding: 15px; margin: 5px; background: #ffffff;">--%>
-                            <center>
-                            <div class="rounded" style="padding: 10px; margin: 5px; background: #e6e6e6;">
-                                <img src="/images/exercises/<%=exercise.getImage()%>" border="0">
-                            </div>
-                            </center>
-                            <br/>
+                            <%if (exercise.getImage()!=null && !exercise.getImage().equals("")){%>
+                                <center>
+                                <div class="rounded" style="padding: 10px; margin: 5px; background: #e6e6e6;">
+                                    <img src="/images/exercises/<%=exercise.getImage()%>" border="0">
+                                </div>
+                                </center>
+                                <br/>
+                            <%}%>
                             <font class="smallfont" style="font-weight: bold;"><%=exercise.getTitle()%>: </font>
                             <font class="smallfont"><%=exercise.getDescription()%></font>
                             <br/><br/>
@@ -226,6 +228,8 @@ String acl = "public";
                         </select>
                         <br/>
                         <input type="submit" value="Save Settings" class="formsubmitbutton" style="font-size: 9px;">
+                        <br/><br/>
+                        <center><a href="/exercises.jsp"><font class="tinyfont">More Exercise Lists</font></a></center>
                     </form>
                     <!--</center>-->
                 </div>
