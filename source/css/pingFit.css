@@ -134,6 +134,11 @@ input, textarea, select{
     text-align: left;
 }
 
+form {
+    border: 0px;
+    margin: 0px;
+}
+
 .formsubmitbutton, submit {
    color:#333;
    font-family:'trebuchet ms',helvetica,sans-serif;
@@ -145,7 +150,7 @@ input, textarea, select{
    border-left-color:#6f1eb0;
    border-right-color:#6f1eb0;
    border-bottom-color:#6f1eb0;
-   margin: 2px;
+   margin: 0px;
    cursor: pointer;
    cursor: hand;
 }

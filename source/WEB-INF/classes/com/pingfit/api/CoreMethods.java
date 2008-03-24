@@ -156,6 +156,24 @@ public class CoreMethods {
         }
     }
 
+    public static void setExerciselistid(Exerciser exerciser, int exerciselistid) throws GeneralException {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        try{
+            exerciser.setExerciselistid(exerciselistid);
+            //Store in db if there's a user
+            if (exerciser.getUserid()>0){
+                User user = User.get(exerciser.getUserid());
+                user.setExerciselistid(exerciselistid);
+                user.save();
+            }
+            //Reset next time
+            resetNextExerciseTime(exerciser);
+        } catch (Exception ex) {
+            logger.error("", ex);
+            throw new GeneralException("Error... sorry... please try again.");
+        }
+    }
+
     public static void setExerciseChooserId(Exerciser exerciser, int exercisechooserid) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{

@@ -14,17 +14,17 @@ public class AjaxExercisePage {
 
     public static String getUpcomingExercisesHtml(Exerciser exerciser){
         StringBuffer out = new StringBuffer();
+        boolean isfirst = true;
         for (Iterator<Integer> it = exerciser.getUpcomingexercises().iterator(); it.hasNext(); ) {
             Integer exerciseid = (Integer)it.next();
             Exercise exercise = Exercise.get(exerciseid);
-            out.append(
-                "<div class=\"rounded\" style=\"padding: 10px; margin: 5px; background: #e6e6e6;\">\n" +
-                "                        <font class=\"formfieldfont\" style=\"color: #666666;\"><b>"+exercise.getTitle()+"</b></font>\n" +
-                "                        <!--<br/>-->\n" +
-                "                        <!--<font class=\"tinyfont\" style=\"color: #666666;\">"+exercise.getDescription()+"</font>-->\n" +
-                "                    </div>\n" +
-                "                    <img src=\"/images/clear.gif\" alt=\"\" width=\"1\" height=\"5\"/>\n"
-            );
+            if (!isfirst){
+                out.append(exercise.getTitle());
+                if (it.hasNext()){
+                    out.append(", ");
+                }
+            }
+            isfirst = false;
         }
         return out.toString();
     }

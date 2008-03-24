@@ -26,7 +26,7 @@ String acl = "sysadmin";
 
         <%
             List<Exerciselist> exerciseLists = HibernateUtil.getSession().createCriteria(Exerciselist.class)
-                    .addOrder(Order.desc("exerciselistid"))
+                    .addOrder(Order.asc("exerciselistid"))
                     .setCacheable(true)
                     .list();
         %>
