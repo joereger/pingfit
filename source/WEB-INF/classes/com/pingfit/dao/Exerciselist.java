@@ -15,6 +15,9 @@ public class Exerciselist extends BasePersistentClass implements java.io.Seriali
      private int exerciselistid;
      private String title;
      private String description;
+     private boolean issystem;
+     private int useridofcreator;
+     private boolean ispublic;
 
     private Set<Exerciselistitem> exerciselistitems = new HashSet<Exerciselistitem>();
 
@@ -86,5 +89,29 @@ public class Exerciselist extends BasePersistentClass implements java.io.Seriali
 
     public void setExerciselistitems(Set<Exerciselistitem> exerciselistitems) {
         this.exerciselistitems = exerciselistitems;
+    }
+
+    public boolean getIssystem() {
+        return issystem;
+    }
+
+    public void setIssystem(boolean issystem) {
+        this.issystem = issystem;
+    }
+
+    public int getUseridofcreator() {
+        return useridofcreator;
+    }
+
+    public void setUseridofcreator(int useridofcreator) {
+        this.useridofcreator = useridofcreator;
+    }
+
+    public boolean getIspublic() {
+        return ispublic;
+    }
+
+    public void setIspublic(boolean ispublic) {
+        this.ispublic = ispublic;
     }
 }

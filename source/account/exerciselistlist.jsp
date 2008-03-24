@@ -12,35 +12,34 @@
 <%@ page import="com.pingfit.dao.Exerciselist" %>
 <%
 Logger logger = Logger.getLogger(this.getClass().getName());
-String pagetitle = "Exercise Lists";
-String navtab = "sysadmin";
-String acl = "sysadmin";
+String pagetitle = "Your Exercise Lists";
+String navtab = "youraccount";
+String acl = "account";
 %>
 <%@ include file="/template/auth.jsp" %>
 <%@ include file="/template/header.jsp" %>
 
 
-
-        <a href="/sysadmin/exerciselistdetail.jsp"><b>Create a New Exercise List</b></a>
+        <a href="/account/exerciselistdetail.jsp"><b>Create a New Exercise List</b></a>
         <br/><br/>
 
         <%
             List<Exerciselist> exerciseLists = HibernateUtil.getSession().createCriteria(Exerciselist.class)
                     .addOrder(Order.asc("exerciselistid"))
+                    .add(Restrictions.eq("useridofcreator", Pagez.getUserSession().getUser().getUserid()))
+                    .add(Restrictions.eq("issystem", false))
                     .setCacheable(true)
                     .list();
         %>
 
         <%if (exerciseLists==null || exerciseLists.size()==0){%>
-            <font class="normalfont">No exercise lists!</font>
+            <font class="normalfont">You haven't created exercise lists.</font>
         <%} else {%>
             <%
                 ArrayList<GridCol> cols=new ArrayList<GridCol>();
-                cols.add(new GridCol("Exerciselistid", "<$exerciselistid$>", false, "", "tinyfont", "width: 20px;", ""));
-                cols.add(new GridCol("System List?", "<$issystem$>", false, "", "tinyfont", "width: 20px;", ""));
-                cols.add(new GridCol("Title", "<a href=\"/sysadmin/exerciselistdetail.jsp?exerciselistid=<$exerciselistid$>\"><$title$></a>", false, "", "tinyfont"));
+                cols.add(new GridCol("Title", "<a href=\"/account/exerciselistdetail.jsp?exerciselistid=<$exerciselistid$>\"><$title$></a>", false, "", "tinyfont"));
             %>
-            <%=Grid.render(exerciseLists, cols, 200, "/sysadmin/exerciselistlist.jsp", "page")%>
+            <%=Grid.render(exerciseLists, cols, 200, "/account/exerciselistlist.jsp", "page")%>
         <%}%>
 
 

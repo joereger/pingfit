@@ -77,7 +77,14 @@
     </servlet-mapping>
 
 
-
+    <servlet>
+        <servlet-name>BlogRss</servlet-name>
+        <servlet-class>com.pingfit.helpers.BlogRss</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BlogRss</servlet-name>
+        <url-pattern>/rss.xml</url-pattern>
+    </servlet-mapping>
 
 
 

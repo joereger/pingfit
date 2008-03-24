@@ -18,13 +18,13 @@
 <%
 Logger logger = Logger.getLogger(this.getClass().getName());
 String pagetitle = "Exercise List Detail";
-String navtab = "sysadmin";
-String acl = "sysadmin";
+String navtab = "youraccount";
+String acl = "account";
 %>
 <%@ include file="/template/auth.jsp" %>
 <%
     Exerciselist exerciselist = new Exerciselist();
-    exerciselist.setIssystem(true);
+    exerciselist.setIssystem(false);
     exerciselist.setIspublic(true);
     exerciselist.setUseridofcreator(Pagez.getUserSession().getUser().getUserid());
     if (request.getParameter("exerciselistid") != null && !request.getParameter("exerciselistid").equals("0") && Num.isinteger(request.getParameter("exerciselistid"))) {
@@ -41,9 +41,21 @@ String acl = "sysadmin";
             exerciselist.setTitle(Textbox.getValueFromRequest("title", "Title", true, DatatypeString.DATATYPEID));
             exerciselist.setDescription(Textarea.getValueFromRequest("description", "Description", true));
             exerciselist.save();
-            Pagez.getUserSession().setMessage("Exercise list saved.");
+            if (exerciselist.getExerciselistitems()==null || exerciselist.getExerciselistitems().size()==0){
+                Exerciselistitem eli = new Exerciselistitem();
+                eli.setExerciselistid(exerciselist.getExerciselistid());
+                eli.setExerciseid(1);
+                eli.setReps(10);
+                eli.setNum(1);
+                eli.save();
+                exerciselist.getExerciselistitems().add(eli);
+                exerciselist.save();
+                Pagez.getUserSession().setMessage("Exercise list saved.  We've added one exercise to get you started.  Now you should add more.");
+            } else {
+                Pagez.getUserSession().setMessage("Exercise list saved.  Now you can add/remove some exercises.");
+            }
             if (redirectToList){
-                Pagez.sendRedirect("/sysadmin/exerciselistlist.jsp");
+                Pagez.sendRedirect("/account/exerciselistlist.jsp");
             }
         } catch (ValidationException vex) {
             Pagez.getUserSession().setMessage(vex.getErrorsAsSingleString());
@@ -105,8 +117,8 @@ String acl = "sysadmin";
     <tr>
         <td valign="top">
 
-            <form action="/sysadmin/exerciselistdetail.jsp" method="post">
-                <input type="hidden" name="dpage" value="/sysadmin/exerciselistdetail.jsp">
+            <form action="/account/exerciselistdetail.jsp" method="post">
+                <input type="hidden" name="dpage" value="/account/exerciselistdetail.jsp">
                 <input type="hidden" name="action" value="save">
                 <input type="hidden" name="exerciselistid" value="<%=exerciselist.getExerciselistid()%>">
 
@@ -150,20 +162,33 @@ String acl = "sysadmin";
         <td valign="top">
             <%if (exerciselist.getExerciselistid()>0){%>
                 <div class="rounded" style="padding: 15px; margin: 8px; background: #e6e6e6;">
-                    <form action="/sysadmin/exerciselistdetail.jsp" method="post">
-                        <input type="hidden" name="dpage" value="/sysadmin/exerciselistdetail.jsp">
+                    <form action="/account/exerciselistdetail.jsp" method="post">
+                        <input type="hidden" name="dpage" value="/account/exerciselistdetail.jsp">
                         <input type="hidden" name="action" value="addexercisetolist">
                         <input type="hidden" name="exerciselistid" value="<%=exerciselist.getExerciselistid()%>">
                         <select name="exerciseid">
                         <%
-
                             List<Exercise> exercises = HibernateUtil.getSession().createCriteria(Exercise.class)
                                     .addOrder(Order.desc("exerciseid"))
-                                    .add(Restrictions.eq("issystem", true))
+                                    .add(Restrictions.eq("issystem", false))
+                                    .add(Restrictions.eq("useridofcreator", Pagez.getUserSession().getUser().getUserid()))
                                     .setCacheable(true)
                                     .list();
                             if (exercises != null || exercises.size() > 0) {
                                 for (Iterator<Exercise> iterator = exercises.iterator(); iterator.hasNext();) {
+                                    Exercise exercise = iterator.next();
+                                    %><option value="<%=exercise.getExerciseid()%>">*<%=exercise.getTitle()%></option><%
+                                }
+                            }
+                        %>
+                        <%
+                            List<Exercise> sysExercises = HibernateUtil.getSession().createCriteria(Exercise.class)
+                                    .addOrder(Order.desc("exerciseid"))
+                                    .add(Restrictions.eq("issystem", true))
+                                    .setCacheable(true)
+                                    .list();
+                            if (sysExercises != null || sysExercises.size() > 0) {
+                                for (Iterator<Exercise> iterator = sysExercises.iterator(); iterator.hasNext();) {
                                     Exercise exercise = iterator.next();
                                     %><option value="<%=exercise.getExerciseid()%>"><%=exercise.getTitle()%></option><%
                                 }
@@ -173,6 +198,8 @@ String acl = "sysadmin";
                         X
                         <%=Textbox.getHtml("reps", "10", 255, 2, "", "")%> Reps
                         <input type="submit" class="formsubmitbutton" value="Add">
+                        <br/>
+                        <a href="/account/exercisedetail.jsp"><font class="tinyfont" style="font-weight: bold;">Create a New Exercise</font></a><br/>
                     </form>
                 <%}%>
             </div>
@@ -187,9 +214,11 @@ String acl = "sysadmin";
                         Exerciselistitem exerciselistitem =  iterator.next();
                         Exercise exercise = Exercise.get(exerciselistitem.getExerciseid());
                         %>
-                        <font class="tinyfont">(Order:<%=exerciselistitem.getNum()%>) <%=exercise.getTitle()%> x <%=exerciselistitem.getReps()%></font>
-                        <font class="tinyfont"><a href="/sysadmin/exerciselistdetail.jsp?action=deleteexerciselistitem&exerciselistid=<%=exerciselist.getExerciselistid()%>&exerciselistitemid=<%=exerciselistitem.getExerciselistitemid()%>">Delete</a></font>
-                        <br/>
+                        <font class="tinyfont"><%=exercise.getTitle()%> x <%=exerciselistitem.getReps()%></font>
+                        <%if (exerciselist.getExerciselistitems()!=null && exerciselist.getExerciselistitems().size()>1){%>
+                            <font class="tinyfont"><a href="/account/exerciselistdetail.jsp?action=deleteexerciselistitem&exerciselistid=<%=exerciselist.getExerciselistid()%>&exerciselistitemid=<%=exerciselistitem.getExerciselistitemid()%>">Delete</a></font>
+                            <br/>
+                        <%}%>
                         <%
                     }
                 }

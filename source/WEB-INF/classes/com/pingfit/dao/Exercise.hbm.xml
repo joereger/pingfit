@@ -21,5 +21,14 @@
         <property name="image" type="string">
             <column name="image" not-null="true" />
         </property>
+        <property name="issystem" type="boolean">
+            <column name="issystem" />
+        </property>
+        <property name="ispublic" type="boolean">
+            <column name="ispublic" />
+        </property>
+        <property name="useridofcreator" type="int">
+            <column name="useridofcreator" not-null="true" />
+        </property>
     </class>
 </hibernate-mapping>

@@ -17,6 +17,10 @@ public class Exercise extends BasePersistentClass implements java.io.Serializabl
      private String description;
      private int reps;
      private String image;
+     private boolean issystem;
+     private int useridofcreator;
+     private boolean ispublic;
+
 
     public static Exercise get(int id) {
         Logger logger = Logger.getLogger("com.pingfit.dao.Exercise");
@@ -92,5 +96,29 @@ public class Exercise extends BasePersistentClass implements java.io.Serializabl
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public boolean getIssystem() {
+        return issystem;
+    }
+
+    public void setIssystem(boolean issystem) {
+        this.issystem = issystem;
+    }
+
+    public int getUseridofcreator() {
+        return useridofcreator;
+    }
+
+    public void setUseridofcreator(int useridofcreator) {
+        this.useridofcreator = useridofcreator;
+    }
+
+    public boolean getIspublic() {
+        return ispublic;
+    }
+
+    public void setIspublic(boolean ispublic) {
+        this.ispublic = ispublic;
     }
 }

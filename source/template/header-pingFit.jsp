@@ -104,6 +104,10 @@
             <%if (navtab.equals("youraccount")){%>
                 <%if (Pagez.getUserSession().getIsloggedin()){%>
                     <img src="/images/clear.gif" alt="" width="10" height="1"/>
+                    <a href="/account/exerciselist.jsp"><font class="subnavfont" style="color: #000000;">Your Exercises</font></a>
+                    <img src="/images/clear.gif" alt="" width="10" height="1"/>
+                    <a href="/account/exerciselistlist.jsp"><font class="subnavfont" style="color: #000000;">Your Exercise Lists</font></a>        
+                    <img src="/images/clear.gif" alt="" width="10" height="1"/>
                     <a href="/account/accountsettings.jsp"><font class="subnavfont" style="color: #000000;">Account Settings</font></a>
                     <img src="/images/clear.gif" alt="" width="10" height="1"/>
                     <a href="/account/accountbalance.jsp"><font class="subnavfont" style="color: #000000;">Account Balance</font></a>

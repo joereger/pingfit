@@ -12,6 +12,7 @@
 <%@ page import="java.util.*" %>
 <%@ page import="com.pingfit.dao.hibernate.HibernateUtil" %>
 <%@ page import="org.hibernate.criterion.Order" %>
+<%@ page import="org.hibernate.criterion.Restrictions" %>
 
 <%
 Logger logger = Logger.getLogger(this.getClass().getName());
@@ -210,8 +211,29 @@ String acl = "public";
                         <%--<br/>--%>
                         <select name="exerciselistid" style="font-size: 10px;">
                         <%
+                            if (Pagez.getUserSession().getUser()!=null){
+                                List<Exerciselist> userExerciseLists = HibernateUtil.getSession().createCriteria(Exerciselist.class)
+                                        .addOrder(Order.asc("exerciselistid"))
+                                        .add(Restrictions.eq("issystem", false))
+                                        .add(Restrictions.eq("useridofcreator", Pagez.getUserSession().getUser().getUserid()))
+                                        .setCacheable(true)
+                                        .list();
+                                if (userExerciseLists != null) {
+                                    for (Iterator<Exerciselist> iterator = userExerciseLists.iterator(); iterator.hasNext();) {
+                                        Exerciselist exerciselist = iterator.next();
+                                        String sel = "";
+                                        if (exerciselist.getExerciselistid() == Pagez.getUserSession().getExerciser().getExerciselistid()) {
+                                            sel = " selected";
+                                        }
+                                        %><option value="<%=exerciselist.getExerciselistid()%>" <%=sel%>>*<%=exerciselist.getTitle()%></option><%
+                                    }
+                                }
+                            }
+                        %>
+                        <%
                             List<Exerciselist> exerciseLists = HibernateUtil.getSession().createCriteria(Exerciselist.class)
                                     .addOrder(Order.asc("exerciselistid"))
+                                    .add(Restrictions.eq("issystem", true))
                                     .setCacheable(true)
                                     .list();
                             if (exerciseLists != null) {

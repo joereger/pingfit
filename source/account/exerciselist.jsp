@@ -11,36 +11,38 @@
 <%@ page import="org.hibernate.criterion.Order" %>
 <%
 Logger logger = Logger.getLogger(this.getClass().getName());
-String pagetitle = "Exercises";
-String navtab = "sysadmin";
-String acl = "sysadmin";
+String pagetitle = "Exercises You've Created";
+String navtab = "youraccount";
+String acl = "account";
 %>
 <%@ include file="/template/auth.jsp" %>
 <%@ include file="/template/header.jsp" %>
 
 
 
-        <a href="/sysadmin/exercisedetail.jsp"><b>Create a New Exercise</b></a>
+        <a href="/account/exercisedetail.jsp"><b>Create a New Exercise</b></a>
+        <br/>
+        <a href="/account/exerciselistlist.jsp"><b>Manage Your Own Exercise Lists</b></a>
         <br/><br/>
 
         <%
             List<Exercise> exercises = HibernateUtil.getSession().createCriteria(Exercise.class)
                     .addOrder(Order.desc("exerciseid"))
+                    .add(Restrictions.eq("useridofcreator", Pagez.getUserSession().getUser().getUserid()))
+                    .add(Restrictions.eq("issystem", false))
                     .setCacheable(true)
                     .list();
         %>
 
         <%if (exercises==null || exercises.size()==0){%>
-            <font class="normalfont">No exercises!</font>
+            <font class="normalfont">You haven't created any exercises!</font>
         <%} else {%>
             <%
                 ArrayList<GridCol> cols=new ArrayList<GridCol>();
-                cols.add(new GridCol("Exerciseid", "<a href=\"/sysadmin/exercisedetail.jsp?exerciseid=<$exerciseid$>\"><$exerciseid$></a>", false, "", "tinyfont", "width: 20px;", ""));
-                cols.add(new GridCol("System Exercise?", "<$issystem$>", false, "", "tinyfont", "width: 20px;", ""));
-                cols.add(new GridCol("Title", "<a href=\"/sysadmin/exercisedetail.jsp?exerciseid=<$exerciseid$>\"><$title$></a>", false, "", "tinyfont"));
+                cols.add(new GridCol("Title", "<a href=\"/account/exercisedetail.jsp?exerciseid=<$exerciseid$>\"><$title$></a>", false, "", "tinyfont"));
                 cols.add(new GridCol("Reps", "<$reps$>", false, "", "tinyfont"));
             %>
-            <%=Grid.render(exercises, cols, 200, "/sysadmin/exerciselist.jsp", "page")%>
+            <%=Grid.render(exercises, cols, 200, "/account/exerciselist.jsp", "page")%>
         <%}%>
 
 

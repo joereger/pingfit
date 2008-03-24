@@ -51,11 +51,44 @@ String acl = "public";
             <td valign="top" width="25%">
                 <!-- Start exercise lists -->
                 <div class="rounded" style="padding: 10px; margin: 5px; background: #e6e6e6;">
-                    <font class="mediumfont" style="font-weight: bold;">Exercise Lists</font>
-                    <br/><br/>
+                    <font class="mediumfont" style="font-weight: bold;">Exercise Lists</font><br/>
+                        <%if (Pagez.getUserSession().getUser()!=null){%>
+                            <a href="/account/exerciselistdetail.jsp"><font class="tinyfont" style="font-weight: bold;">Create a New List</font></a><br/>
+                            <br/>
+                        <%} else {%>
+                            <font class="tinyfont" style="font-weight: bold;">Sign Up or Log In to create your own Exercise Lists.</font><br/>
+                            <br/>
+                        <%}%>
+                        <font class="tinyfont">An exercise list is a collection of exercises.  When you workout you move through one list at a time.</font><br/>
+                        <br/>
+                    <%
+                        if (Pagez.getUserSession().getUser()!=null){
+                            List<Exerciselist> userexerciselists = HibernateUtil.getSession().createCriteria(Exerciselist.class)
+                                    .addOrder(Order.asc("exerciselistid"))
+                                    .add(Restrictions.eq("issystem", false))
+                                    .add(Restrictions.eq("useridofcreator", Pagez.getUserSession().getUser().getUserid()))
+                                    .setCacheable(true)
+                                    .list();
+                            for (Iterator<Exerciselist> iterator = userexerciselists.iterator(); iterator.hasNext();) {
+                                Exerciselist el =  iterator.next();
+                                if (exerciselist!=null && el.getExerciselistid()==exerciselist.getExerciselistid()){
+                                    %>
+                                    <a href="/exercises.jsp?exerciselistid=<%=el.getExerciselistid()%>"><font class="normalfont" style="font-weight: bold;">*<%=el.getTitle()%></font></a>
+                                    <br/><br/>
+                                    <%
+                                } else {
+                                    %>
+                                    <a href="/exercises.jsp?exerciselistid=<%=el.getExerciselistid()%>"><font class="normalfont">*<%=el.getTitle()%></font></a>
+                                    <br/><br/>
+                                    <%
+                                }
+                            }
+                        }
+                    %>
                     <%
                         List<Exerciselist> exerciselists = HibernateUtil.getSession().createCriteria(Exerciselist.class)
                                 .addOrder(Order.asc("exerciselistid"))
+                                .add(Restrictions.eq("issystem", true))
                                 .setCacheable(true)
                                 .list();
                         for (Iterator<Exerciselist> iterator = exerciselists.iterator(); iterator.hasNext();) {
@@ -81,8 +114,12 @@ String acl = "public";
                 <%if (exerciselist!=null){%>
                     <div class="rounded" style="padding: 10px; margin: 5px; background: #e6e6e6;">
                         <font class="mediumfont" style="font-weight: bold;"><%=exerciselist.getTitle()%></font><br/>
-                        <a href="/exercises.jsp?exerciselistid=<%=exerciselist.getExerciselistid()%>&action=setexerciselistid"><font class="tinyfont" style="font-weight: bold;">Use this Exercise List</font></a><br/>
+                        <a href="/exercises.jsp?exerciselistid=<%=exerciselist.getExerciselistid()%>&action=setexerciselistid"><font class="tinyfont" style="font-weight: bold;">Use this List</font></a><br/>
                         <br/>
+                        <%if (Pagez.getUserSession().getUser()!=null && exerciselist.getUseridofcreator()==Pagez.getUserSession().getUser().getUserid()){%>
+                            <a href="/account/exerciselistdetail.jsp?exerciselistid=<%=exerciselist.getExerciselistid()%>"><font class="tinyfont" style="font-weight: bold;">Edit this List</font></a><br/>
+                            <br/>
+                        <%}%>
                         <font class="tinyfont"><%=exerciselist.getDescription()%></font><br/>
                         <br/>
                         <%

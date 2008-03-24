@@ -34,6 +34,20 @@ AccountIndex accountIndex = (AccountIndex) Pagez.getBeanMgr().get("AccountIndex"
         </div>
     <%}%>
 
+    <br/><br/>
+    <div class="rounded" style="padding: 15px; margin: 5px; background: #e6e6e6;">
+        <a href="/account/exerciselist.jsp"><font class="mediumfont" style="color: #666666;">Your Exercises</font></a>
+        <br/>
+        <font class="smallfont">Create and manage your own exercises.</font>
+    </div>
+
+    <br/><br/>
+    <div class="rounded" style="padding: 15px; margin: 5px; background: #e6e6e6;">
+        <a href="/account/exerciselistlist.jsp"><font class="mediumfont" style="color: #666666;">Your Exercise Lists</font></a>
+        <br/>
+        <font class="smallfont">Create and manage your own exercise lists.</font>
+    </div>
+
 
     <br/><br/>
     <div class="rounded" style="padding: 15px; margin: 5px; background: #e6e6e6;">
@@ -55,6 +69,8 @@ AccountIndex accountIndex = (AccountIndex) Pagez.getBeanMgr().get("AccountIndex"
         <br/>
         <font class="smallfont">Change your password for super duper high security.</font>
     </div>
+
+
 
 
 
