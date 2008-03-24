@@ -65,6 +65,12 @@ String acl = "public";
 <%@ include file="/template/header.jsp" %>
 
 <%
+    if (Pagez.getUserSession()==null){
+        logger.debug("Pagez.getUserSession()==null");
+    }
+    if (Pagez.getUserSession().getExerciser()==null){
+        logger.debug("Pagez.getUserSession().getExerciser()==null");   
+    }
     Exercise exercise = Exercise.get(Pagez.getUserSession().getExerciser().getNextexerciseid());
 %>
 

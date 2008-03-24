@@ -50,7 +50,7 @@ public class FilterMain implements Filter {
         Pagez.setResponse(httpServletResponse);
         Pagez.setBeanMgr(new BeanMgr());
         try{
-            if (httpServletRequest.getRequestURL().indexOf("jpg")==-1 && httpServletRequest.getRequestURL().indexOf("css")==-1 && httpServletRequest.getRequestURL().indexOf("gif")==-1 && httpServletRequest.getRequestURL().indexOf("png")==-1){
+            if (httpServletRequest.getRequestURL().indexOf("jpg")==-1 && httpServletRequest.getRequestURL().indexOf("css")==-1 && httpServletRequest.getRequestURL().indexOf("gif")==-1 && httpServletRequest.getRequestURL().indexOf("png")==-1 && httpServletRequest.getRequestURL().indexOf("/js/")==-1){
                 logger.debug("Start FilterMain");
 //                logger.debug("");
 //                logger.debug("");
@@ -174,6 +174,8 @@ public class FilterMain implements Filter {
                     }
                 }
                 //Persistent login end
+                logger.debug("after persistent login and wasAutoLoggedIn="+wasAutoLoggedIn);
+                logger.debug("after persistent login and Pagez.getUserSession().getIsloggedin()="+Pagez.getUserSession().getIsloggedin());
                 logger.debug("after persistent login and isfacebookui="+Pagez.getUserSession().getIsfacebookui());
 
 
@@ -233,7 +235,7 @@ public class FilterMain implements Filter {
         chain.doFilter(request, response);
 
         try{
-            if (httpServletRequest.getRequestURL().indexOf("jpg")==-1 && httpServletRequest.getRequestURL().indexOf("css")==-1 && httpServletRequest.getRequestURL().indexOf("gif")==-1 && httpServletRequest.getRequestURL().indexOf("png")==-1){
+            if (httpServletRequest.getRequestURL().indexOf("jpg")==-1 && httpServletRequest.getRequestURL().indexOf("css")==-1 && httpServletRequest.getRequestURL().indexOf("gif")==-1 && httpServletRequest.getRequestURL().indexOf("png")==-1 && httpServletRequest.getRequestURL().indexOf("/js/")==-1){
 //                logger.debug("---------------------------END REQUEST: "+httpServletRequest.getRequestURL());
 //                logger.debug("-------------");
 //                logger.debug("------");

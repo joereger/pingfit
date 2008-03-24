@@ -4,6 +4,7 @@ import com.pingfit.cachedstuff.CachedStuff;
 import com.pingfit.cache.providers.CacheFactory;
 import com.pingfit.util.DateDiff;
 import com.pingfit.exercisechoosers.ExerciseChooserRandom;
+import com.pingfit.exercisechoosers.ExerciseChooserList;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +30,7 @@ public class ExerciserCache {
                 return cachedExerciser;
             } else {
                 Exerciser newEx = getNewEmptyExerciser();
+                CoreMethods.flushUpcomingExercises(newEx);
                 CoreMethods.skipCurrentOrNextExercise(newEx);
                 CacheFactory.getCacheProvider().put(key, group, newEx);
                 return newEx;
@@ -45,7 +47,8 @@ public class ExerciserCache {
         newEx.setExerciseeveryxminutes(20);
         newEx.setExercisesessionstarted(Calendar.getInstance());
         newEx.setNextexerciseid(1);
-        newEx.setExercisechooserid((new ExerciseChooserRandom()).getId());
+        newEx.setExercisechooserid((new ExerciseChooserList()).getId());
+        newEx.setCurrentexercisenum(1);
         return newEx;
     }
 

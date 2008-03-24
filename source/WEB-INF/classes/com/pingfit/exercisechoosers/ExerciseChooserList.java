@@ -2,12 +2,17 @@ package com.pingfit.exercisechoosers;
 
 import com.pingfit.api.Exerciser;
 import com.pingfit.dao.hibernate.HibernateUtil;
+import com.pingfit.dao.hibernate.NumFromUniqueResult;
 import com.pingfit.dao.Exercise;
+import com.pingfit.dao.Exerciselist;
+import com.pingfit.dao.Exerciselistitem;
 import com.pingfit.util.Num;
 import org.apache.log4j.Logger;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.Order;
 
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * User: Joe Reger Jr
@@ -17,32 +22,50 @@ import java.util.List;
 public class ExerciseChooserList implements ExerciseChooser {
 
     public int getId(){
-        return 2;
+        return 1;
     }
 
     public String getName() {
-        return "Exercise List";
+        return "Lists";
     }
 
 
-    public int getNextExercise(Exerciser exerciser){
+    public ArrayList<Integer> getNextExercises(Exerciser exerciser, int numbertoget){
         Logger logger = Logger.getLogger(this.getClass().getName());
-        int maxexerciseid = (Integer) HibernateUtil.getSession().createQuery("select max(exerciseid) from Exercise").setCacheable(true).uniqueResult();
-        boolean donthavevalidchoice = true;
-        int attempts = 0;
-        while(donthavevalidchoice && attempts<=10){
-            attempts++;
-            int randomExerciseid = Num.randomInt(maxexerciseid);
-            List<Exercise> exs = HibernateUtil.getSession().createCriteria(Exercise.class)
-                                               .add(Restrictions.eq("exerciseid", randomExerciseid))
+        ArrayList<Integer> out = new ArrayList<Integer>();
+        logger.debug("getNextExercise()");
+        if (exerciser.getExerciselistid()<=0){
+            exerciser.setExerciselistid(1);
+        }
+
+        int maxNumInList = NumFromUniqueResult.getInt("select max(num) from Exerciselistitem where exerciselistid='"+exerciser.getExerciselistid()+"'");
+        logger.debug("maxNumInList="+maxNumInList);
+
+        List<Exerciselistitem> exerciselistitems = HibernateUtil.getSession().createCriteria(Exerciselistitem.class)
+                                               .add(Restrictions.eq("exerciselistid", exerciser.getExerciselistid()))
+                                               .addOrder(Order.asc("num"))
                                                .setCacheable(true)
                                                .list();
-            if (exs!=null && exs.size()>0){
-                return randomExerciseid;
+        logger.debug("exerciselistitems.size()="+exerciselistitems.size());
+        int attempts = 0;
+        int tmpExNum = exerciser.getCurrentexercisenum();
+        while(out.size()<=numbertoget && attempts<=(10+numbertoget)){
+            attempts++;
+            if (tmpExNum>maxNumInList){
+                tmpExNum = 1;
             }
+            logger.debug("exerciser.getCurrentexercisenum()="+exerciser.getCurrentexercisenum()+" tmpExNum="+tmpExNum);
+            try{
+                if (exerciselistitems.get(tmpExNum-1)!=null){
+                    out.add(exerciselistitems.get(tmpExNum-1).getExerciseid());
+                    logger.debug("added exerciselistitems.get("+(tmpExNum-1)+").getExerciseid()="+exerciselistitems.get(tmpExNum-1).getExerciseid());
+                }
+            } catch (Exception ex){
+                logger.error("", ex);
+            }
+            tmpExNum++;
         }
-        logger.debug("Had to return 0 from getSingleExerciseAtRandom()");
-        return 0;
+        return out;
     }
 
 

@@ -105,11 +105,13 @@ public class Login implements Serializable {
 
                 //Set persistent login cookie, if necessary
                 if (keepmeloggedin){
+                    logger.debug("keepmeloggedin=true");
                     //Get all possible cookies to set
                     Cookie[] cookies = PersistentLogin.getPersistentCookies(user.getUserid(), Pagez.getRequest());
+                    logger.debug("cookies.length="+cookies.length);
                     //Add a cookies to the response
                     for (int j = 0; j < cookies.length; j++) {
-                        logger.debug("Setting persistent login cookie name="+cookies[j].getName()+" value="+cookies[j].getValue());
+                        logger.debug("Setting persistent login cookie name="+cookies[j].getName()+" value="+cookies[j].getValue()+" cookies[j].getDomain()="+cookies[j].getDomain()+" cookies[j].getPath()="+cookies[j].getPath());
                         Pagez.getResponse().addCookie(cookies[j]);
                     }
                 }

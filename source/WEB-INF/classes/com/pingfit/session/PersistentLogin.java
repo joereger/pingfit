@@ -61,6 +61,7 @@ public class PersistentLogin {
     }
 
     public static Cookie[] getPersistentCookies(int accountuserid, javax.servlet.http.HttpServletRequest request){
+        Logger logger = Logger.getLogger(PersistentLogin.class);
         //Create the domain
         UrlSplitter urlSplitter = new UrlSplitter(request);
         Cookie[] outCookies = new Cookie[1];
@@ -68,8 +69,10 @@ public class PersistentLogin {
         outCookies[0] = createPersistentCookie(accountuserid, request, "");
         //Iterate all possible domains
         ArrayList<String> domains =  urlSplitter.getServernameAllPossibleDomains();
+        logger.debug("domains.size()="+domains.size());
         for (Iterator it = domains.iterator(); it.hasNext(); ) {
             String domain = (String)it.next();
+            logger.debug("domain="+domain);
             outCookies = Util.addToCookieArray(outCookies, createPersistentCookie(accountuserid, request, domain));
         }
         return outCookies;
@@ -82,7 +85,11 @@ public class PersistentLogin {
         Cookie userCookie = new Cookie(cookieName, userid+"-"+randomString);
         userCookie.setMaxAge(31536000);  //One Year
         if (!domainToSetCookieOn.equals("")){
-            userCookie.setDomain("."+domainToSetCookieOn);
+//            if (!domainToSetCookieOn.equals("localhost")){
+                userCookie.setDomain("."+domainToSetCookieOn);
+//            } else {
+//                userCookie.setDomain(domainToSetCookieOn);
+//            }
         }
         //Implement sslison system property
         if (SystemProperty.getProp("PROP_SSLISON").equals("1")){

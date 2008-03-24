@@ -23,7 +23,7 @@ import org.hibernate.criterion.Restrictions;
 public class ExerciseChooserRandom implements ExerciseChooser {
 
     public int getId(){
-        return 1;
+        return 2;
     }
 
     public String getName() {
@@ -31,12 +31,14 @@ public class ExerciseChooserRandom implements ExerciseChooser {
     }
 
 
-    public int getNextExercise(Exerciser exerciser){
+    public ArrayList<Integer> getNextExercises(Exerciser exerciser, int numbertoget){
         Logger logger = Logger.getLogger(this.getClass().getName());
+        ArrayList<Integer> out = new ArrayList<Integer>();
+        logger.debug("getNextExercise()");
         int maxexerciseid = (Integer)HibernateUtil.getSession().createQuery("select max(exerciseid) from Exercise").setCacheable(true).uniqueResult();
         boolean donthavevalidchoice = true;
         int attempts = 0;
-        while(donthavevalidchoice && attempts<=10){
+        while(donthavevalidchoice && attempts<=(numbertoget+10)){
             attempts++;
             int randomExerciseid = Num.randomInt(maxexerciseid);
             List<Exercise> exs = HibernateUtil.getSession().createCriteria(Exercise.class)
@@ -44,11 +46,10 @@ public class ExerciseChooserRandom implements ExerciseChooser {
                                                .setCacheable(true)
                                                .list();
             if (exs!=null && exs.size()>0){
-                return randomExerciseid;
+                out.add(randomExerciseid);
             }
         }
-        logger.debug("Had to return 0 from getSingleExerciseAtRandom()");
-        return 0;
+        return out;
     }
 
 

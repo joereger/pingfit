@@ -6,6 +6,7 @@ import com.pingfit.util.Util;
 import com.pingfit.dao.Pingback;
 import com.pingfit.dao.User;
 import com.pingfit.dao.Exercise;
+import com.pingfit.dao.hibernate.NumFromUniqueResult;
 import com.pingfit.exercisechoosers.ExerciseChooserFactory;
 import com.pingfit.exercisechoosers.ExerciseChooser;
 
@@ -88,41 +89,41 @@ public class CoreMethods {
         }
     }
 
+    public static void flushUpcomingExercises(Exerciser exerciser) throws GeneralException {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        try{
+            exerciser.setUpcomingexercises(new ArrayList<Integer>());
+            exerciser.setCurrentexercisenum(1);
+            //Store in db if there's a user
+            if (exerciser.getUserid()>0){
+                User user = User.get(exerciser.getUserid());
+                user.setUpcomingexercises("");
+                user.setCurrentexercisenum(1);
+                user.save();
+            }
+        } catch (Exception ex) {
+            logger.error("", ex);
+            throw new GeneralException("Error... sorry... please try again.");
+        }
+    }
+
     public static void advanceOneExercise(Exerciser exerciser) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
-            //Get the current value
+            //Get the current exercisechooser
             int exercisechooserid = exerciser.getExercisechooserid();
             if (exerciser.getUserid()>0){
                 User user = User.get(exerciser.getUserid());
                 exercisechooserid = user.getExercisechooserid();
             }
-            //Get the current list
-            ArrayList<Integer> upcomingexercises = exerciser.getUpcomingexercises();
-            if (exerciser.getUserid()>0){
-                User user = User.get(exerciser.getUserid());
-                upcomingexercises = Util.commaSeparatedStringListToIntegerArrayList(user.getUpcomingexercises());
+            //Increment currentexercisenum
+            exerciser.setCurrentexercisenum(exerciser.getCurrentexercisenum()+1);
+            int maxNumInList = NumFromUniqueResult.getInt("select max(num) from Exerciselistitem where exerciselistid='"+exerciser.getExerciselistid()+"'");
+            if (exerciser.getCurrentexercisenum()>maxNumInList){
+                exerciser.setCurrentexercisenum(1);
             }
-            //Remove the top one
-            if (upcomingexercises!=null && upcomingexercises.size()>0){
-                upcomingexercises.remove(0);
-            }
-            //Make sure we have min number of next exercises chosen
-            int numberofupcomingtostore = 5;
-            boolean donthaveenough = true;
-            int attempts = 0;
-            while(donthaveenough && attempts<=20){
-                attempts++;
-                //Find the next exercise using the ExerciseChooser infrastructure
-                int nextexercise = ((ExerciseChooser)ExerciseChooserFactory.get(exercisechooserid)).getNextExercise(exerciser);
-                //Add to arraylist
-                logger.debug("adding one exercise: nextexercise = "+nextexercise);
-                upcomingexercises.add(nextexercise);
-                //See if we now have enough
-                if (upcomingexercises.size()>=numberofupcomingtostore){
-                    donthaveenough = false;
-                }
-            }
+            //Find the next exercise using the ExerciseChooser infrastructure
+            ArrayList<Integer> upcomingexercises = ((ExerciseChooser)ExerciseChooserFactory.get(exercisechooserid)).getNextExercises(exerciser, 6);
             //Store in Exerciser
             exerciser.setUpcomingexercises(upcomingexercises);
             exerciser.setNextexerciseid(upcomingexercises.get(0));
@@ -166,6 +167,10 @@ public class CoreMethods {
                 user.setExerciselistid(exerciselistid);
                 user.save();
             }
+            //Flush
+            flushUpcomingExercises(exerciser);
+            //Advance one exercise without recording anythign to database
+            advanceOneExercise(exerciser);
             //Reset next time
             resetNextExerciseTime(exerciser);
         } catch (Exception ex) {
@@ -184,6 +189,12 @@ public class CoreMethods {
                 user.setExercisechooserid(exercisechooserid);
                 user.save();
             }
+            //Flush
+            flushUpcomingExercises(exerciser);
+            //Advance one exercise without recording anythign to database
+            advanceOneExercise(exerciser);
+            //Reset next time
+            resetNextExerciseTime(exerciser);
         } catch (Exception ex) {
             logger.error("", ex);
             throw new GeneralException("Error... sorry... please try again.");

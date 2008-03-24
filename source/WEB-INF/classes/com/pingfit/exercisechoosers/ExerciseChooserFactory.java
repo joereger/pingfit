@@ -23,6 +23,7 @@ public class ExerciseChooserFactory {
     public static ArrayList<ExerciseChooser> getAllExerciseChoosers(){
         ArrayList<ExerciseChooser> out = new ArrayList<ExerciseChooser>();
         out.add(new ExerciseChooserRandom());
+        out.add(new ExerciseChooserList());
         return out;
     }
 
