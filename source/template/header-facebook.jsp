@@ -5,7 +5,7 @@
           <!--"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">-->
 <!--<html>-->
 <!--<head>-->
-  <!--<title>dNeero Social Surveys</title>-->
+  <!--<title>PingFit.com</title>-->
   <style type="text/css"><%=Io.textFileRead(WebAppRootDir.getWebAppRootPath()+"/css/basic.css").toString()%></style>
   <!--<link rel="stylesheet" type="text/css" href="/css/basic.css" />-->
   <style type="text/css"><%=Io.textFileRead(WebAppRootDir.getWebAppRootPath()+"/css/pingFit-facebook.css").toString()%></style>
