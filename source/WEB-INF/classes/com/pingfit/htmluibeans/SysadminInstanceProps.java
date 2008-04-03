@@ -28,6 +28,7 @@ public class SysadminInstanceProps implements Serializable {
     private String dbDriverName;
     private String runScheduledTasksOnThisInstance;
     private String instancename;
+    private String absolutepathtoexerciseimages;
 
     public SysadminInstanceProps(){
 
@@ -50,6 +51,7 @@ public class SysadminInstanceProps implements Serializable {
             runScheduledTasksOnThisInstance = "0";
         }
         instancename = InstanceProperties.getInstancename();
+        absolutepathtoexerciseimages = InstanceProperties.getAbsolutepathtoexerciseimages();
     }
 
     public void saveProps() throws ValidationException {
@@ -71,6 +73,7 @@ public class SysadminInstanceProps implements Serializable {
                 InstanceProperties.setRunScheduledTasksOnThisInstance(false);
             }
             InstanceProperties.setInstancename(instancename);
+            InstanceProperties.setAbsolutepathtoexerciseimages(absolutepathtoexerciseimages);
             try{
                 InstanceProperties.save();
                 if (InstanceProperties.haveValidConfig()){
@@ -171,5 +174,13 @@ public class SysadminInstanceProps implements Serializable {
 
     public void setInstancename(String instancename) {
         this.instancename = instancename;
+    }
+
+    public String getAbsolutepathtoexerciseimages() {
+        return absolutepathtoexerciseimages;
+    }
+
+    public void setAbsolutepathtoexerciseimages(String absolutepathtoexerciseimages) {
+        this.absolutepathtoexerciseimages = absolutepathtoexerciseimages;
     }
 }

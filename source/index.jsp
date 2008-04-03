@@ -263,30 +263,31 @@ String acl = "public";
                         </font>
                     </div>
                 <%}%>
-                <div class="rounded" style="padding: 15px; margin: 5px; background: #e6e6e6;">
-                    <font class="smallfont" style="font-weight: bold; color: #666666;">Completed Exercises</font>
-                    <br/><br/>
-                <%
-                    ArrayList<CompletedExercise> completedExercises = Pagez.getUserSession().getExerciser().getCompletedexercises();
-                    if (completedExercises != null && completedExercises.size() > 0) {
-                        int size = completedExercises.size();
-                        for (int i = (size-1); i >=0; i=i-1) {
-                            CompletedExercise completedExercise = completedExercises.get(i);
-                            Exercise cex = Exercise.get(completedExercise.getExerciseid());
-                            %>
-                                <font class="tinyfont" style="font-weight: bold; color: #666666;"><%=Time.dateformatcompactwithtime(completedExercise.getDate())%></font>
-                                <br/>
-                                <font class="smallfont" style="font-weight: bold; color: #666666;"><%=cex.getTitle()%> x <%=completedExercise.getReps()%> reps</font>
-                                <br/><br/>
-                            <%
-                        }
-                    } else {
-                    %>
-                        <font class="smallfont" style="color: #666666;">You haven't completed any exercises yet.  Get started by doing the exercise in the middle of the screen and clicking the I Did It button.</font>
-                    <%
-                    }
-                %>
-                </div>
+
+                <%if (!Pagez.getUserSession().getIsloggedin()){%>
+                    <div class="rounded" style="padding: 15px; margin: 5px; background: #e6e6e6;">
+                        <font class="smallfont" style="font-weight: bold; color: #666666;">Completed Exercises</font>
+                        <br/><br/>
+                        <%
+                        ArrayList<CompletedExercise> completedExercises = Pagez.getUserSession().getExerciser().getCompletedexercises();
+                        if (completedExercises != null && completedExercises.size() > 0) {
+                            int size = completedExercises.size();
+                            for (int i = (size-1); i >=0; i=i-1) {
+                                CompletedExercise completedExercise = completedExercises.get(i);
+                                Exercise cex = Exercise.get(completedExercise.getExerciseid());
+                                %>
+                                    <font class="tinyfont" style="font-weight: bold; color: #666666;"><%=Time.dateformatcompactwithtime(completedExercise.getDate())%></font>
+                                    <br/>
+                                    <font class="smallfont" style="font-weight: bold; color: #666666;"><%=cex.getTitle()%> x <%=completedExercise.getReps()%> reps</font>
+                                    <br/><br/>
+                                <%
+                            }
+                        } else {
+                        %>
+                            <font class="smallfont" style="color: #666666;">You haven't completed any exercises yet.  Get started by doing the exercise in the middle of the screen and clicking the I Did It button.</font>
+                        <%}%>
+                    </div>
+                <%}%>
             </td>
         </tr>
     </table>

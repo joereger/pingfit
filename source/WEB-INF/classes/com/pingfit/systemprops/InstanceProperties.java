@@ -29,6 +29,7 @@ public class InstanceProperties {
     private static String dbDriverName;
     private static String runScheduledTasksOnThisInstance;
     private static String instancename;
+    private static String absolutepathtoexerciseimages;
 
 
 
@@ -97,6 +98,7 @@ public class InstanceProperties {
             dbDriverName = properties.getProperty("dbDriverName", "com.mysql.jdbc.Driver");
             runScheduledTasksOnThisInstance = properties.getProperty("runScheduledTasksOnThisInstance", "0");
             instancename = properties.getProperty("instancename", "InstanceNotNamed");
+            absolutepathtoexerciseimages = properties.getProperty("absolutepathtoexerciseimages", "");
 
             haveAttemptedToLoadDefaultPropsFile = true;
             haveNewConfigToTest = true;
@@ -148,6 +150,9 @@ public class InstanceProperties {
             }
             if (instancename!=null){
                 properties.setProperty("instancename", instancename);
+            }
+            if (absolutepathtoexerciseimages!=null){
+                properties.setProperty("absolutepathtoexerciseimages", absolutepathtoexerciseimages);
             }
 
             if (testConfig()){
@@ -356,5 +361,15 @@ public class InstanceProperties {
 
     public static void setInstancename(String instancename) {
         InstanceProperties.instancename = instancename;
+    }
+
+
+    public static String getAbsolutepathtoexerciseimages() {
+        load();
+        return absolutepathtoexerciseimages;
+    }
+
+    public static void setAbsolutepathtoexerciseimages(String absolutepathtoexerciseimages) {
+        InstanceProperties.absolutepathtoexerciseimages = absolutepathtoexerciseimages;
     }
 }
