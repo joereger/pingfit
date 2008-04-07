@@ -24,10 +24,11 @@ cdtime.prototype.showresults=function(){
     var thisobj=this
     var timediff = this.secondsuntilnextexercise;
     if (timediff<0){ //if time is up
-        this.timesup=true
-        this.container.innerHTML=this.formatresults()
+        this.timesup=true;
+        this.container.innerHTML=this.formatresults();
+        NewWindow('/timetoworkout.jsp','Time to Workout!','0','0','yes');
         alert("PingFit says it's time to exercise!");
-        return
+        return ;
     }
     var oneMinute=60 //minute unit in seconds
     var oneHour=60*60 //hour unit in seconds
@@ -70,6 +71,27 @@ function formatresults(){
         var displaystring="Now!"
     }
     return displaystring
+}
+
+function NewWindow(mypage, myname, w, h, scroll) {
+    if (w>0) {
+    //Do nothing... we're using the input values
+    } else if (window.screen) {
+        w = window.screen.availWidth - 50;
+    } else {
+        w = 800
+    }
+    if (h>0) {
+        //Do nothing... we're using the input values
+    } else if (window.screen) {
+        h = window.screen.availHeight - 100;
+    } else {
+        h = 600
+    }
+    var percent = 90;
+    var winprops = 'height='+ h +',width='+ w +',top=25,left=25,scrollbars='+ scroll +',resizable';
+    var win = window.open(mypage, myname, winprops)
+    if (parseInt(navigator.appVersion) >= 4) { win.window.focus(); }
 }
 
 

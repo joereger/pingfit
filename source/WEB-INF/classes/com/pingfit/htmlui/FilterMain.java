@@ -201,17 +201,43 @@ public class FilterMain implements Filter {
                     }
                 }
 
-
-
-
                 //Find the Exerciser
                 //Start with the sessionid
                 String exerciserKey = "sessionid:"+httpServletRequest.getSession().getId();
-                //@todo if there's an api call with an email address, etc
-                //If there's a user
+
+                //Look for long-term non-login cookie
+                String cookieName = "pingFitExerciserCookieID";
+                boolean havecookie = false;
+                Cookie[] cookies = Pagez.getRequest().getCookies();
+                if (cookies!=null){
+                    for (int i = 0; i < cookies.length; i++) {
+                        Cookie cooky = cookies[i];
+                        if (cooky.getName().equals(cookieName)){
+                            String value = cooky.getValue();
+                            logger.debug("found a "+cookieName+" with value="+value);
+                            //Set the exerciserKey to the value of the cookie
+                            exerciserKey = "cookieid:"+value;
+                            havecookie = true;
+                        }
+                    }
+                }
+
+                //Build long-term non-login cookie if it's not already there
+                if (!havecookie){
+                    Cookie cooky = new Cookie(cookieName, httpServletRequest.getSession().getId());
+                    cooky.setMaxAge(Integer.MAX_VALUE);
+                    Pagez.getResponse().addCookie(cooky);
+                    //Set the exerciserKey to the value of the cookie
+                    exerciserKey = "cookieid:"+cooky.getValue();
+                }
+
+
+                //If there's a user, use that as the exerciserKey
                 if (Pagez.getUserSession().getUser()!=null && Pagez.getUserSession().getUser().getUserid()>0){
                     exerciserKey = "userid:"+Pagez.getUserSession().getUser().getUserid();
                 }
+
+                //Now go to the cache to get the Exerciser
                 Exerciser exerciser = ExerciserCache.get(exerciserKey);
                 if (exerciser!=null){
                     if (Pagez.getUserSession().getUser()!=null && Pagez.getUserSession().getUser().getUserid()>0){
@@ -222,7 +248,6 @@ public class FilterMain implements Filter {
                 } else {
                     logger.debug("No Exerciser created/found.");
                 }
-
 
 
             } else {
