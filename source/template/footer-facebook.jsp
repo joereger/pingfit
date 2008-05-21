@@ -22,7 +22,7 @@
         pgFooter = request.getParameter("dpage");
     }
     %>
-    <fb:google-analytics uacct="UA-208946-2" page="<%=pgFooter%>"/>
+    <fb:google-analytics uacct="UA-208946-7" page="<%=pgFooter%>"/>
 
 <!--</body>-->
 <!--</html>-->
