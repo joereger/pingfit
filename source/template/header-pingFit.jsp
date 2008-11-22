@@ -72,6 +72,7 @@
             <ul class="glossymenu">
                 <%if (navtab.equals("home")){%><li class="current"><a href="/index.jsp"><b>Home</b></a></li><%}%>
                 <%if (!navtab.equals("home")){%><li><a href="/index.jsp"><b>Home</b></a></li><%}%>
+                <%if (navtab.equals("exercise") && Pagez.getUserSession().getIsloggedin()){%><li class="current"><a href="/account/exercise.jsp"><b>Exercise</b></a></li><%}%>
                 <%if (navtab.equals("whatis")){%><li class="current"><a href="/whatis.jsp"><b>What is PingFit?</b></a></li><%}%>
                 <%if (!navtab.equals("whatis")){%><li><a href="/whatis.jsp"><b>What is PingFit?</b></a></li><%}%>
                 <%if (navtab.equals("blog")){%><li class="current"><a href="/blog.jsp"><b>PingFit Blog</b></a></li><%}%>

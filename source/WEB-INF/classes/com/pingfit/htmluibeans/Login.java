@@ -88,6 +88,7 @@ public class Login implements Serializable {
                 userSession.setIsloggedin(true);
                 userSession.setIsLoggedInToBeta(Pagez.getUserSession().getIsLoggedInToBeta());
                 userSession.setIsfacebookui(Pagez.getUserSession().getIsfacebookui());
+                userSession.setIstrayui(Pagez.getUserSession().getIstrayui());
                 userSession.setFacebookSessionKey(Pagez.getUserSession().getFacebookSessionKey());
                 userSession.setExerciser(Pagez.getUserSession().getExerciser());
                 //Set in the Pagez Exerciser
@@ -123,7 +124,6 @@ public class Login implements Serializable {
 
                 //This is where the new UserSession is actually bound to Pagez.getUserSession()
                 Pagez.setUserSessionAndUpdateCache(userSession);
-
 
 
             } else {

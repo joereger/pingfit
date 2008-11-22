@@ -3,8 +3,8 @@
 </tr>
 </table>
 
-<br/><br/>
-<table width="786" cellspacing="0" border="0" cellpadding="0">
+<br/><br/><br/><br/><br/><br/>
+<table width="400" cellspacing="0" border="0" cellpadding="0">
     <tr>
         <td background="/images/navtabs2/linedots.gif"><img src="/images/clear.gif" width="1" height="1"/></td>
     </tr>

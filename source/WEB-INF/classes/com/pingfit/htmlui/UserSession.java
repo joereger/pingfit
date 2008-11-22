@@ -37,6 +37,7 @@ public class UserSession implements Serializable {
     private String facebookSessionKey = "";
     private ArrayList<FacebookUser> facebookFriends = null;
     private boolean isfacebookui = false;
+    private boolean istrayui = false;
     private String message = "";
     private Calendar createdate = Calendar.getInstance();
     private Exerciser exerciser = null;
@@ -59,6 +60,10 @@ public class UserSession implements Serializable {
             if (Pagez.getRequest().getParameter("action")!=null && Pagez.getRequest().getParameter("action").indexOf("showsurvey")>-1){
                 logger.debug("setting isfacebook=true because of showsurvey request param");
                 isfacebookui=true;
+            }
+            if (Pagez.getRequest().getParameter("trayui")!=null && Pagez.getRequest().getParameter("trayui").equals("1")){
+                logger.debug("setting isfacebook=true because of showsurvey request param");
+                istrayui=true;
             }
         } catch (Exception ex){
             logger.error("", ex);
@@ -244,7 +249,13 @@ public class UserSession implements Serializable {
         this.exerciser = exerciser;
     }
 
+    public boolean getIstrayui() {
+        return istrayui;
+    }
 
+    public void setIstrayui(boolean istrayui) {
+        this.istrayui=istrayui;
+    }
 
     public void setLoggedInToBeta(boolean loggedInToBeta) {
         isLoggedInToBeta = loggedInToBeta;

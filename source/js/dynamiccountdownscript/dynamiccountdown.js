@@ -26,8 +26,8 @@ cdtime.prototype.showresults=function(){
     if (timediff<0){ //if time is up
         this.timesup=true;
         this.container.innerHTML=this.formatresults();
-        NewWindow('/timetoworkout.jsp','Time to Workout!','0','0','yes');
-        alert("PingFit says it's time to exercise!");
+        //NewWindow('/timetoworkout.jsp','Time to Workout!','0','0','yes');
+        //alert("PingFit says it's time to exercise!");
         return ;
     }
     var oneMinute=60 //minute unit in seconds
