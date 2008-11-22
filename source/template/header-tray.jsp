@@ -44,7 +44,7 @@
         <tr>
             <td valign="top">
                 <%if (pagetitle!=null && !pagetitle.equals("")){%>
-                    <font class="pagetitlefont"><%=pagetitle%></font>
+                    <font class="pagetitlefont" size="+1"><b><%=pagetitle%></b></font>
                     <br/>
                 <%}%>
                 <%

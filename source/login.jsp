@@ -65,6 +65,13 @@ Login login = (Login) Pagez.getBeanMgr().get("Login");
         }
     }
 %>
+<%
+//This one should be last
+if (Pagez.getUserSession().getIstrayui() && !Pagez.getUserSession().getIsloggedin()){
+    Pagez.sendRedirect("/logintray.jsp");
+    return;
+}
+%>
 <%@ include file="/template/header.jsp" %>
 
     <br/><br/>

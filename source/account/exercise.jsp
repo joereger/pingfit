@@ -70,6 +70,8 @@ AccountExercise accountExercise = (AccountExercise) Pagez.getBeanMgr().get("Acco
 <%@ include file="/template/header.jsp" %>
 
 
+
+
 <%
     if (Pagez.getUserSession()==null){
         logger.debug("Pagez.getUserSession()==null");
@@ -79,6 +81,14 @@ AccountExercise accountExercise = (AccountExercise) Pagez.getBeanMgr().get("Acco
     }
     Exercise exercise = Exercise.get(Pagez.getUserSession().getExerciser().getNextexerciseid());
 %>
+
+
+<%if (!Pagez.getUserSession().getIstrayui() && !Pagez.getUserSession().getIsfacebookui()){%>
+
+    <br/><br/>You need to <a href="http://www.frogfire.com/pingfit/PingFit_Installer.exe">download</a> and install the PingFit application.  Once you start the application, right-click the icon in the system tray and choose Profile.  Enter your email and password.  PingFit will alert you when it's time to workout.
+
+<%} else {%>
+
 
 <script type="text/javascript" src="/js/countdownpro/countdownpro.js" defer="defer"></script>
 <meta scheme="countdown1" name="d_mindigits" content="1" />
@@ -275,7 +285,7 @@ AccountExercise accountExercise = (AccountExercise) Pagez.getBeanMgr().get("Acco
 
 
 
-
+<%}%>
 
 
 

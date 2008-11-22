@@ -21,6 +21,7 @@ import com.pingfit.eula.EulaHelper;
 import com.pingfit.systemprops.SystemProperty;
 import com.pingfit.systemprops.BaseUrl;
 import com.pingfit.api.SaveCompletedExercisesFromMemory;
+import com.pingfit.api.Exerciser;
 
 import javax.servlet.http.Cookie;
 
@@ -74,7 +75,7 @@ public class Login implements Serializable {
         Logger logger = Logger.getLogger(this.getClass().getName());
         logger.debug("login() called.");
         logger.debug("keepmeloggedin="+keepmeloggedin);
-        List users = HibernateUtil.getSession().createQuery("FROM User as user WHERE user.email='"+ Str.cleanForSQL(email)+"' AND user.password='"+Str.cleanForSQL(password)+"'").setMaxResults(1).list();
+        List users = HibernateUtil.getSession().createQuery("FROM User as user WHERE user.email='"+ Str.cleanForSQL(email)+"' AND user.password='"+Str.cleanForSQL(password)+"'").setMaxResults(1).setCacheable(true).list();
         if (users.size()==0){
             vex.addValidationError("Email/password incorrect.");
             throw vex;
@@ -119,8 +120,8 @@ public class Login implements Serializable {
 
 
                 //Notify via XMPP
-                SendXMPPMessage xmpp = new SendXMPPMessage(SendXMPPMessage.GROUP_SALES, "dNeero User Login: "+ user.getFirstname() + " " + user.getLastname() + " ("+user.getEmail()+")");
-                xmpp.send();
+                //SendXMPPMessage xmpp = new SendXMPPMessage(SendXMPPMessage.GROUP_SALES, "dNeero User Login: "+ user.getFirstname() + " " + user.getLastname() + " ("+user.getEmail()+")");
+                //xmpp.send();
 
                 //This is where the new UserSession is actually bound to Pagez.getUserSession()
                 Pagez.setUserSessionAndUpdateCache(userSession);

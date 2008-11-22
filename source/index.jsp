@@ -27,13 +27,6 @@ String acl = "public";
 <%@ include file="/template/header.jsp" %>
 
 
-
-
-
-
-
-
-
-
+Wachoo lookin' at punk?  Sign up and test some stuff.  Jeeze.
 
 <%@ include file="/template/footer.jsp" %>
