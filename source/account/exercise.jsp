@@ -82,10 +82,24 @@ AccountExercise accountExercise = (AccountExercise) Pagez.getBeanMgr().get("Acco
     Exercise exercise = Exercise.get(Pagez.getUserSession().getExerciser().getNextexerciseid());
 %>
 
-
 <%if (!Pagez.getUserSession().getIstrayui() && !Pagez.getUserSession().getIsfacebookui()){%>
+    <table cellpadding="5" cellspacing="0" border="0" width="100%">
+        <tr>
+            <td valign="top">
+                <div style="padding: 5px; margin: 5px; background: #e6e6e6;">
+                    <div style="padding: 10px; margin: 5px; background: #ffffff;">
+                        <b><a href="http://www.frogfire.com/pingfit/PingFit_Installer.exe">Download</a> and install the PingFit application.</b>  Once you start the application, right-click the icon in the system tray and choose Profile.  Enter your email and PingFit password.  PingFit will alert you when it's time to workout.
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
 
-    <br/><br/>You need to <a href="http://www.frogfire.com/pingfit/PingFit_Installer.exe">download</a> and install the PingFit application.  Once you start the application, right-click the icon in the system tray and choose Profile.  Enter your email and password.  PingFit will alert you when it's time to workout.
+<%}%>
+
+
+<%if (1==2 && !Pagez.getUserSession().getIstrayui() && !Pagez.getUserSession().getIsfacebookui()){%>
+
 
 <%} else {%>
 
@@ -117,8 +131,8 @@ AccountExercise accountExercise = (AccountExercise) Pagez.getBeanMgr().get("Acco
 <table cellpadding="5" cellspacing="0" border="0" width="100%">
         <tr>
             <td valign="top">
-                <div class="rounded" style="padding: 5px; margin: 5px; background: #e6e6e6;">
-                    <div class="rounded" style="padding: 10px; margin: 5px; background: #ffffff;">
+                <div style="padding: 5px; margin: 5px; background: #e6e6e6;">
+                    <div style="padding: 10px; margin: 5px; background: #ffffff;">
                         <div id="mainexercisearea">
                             <table cellpadding="0" cellspacing="0" border="0" width="100%">
                                 <tr>
@@ -142,7 +156,7 @@ AccountExercise accountExercise = (AccountExercise) Pagez.getBeanMgr().get("Acco
                                         <!--</center>-->
                                     </td>
                                     <td valign="top" width="175">
-                                        <div class="rounded" style="padding: 10px; margin: 5px; background: #e6e6e6;">
+                                        <div style="padding: 10px; margin: 5px; background: #e6e6e6;">
                                             <font class="tinyfont">
                                             <form action="/account/exercise.jsp" method="post">
                                                 <input type="hidden" name="action" value="completeexercise">
@@ -162,7 +176,7 @@ AccountExercise accountExercise = (AccountExercise) Pagez.getBeanMgr().get("Acco
                                             </form>
                                             </font>
                                         </div>
-                                        <div class="rounded" style="padding: 10px; margin: 5px; background: #e6e6e6;">
+                                        <div style="padding: 10px; margin: 5px; background: #e6e6e6;">
                                             <form action="/account/exercise.jsp" method="post">
                                                 <input type="hidden" name="action" value="skipexercise">
                                                 <center>
@@ -175,7 +189,7 @@ AccountExercise accountExercise = (AccountExercise) Pagez.getBeanMgr().get("Acco
                             </table>
                             <%if (exercise.getImage()!=null && !exercise.getImage().equals("")){%>
                                 <center>
-                                <div class="rounded" style="padding: 10px; margin: 5px; background: #e6e6e6;">
+                                <div style="padding: 10px; margin: 5px; background: #e6e6e6;">
                                     <img src="/images/exercises/<%=exercise.getImage()%>" border="0">
                                 </div>
                                 </center>
@@ -193,7 +207,7 @@ AccountExercise accountExercise = (AccountExercise) Pagez.getBeanMgr().get("Acco
         <tr>
             <td valign="top">
 
-                <div class="rounded" style="padding: 10px; margin: 5px; background: #e6e6e6;">
+                <div style="padding: 10px; margin: 5px; background: #e6e6e6;">
                     <form action="/account/exercise.jsp" method="post">
                         <input type="hidden" name="action" value="savesettings">
                         <select name="exerciseeveryxminutes" style="font-size: 10px;">
@@ -256,7 +270,7 @@ AccountExercise accountExercise = (AccountExercise) Pagez.getBeanMgr().get("Acco
 
 
                 <%if (!Pagez.getUserSession().getIsloggedin()){%>
-                    <div class="rounded" style="padding: 15px; margin: 5px; background: #e6e6e6;">
+                    <div style="padding: 15px; margin: 5px; background: #e6e6e6;">
                         <font class="smallfont" style="font-weight: bold; color: #666666;">Completed Exercises</font>
                         <br/><br/>
                         <%

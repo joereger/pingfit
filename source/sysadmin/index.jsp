@@ -18,11 +18,9 @@ String acl = "sysadmin";
 
 
 
-    
 
-    <div class="rounded" style="padding: 15px; margin: 8px; background: #e6e6e6;">
         <%=sysadminIndex.getServermemory()%>
-    </div>
+
 
 
 

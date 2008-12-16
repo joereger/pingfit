@@ -16,14 +16,15 @@ AccountBalance accountBalance = (AccountBalance)Pagez.getBeanMgr().get("AccountB
 %>
 <%@ include file="/template/header.jsp" %>
 
-
-    <div class="rounded" style="padding: 15px; margin: 5px; background: #F2FFBF;">
-        <%if (accountBalance.getCurrentbalanceDbl()>0){%>
-            <font class="smallfont" style="color: #000000;">(We owe you money.  Once a day, if you have a balance of over $20 and don't have any live surveys that you've launched yourself then we'll send money to the PayPal address in your account settings.)</font>
-        <%} else if (accountBalance.getCurrentbalanceDbl()<0){%>
-            <font class="smallfont" style="color: #000000;">(You owe us money.)</font>
-        <%}%>
-    </div>
+    <%if (accountBalance.getCurrentbalanceDbl()!=0){%>
+        <div style="padding: 15px; margin: 5px; background: #e6e6e6;">
+            <%if (accountBalance.getCurrentbalanceDbl()>0){%>
+                <font class="smallfont" style="color: #000000;">(We owe you money.  Once a day, if you have a balance of over $20 and don't have any live surveys that you've launched yourself then we'll send money to the PayPal address in your account settings.)</font>
+            <%} else if (accountBalance.getCurrentbalanceDbl()<0){%>
+                <font class="smallfont" style="color: #000000;">(You owe us money.)</font>
+            <%}%>
+        </div>
+    <%}%>
     <br/><br/>
     
 

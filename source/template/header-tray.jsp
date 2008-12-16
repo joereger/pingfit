@@ -12,7 +12,8 @@
           content="PingFit"/>
     <meta name="keywords" content="fitness,workout"/>
 </head>
-<body>
+
+<body background="/images/template-v1/bg2.gif" LEFTMARGIN="0" TOPMARGIN="0" MARGINWIDTH="0" MARGINHEIGHT="0"><center>
 
 <table width="400" cellspacing="0" border="0" cellpadding="0">
     <tr>

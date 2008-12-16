@@ -2,7 +2,7 @@ body {
     padding:0px;
     margin:0px;
     background:#FFFFFF;
-    background-image: url("/images/background-grey.gif");
+    background-image: url("/images/template-v1/bg2.gif");
     font-family: Verdana, Arial, Helvetica, sans-serif;
     font-size: 12px;
     font-weight: normal;
@@ -164,8 +164,8 @@ form {
 }
 
 .rounded {
-    padding: 20px;
-    background: #BFFFBF;
+    /*padding: 20px;*/
+    /*background: #BFFFBF;*/
 }
 
 .survey_tabs_body_width{
@@ -192,54 +192,6 @@ form {
     border-top: 1px solid #333333;
 }
 
-/* Start Css Tabs */
-/* Source: http://www.exploding-boy.com/images/cssmenus/menus.html */
-    #csstabs {
-      float:left;
-      width:100%;
-      background:#E7E5E2;
-      font-size:93%;
-      line-height:normal;
-	  border-bottom:1px solid #54545C;
-      }
-    #csstabs ul {
-	  margin:0;
-	  padding:10px 10px 0 10px;
-	  list-style:none;
-      }
-    #csstabs li {
-      display:inline;
-      margin:0;
-      padding:0;
-      }
-    #csstabs a {
-      float:left;
-      background:url("/images/csstabs-tableft.gif") no-repeat left top;
-      margin:0;
-      padding:0 0 0 4px;
-      text-decoration:none;
-      }
-    #csstabs a span {
-      float:left;
-      display:block;
-      background:url("/images/csstabs-tabright.gif") no-repeat right top;
-      padding:5px 15px 4px 6px;
-      color:#FFF;
-      }
-    /* Commented Backslash Hack hides rule from IE5-Mac \*/
-    #csstabs a span {float:none;}
-    /* End IE5-Mac hack */
-    #csstabs a:hover span {
-      color:#FFF;
-	  background-position:100% -42px;
-      }
-    #csstabs a:hover {
-      background-position:0% -42px;
-      }
-    #csstabs a:hover span {
-      background-position:100% -42px;
-	  }
- /* End Css Tabs */
 
 .gridheader{
    font-family:'trebuchet ms',helvetica,sans-serif;

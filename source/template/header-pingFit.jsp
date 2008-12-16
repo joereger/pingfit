@@ -14,11 +14,11 @@
     <meta name="keywords" content="fitness,workout"/>
     <script type="text/javascript" src="/js/mootools/mootools-release-1.11.js"></script>
     <script type="text/javascript" src="/js/niftycube/niftycube.js"></script>
-    <script type="text/javascript">
-        NiftyLoad = function() {
-            Nifty("div.rounded", "big");
-        }
-    </script>
+    <!--<script type="text/javascript">-->
+        <!--NiftyLoad = function() {-->
+            <!--Nifty("div.rounded", "big");-->
+        <!--}-->
+    <!--</script>-->
     <!--[if IE]>
     <style type="text/css">
     p.iepara{ /*Conditional CSS- For IE (inc IE7), create 1em spacing between menu and paragraph that follows*/
@@ -28,137 +28,121 @@
     <![endif]-->
 
 </head>
-<body>
 
+
+<body background="/images/template-v1/bg2.gif" LEFTMARGIN="0" TOPMARGIN="0" MARGINWIDTH="0" MARGINHEIGHT="0"><center>
 <table width="786" cellspacing="0" border="0" cellpadding="0">
-    <tr>
-        <td valign="top">
-            <img src="/images/clear.gif" width="10" height="1" align="left"/>
-            <a href="/"><img src="/images/pingfit-logo.gif" border="0" height="75" align="left"/></a>
-        </td>
-        <td valign="top" style="text-align: right;">
-            <%if (!Pagez.getUserSession().getIsloggedin()){%>
-                <div style="padding: 10px; text-align: right;">
-                <font class="subnavfont">Already have an account?<img src="/images/clear.gif" width="20" height="1"/><a href="/login.jsp">Log In</a></font>
-                <br/>
-                <font class="subnavfont">Want to get one?<img src="/images/clear.gif" width="20" height="1"/><a href="/registration.jsp">Sign Up</a></font>
+<tr>
+    <td width="200"><a href="/"><img src="/images/pingfit-logo.gif" border="0" width="310" height="75" align="left"/></a></td>
+    <td style="text-align: right; vertical-align: bottom;">
+        <img src="/images/clear.gif" width="1" height="6" alt=""/><br/>
+		<%if (navtab.equals("home")){%><font class="navtabfontlevel1"><a href="/index.jsp"><b>Home</b></a></font><%}%>
+        <%if (!navtab.equals("home")){%><font class="navtabfontlevel1"><a href="/index.jsp"><b>Home</b></a></font><%}%>
+        <%if (navtab.equals("exercise") && Pagez.getUserSession().getIsloggedin()){%><font class="navtabfontlevel1"><a href="/account/exercise.jsp"><b>Exercise</b></a></font><%}%>
+        <%if (!navtab.equals("exercise") && Pagez.getUserSession().getIsloggedin()){%><font class="navtabfontlevel1"><a href="/account/exercise.jsp"><b>Exercise</b></a></font><%}%>
+        <%if (navtab.equals("blog")){%><font class="navtabfontlevel1"><a href="/blog.jsp"><b>Blog</b></a></font><%}%>
+        <%if (!navtab.equals("blog")){%><font class="navtabfontlevel1"><a href="/blog.jsp"><b>Blog</b></a></font><%}%>
+        <%if (!navtab.equals("reports") && Pagez.getUserSession().getIsloggedin()){%><font class="navtabfontlevel1"><a href="/account/reports.jsp"><b>Reports</b></a></font><%}%>
+        <%if (navtab.equals("reports") && Pagez.getUserSession().getIsloggedin()){%><font class="navtabfontlevel1"><a href="/account/reports.jsp"><b>Reports</b></a></font><%}%>
+        <%if (!navtab.equals("youraccount") && Pagez.getUserSession().getIsloggedin()){%><font class="navtabfontlevel1"><a href="/account/index.jsp"><b>Settings</b></a></font><%}%>
+        <%if (navtab.equals("youraccount") && Pagez.getUserSession().getIsloggedin()){%><font class="navtabfontlevel1"><a href="/account/index.jsp"><b>Settings</b></a></font><%}%>
+        <%if (!navtab.equals("youraccount") && !Pagez.getUserSession().getIsloggedin()){%><font class="navtabfontlevel1"><a href="/registration.jsp"><b>Sign Up</b></a></font><%}%>
+        <%if (navtab.equals("youraccount") && !Pagez.getUserSession().getIsloggedin()){%><font class="navtabfontlevel1"><a href="/registration.jsp"><b>Sign Up</b></a></font><%}%>
+        <%if (!navtab.equals("help") && Pagez.getUserSession().getIsloggedin()){%><font class="navtabfontlevel1"><a href="/account/accountsupportissueslist.jsp"><b>Help</b></a></font><%}%>
+        <%if (navtab.equals("help") && Pagez.getUserSession().getIsloggedin()){%><font class="navtabfontlevel1"><a href="/account/accountsupportissueslist.jsp"><b>Help</b></a></font><%}%>
+        <%if (1==2 && !navtab.equals("help") && !Pagez.getUserSession().getIsloggedin()){%><font class="navtabfontlevel1"><a href="/account/accountsupportissueslist.jsp"><b>Help</b></a></font><%}%>
+        <%if (1==2 && navtab.equals("help") && !Pagez.getUserSession().getIsloggedin()){%><font class="navtabfontlevel1"><a href="/account/accountsupportissueslist.jsp"><b>Help</b></a></font><%}%>
+        <%if (Pagez.getUserSession().getIsSysadmin() && !navtab.equals("sysadmin")){%><font class="navtabfontlevel1"><a href="/sysadmin/index.jsp"><b>SysAdmin</a></font><%}%>
+        <%if (Pagez.getUserSession().getIsSysadmin() && navtab.equals("sysadmin")){%><font class="navtabfontlevel1"><a href="/sysadmin/index.jsp"><b>SysAdmin</b></a></font><%}%>
+    </td>
+</tr>
+<tr>
+    <td><img src="/images/clear.gif" width="1" height="33" alt=""/></td>
+    <td style="text-align: right; vertical-align: middle;">
+		<%if (navtab.equals("home")){%>
+            <img src="/images/clear.gif" alt="" width="10" height="1"/>
+            <%if (1==2 && !Pagez.getUserSession().getIsloggedin()){%><a href="/registration.jsp"><font class="subnavfont" style="color: #ffffff;">Sign Up</font></a><%}%>
+            <img src="/images/clear.gif" alt="" width="10" height="1"/>
+            <%if (1==2 && !Pagez.getUserSession().getIsloggedin()){%><a href="/login.jsp"><font class="subnavfont" style="color: #ffffff;">Log In</font></a><%}%>
+        <%}%>
+
+        <%if (navtab.equals("youraccount")){%>
+            <%if (Pagez.getUserSession().getIsloggedin()){%>
+                <img src="/images/clear.gif" alt="" width="10" height="1"/>
+                <a href="/account/exerciselist.jsp"><font class="subnavfont" style="color: #ffffff;">Your Exercises</font></a>
+                <img src="/images/clear.gif" alt="" width="10" height="1"/>
+                <a href="/account/exerciselistlist.jsp"><font class="subnavfont" style="color: #ffffff;">Your Exercise Lists</font></a>
+                <img src="/images/clear.gif" alt="" width="10" height="1"/>
+                <a href="/account/accountsettings.jsp"><font class="subnavfont" style="color: #ffffff;">Account Settings</font></a>
+                <img src="/images/clear.gif" alt="" width="10" height="1"/>
+                <a href="/account/accountbalance.jsp"><font class="subnavfont" style="color: #ffffff;">Account Balance</font></a>
+                <img src="/images/clear.gif" alt="" width="10" height="1"/>
+                <a href="/account/changepassword.jsp"><font class="subnavfont" style="color: #ffffff;">Change Password</font></a>
+            <%}%>
+        <%}%>
+
+
+
+        <%if (navtab.equals("sysadmin")){%>
+            <%if (Pagez.getUserSession().getIsloggedin() && Pagez.getUserSession().getIsSysadmin()){%>
+                <a href="/sysadmin/errorlist.jsp"><font class="subnavfont" style=" color: #ffffff;">Log</font></a>
+                <a href="/sysadmin/transactions.jsp"><font class="subnavfont" style=" color: #ffffff;">Trans</font></a>
+                <a href="/sysadmin/balance.jsp"><font class="subnavfont" style=" color: #ffffff;">Balance</font></a>
+                <a href="/sysadmin/userlist.jsp"><font class="subnavfont" style=" color: #ffffff;">Users</font></a>
+                <a href="/sysadmin/editeula.jsp"><font class="subnavfont" style=" color: #ffffff;">Eula</font></a>
+                <a href="/sysadmin/sysadminsupportissueslist.jsp"><font class="subnavfont" style=" color: #ffffff;">Support</font></a>
+                <a href="/sysadmin/manuallyrunscheduledtask.jsp"><font class="subnavfont" style=" color: #ffffff;">Scheds</font></a>
+                <a href="/sysadmin/systemprops.jsp"><font class="subnavfont" style=" color: #ffffff;">SysProps</font></a>
+                <a href="/sysadmin/instanceprops.jsp"><font class="subnavfont" style=" color: #ffffff;">InsProps</font></a>
+                <a href="/sysadmin/hibernatecache.jsp"><font class="subnavfont" style=" color: #ffffff;">Cache</font></a>
+                <a href="/sysadmin/massemaillist.jsp"><font class="subnavfont" style=" color: #ffffff;">Email</font></a>
+                <a href="/sysadmin/pageperformance.jsp"><font class="subnavfont" style=" color: #ffffff;">Perf</font></a>
+                <a href="/sysadmin/exerciselist.jsp"><font class="subnavfont" style=" color: #ffffff;">Exercises</font></a>
+                <a href="/sysadmin/exerciselistlist.jsp"><font class="subnavfont" style=" color: #ffffff;">Exercise Lists</font></a>
+                <a href="/sysadmin/blogpost.jsp"><font class="subnavfont" style=" color: #ffffff;">Blog</font></a>
+            <%}%>
+        <%}%>
+	</td>
+</tr>
+</table><img src="/images/clear.gif" width="1" height="10" alt=""/><br/><table width="786" cellspacing="0" border="0" cellpadding="0">
+<tr>
+    <td valign="top">
+        <%if (pagetitle!=null && !pagetitle.equals("")){%>
+            <img src="/images/clear.gif" width="1" height="10" alt=""/><br/>
+            <font class="pagetitlefont"><%=pagetitle%></font>
+            <br/><br/>
+        <%}%>
+        <%
+        logger.debug("Pagez.getUserSession().getMessage()="+Pagez.getUserSession().getMessage());
+        if (Pagez.getUserSession().getMessage()!=null && !Pagez.getUserSession().getMessage().equals("")){
+            %>
+            <br/>
+            <center><div style="background: #e6e6e6; text-align: left; padding: 20px;"><font class="formfieldnamefont"><%=Pagez.getUserSession().getMessage()%></font></div></center>
+            <br/><br/>
+            <%
+            //Clear the message since it's been displayed
+            Pagez.getUserSession().setMessage("");
+        }
+        %>
+    </td>
+    <td valign="top" style="text-align: right;">
+        <%if (!Pagez.getUserSession().getIsloggedin()){%>
+                <div style="text-align: right;">
+                    <font class="subnavfont">Already have an account?<img src="/images/clear.gif" width="20" height="1"/><a href="/login.jsp">Log In</a></font>
+                    <br/>
+                    <font class="subnavfont">Want to get one?<img src="/images/clear.gif" width="20" height="1"/><a href="/registration.jsp">Sign Up</a></font>
                 </div>
             <%}%>
             <%if (Pagez.getUserSession().getIsloggedin()){%>
-                <div style="padding: 10px; text-align: right;">
+                <div style="text-align: right;">
                     <font class="subnavfont">Hi, <%=Pagez.getUserSession().getUser().getFirstname()%> <%=Pagez.getUserSession().getUser().getLastname()%>! <a href="/login.jsp?action=logout">Log Out</a></font>
-                    <br/>
-                    <font class="subnavfont">Need <a href="/account/accountsupportissueslist.jsp">Help?</a></font>
                 </div>
             <%}%>
         </td>
     </tr>
-    <%--<tr>--%>
-        <%--<td valign="top" bgcolor="#00709e" colspan="2">--%>
-            <%--<ul id="thicktabs">--%>
-                <%--<%if (navtab.equals("home")){%><li><a id="leftmostitem" href="/index.jsp">Home</a></li><%}%>--%>
-                <%--<%if (!navtab.equals("home")){%><li><a id="leftmostitem" href="/index.jsp">Home</a></li><%}%>--%>
-                <%--<%if (!navtab.equals("youraccount") && Pagez.getUserSession().getIsloggedin()){%><li><a href="/account/index.jsp">Your Account</a></li><%}%>--%>
-                <%--<%if (navtab.equals("youraccount") && Pagez.getUserSession().getIsloggedin()){%><li><a href="/account/index.jsp">Your Account</a></li><%}%>--%>
-                <%--<%if (!navtab.equals("youraccount") && !Pagez.getUserSession().getIsloggedin()){%><li><a href="/registration.jsp">Sign Up</a></li><%}%>--%>
-                <%--<%if (navtab.equals("youraccount") && !Pagez.getUserSession().getIsloggedin()){%><li><a href="/registration.jsp">Sign Up</a></li><%}%>--%>
-                <%--<%if (Pagez.getUserSession().getIsSysadmin() && !navtab.equals("sysadmin")){%><li><a href="/sysadmin/index.jsp">SysAdmin</a></li><%}%>--%>
-                <%--<%if (Pagez.getUserSession().getIsSysadmin() && navtab.equals("sysadmin")){%><li><a href="/sysadmin/index.jsp">SysAdmin</a></li><%}%>--%>
-            <%--</ul>--%>
-        <%--</td>--%>
-    <%--</tr>--%>
-    <tr>
-        <td valign="top" colspan="2">
-            <ul class="glossymenu">
-                <%if (navtab.equals("home")){%><li class="current"><a href="/index.jsp"><b>Home</b></a></li><%}%>
-                <%if (!navtab.equals("home")){%><li><a href="/index.jsp"><b>Home</b></a></li><%}%>
-                <%if (navtab.equals("exercise") && Pagez.getUserSession().getIsloggedin()){%><li class="current"><a href="/account/exercise.jsp"><b>Exercise</b></a></li><%}%>
-                <%if (!navtab.equals("exercise") && Pagez.getUserSession().getIsloggedin()){%><li><a href="/account/exercise.jsp"><b>Exercise</b></a></li><%}%>
-                <%if (navtab.equals("blog")){%><li class="current"><a href="/blog.jsp"><b>Blog</b></a></li><%}%>
-                <%if (!navtab.equals("blog")){%><li><a href="/blog.jsp"><b>Blog</b></a></li><%}%>
-                <%if (!navtab.equals("reports") && Pagez.getUserSession().getIsloggedin()){%><li><a href="/account/reports.jsp"><b>Reports</b></a></li><%}%>
-                <%if (navtab.equals("reports") && Pagez.getUserSession().getIsloggedin()){%><li class="current"><a href="/account/reports.jsp"><b>Reports</b></a></li><%}%>
-                <%if (!navtab.equals("youraccount") && Pagez.getUserSession().getIsloggedin()){%><li><a href="/account/index.jsp"><b>Settings</b></a></li><%}%>
-                <%if (navtab.equals("youraccount") && Pagez.getUserSession().getIsloggedin()){%><li class="current"><a href="/account/index.jsp"><b>Settings</b></a></li><%}%>
-                <%if (!navtab.equals("youraccount") && !Pagez.getUserSession().getIsloggedin()){%><li><a href="/registration.jsp"><b>Sign Up</b></a></li><%}%>
-                <%if (navtab.equals("youraccount") && !Pagez.getUserSession().getIsloggedin()){%><li class="current"><a href="/registration.jsp"><b>Sign Up</b></a></li><%}%>
-                <%if (!navtab.equals("help") && Pagez.getUserSession().getIsloggedin()){%><li><a href="/account/accountsupportissueslist.jsp"><b>Help</b></a></li><%}%>
-                <%if (navtab.equals("help") && Pagez.getUserSession().getIsloggedin()){%><li class="current"><a href="/account/accountsupportissueslist.jsp"><b>Help</b></a></li><%}%>
-                <%if (1==2 && !navtab.equals("help") && !Pagez.getUserSession().getIsloggedin()){%><li><a href="/account/accountsupportissueslist.jsp"><b>Help</b></a></li><%}%>
-                <%if (1==2 && navtab.equals("help") && !Pagez.getUserSession().getIsloggedin()){%><li class="current"><a href="/account/accountsupportissueslist.jsp"><b>Help</b></a></li><%}%>
-                <%if (Pagez.getUserSession().getIsSysadmin() && !navtab.equals("sysadmin")){%><li><a href="/sysadmin/index.jsp"><b>SysAdmin</a></li><%}%>
-                <%if (Pagez.getUserSession().getIsSysadmin() && navtab.equals("sysadmin")){%><li class="current"><a href="/sysadmin/index.jsp"><b>SysAdmin</b></a></li><%}%>
-            </ul>
-        </td>
-    </tr>
-
-    <tr>
-        <td bgcolor="#dadada" style="text-align: left; vertical-align: middle;" colspan="2" height="25">
-            <%if (navtab.equals("home")){%>
-                <img src="/images/clear.gif" alt="" width="10" height="1"/>
-                <%if (!Pagez.getUserSession().getIsloggedin()){%><a href="/registration.jsp"><font class="subnavfont" style="color: #000000;">Sign Up</font></a><%}%>
-                <img src="/images/clear.gif" alt="" width="10" height="1"/>
-                <%if (!Pagez.getUserSession().getIsloggedin()){%><a href="/login.jsp"><font class="subnavfont" style="color: #000000;">Log In</font></a><%}%>
-            <%}%>
-
-            <%if (navtab.equals("youraccount")){%>
-                <%if (Pagez.getUserSession().getIsloggedin()){%>
-                    <img src="/images/clear.gif" alt="" width="10" height="1"/>
-                    <a href="/account/exerciselist.jsp"><font class="subnavfont" style="color: #000000;">Your Exercises</font></a>
-                    <img src="/images/clear.gif" alt="" width="10" height="1"/>
-                    <a href="/account/exerciselistlist.jsp"><font class="subnavfont" style="color: #000000;">Your Exercise Lists</font></a>        
-                    <img src="/images/clear.gif" alt="" width="10" height="1"/>
-                    <a href="/account/accountsettings.jsp"><font class="subnavfont" style="color: #000000;">Account Settings</font></a>
-                    <img src="/images/clear.gif" alt="" width="10" height="1"/>
-                    <a href="/account/accountbalance.jsp"><font class="subnavfont" style="color: #000000;">Account Balance</font></a>
-                    <img src="/images/clear.gif" alt="" width="10" height="1"/>
-                    <a href="/account/changepassword.jsp"><font class="subnavfont" style="color: #000000;">Change Password</font></a>
-                <%}%>
-            <%}%>
-            <%if (navtab.equals("sysadmin")){%>
-                <%if (Pagez.getUserSession().getIsloggedin() && Pagez.getUserSession().getIsSysadmin()){%>
-                    <a href="/sysadmin/errorlist.jsp"><font class="subnavfont" style=" color: #000000;">Log</font></a>
-                    <a href="/sysadmin/transactions.jsp"><font class="subnavfont" style=" color: #000000;">Trans</font></a>
-                    <a href="/sysadmin/balance.jsp"><font class="subnavfont" style=" color: #000000;">Balance</font></a>
-                    <a href="/sysadmin/userlist.jsp"><font class="subnavfont" style=" color: #000000;">Users</font></a>
-                    <a href="/sysadmin/editeula.jsp"><font class="subnavfont" style=" color: #000000;">Eula</font></a>
-                    <a href="/sysadmin/sysadminsupportissueslist.jsp"><font class="subnavfont" style=" color: #000000;">Support</font></a>
-                    <a href="/sysadmin/manuallyrunscheduledtask.jsp"><font class="subnavfont" style=" color: #000000;">Scheds</font></a>
-                    <a href="/sysadmin/systemprops.jsp"><font class="subnavfont" style=" color: #000000;">SysProps</font></a>
-                    <a href="/sysadmin/instanceprops.jsp"><font class="subnavfont" style=" color: #000000;">InsProps</font></a>
-                    <a href="/sysadmin/hibernatecache.jsp"><font class="subnavfont" style=" color: #000000;">Cache</font></a>
-                    <a href="/sysadmin/massemaillist.jsp"><font class="subnavfont" style=" color: #000000;">Email</font></a>
-                    <a href="/sysadmin/pageperformance.jsp"><font class="subnavfont" style=" color: #000000;">Perf</font></a>
-                    <a href="/sysadmin/exerciselist.jsp"><font class="subnavfont" style=" color: #000000;">Exercises</font></a>
-                    <a href="/sysadmin/exerciselistlist.jsp"><font class="subnavfont" style=" color: #000000;">Exercise Lists</font></a>
-                    <a href="/sysadmin/blogpost.jsp"><font class="subnavfont" style=" color: #000000;">Blog</font></a>
-                <%}%>
-            <%}%>
-        </td>
-    </tr>
-    <tr>
-        <td background="/images/navtabs2/linedots.gif" colspan="2"><img src="/images/clear.gif" width="1" height="1"/></td>
-    </tr>
 </table>
-
-
-    <table width="775" cellspacing="0" border="0" cellpadding="10">
-        <tr>
-            <td valign="top">
-                <%if (pagetitle!=null && !pagetitle.equals("")){%>
-                    <font class="pagetitlefont"><%=pagetitle%></font>
-                    <br/>
-                <%}%>
-                <%
-                logger.debug("Pagez.getUserSession().getMessage()="+Pagez.getUserSession().getMessage());
-                if (Pagez.getUserSession().getMessage()!=null && !Pagez.getUserSession().getMessage().equals("")){
-                    %>
-                    <br/>
-                    <center><div class="rounded" style="background: #F2FFBF; text-align: left; padding: 20px;"><font class="formfieldnamefont"><%=Pagez.getUserSession().getMessage()%></font></div></center>
-                    <br/><br/>
-                    <%
-                    //Clear the message since it's been displayed
-                    Pagez.getUserSession().setMessage("");
-                }
-                %>
-                <!-- Begin Body -->
+<table width="786" cellspacing="0" border="0" cellpadding="0">
+<tr>
+    <td>
+    <div style="text-align: left;">
+<!-- Start Body -->
