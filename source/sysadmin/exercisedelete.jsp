@@ -10,9 +10,11 @@
 <%@ page import="org.hibernate.criterion.Restrictions" %>
 <%@ page import="org.hibernate.criterion.Order" %>
 <%@ page import="com.pingfit.util.Num" %>
+<%@ page import="com.pingfit.util.Util" %>
+<%@ page import="com.pingfit.dao.hibernate.NumFromUniqueResult" %>
 <%
 Logger logger = Logger.getLogger(this.getClass().getName());
-String pagetitle = "Exercise";
+String pagetitle = "Exercise Delete, orly?";
 String navtab = "sysadmin";
 String acl = "sysadmin";
 %>
@@ -29,17 +31,13 @@ String acl = "sysadmin";
     }
 %>
 <%
-    if (request.getParameter("action") != null && request.getParameter("action").equals("save")) {
+    if (request.getParameter("action") != null && request.getParameter("action").equals("delete")) {
         try {
-            exercise.setTitle(Textbox.getValueFromRequest("title", "Title", true, DatatypeString.DATATYPEID));
-            exercise.setImage(Textbox.getValueFromRequest("image", "Image", false, DatatypeString.DATATYPEID));
-            exercise.setReps(Textbox.getIntFromRequest("reps", "Reps", true, DatatypeInteger.DATATYPEID));
-            exercise.setDescription(Textarea.getValueFromRequest("description", "Description", true));
-            exercise.save();
-            Pagez.getUserSession().setMessage("Exercise saved.");
+            int rowsupdated = HibernateUtil.getSession().createQuery("DELETE FROM Exerciselistitem WHERE exerciseid='"+exercise.getExerciseid()+"'").executeUpdate();
+            int rowsupdates = HibernateUtil.getSession().createQuery("DELETE FROM Pingback WHERE exerciseid='"+exercise.getExerciseid()+"'").executeUpdate();
+            exercise.delete();
+            Pagez.getUserSession().setMessage("Exercise deleted.");
             Pagez.sendRedirect("/sysadmin/exerciselist.jsp");
-        } catch (ValidationException vex) {
-            Pagez.getUserSession().setMessage(vex.getErrorsAsSingleString());
         } catch (Exception ex){
             logger.error("", ex);
             Pagez.getUserSession().setMessage("There has been an error... stuff may be smoking!");
@@ -51,9 +49,9 @@ String acl = "sysadmin";
 
     
 
-        <form action="/sysadmin/exercisedetail.jsp" method="post">
-            <input type="hidden" name="dpage" value="/sysadmin/exercisedetail.jsp">
-            <input type="hidden" name="action" value="save">
+        <form action="/sysadmin/exercisedelete.jsp" method="post">
+            <input type="hidden" name="dpage" value="/sysadmin/exercisedelete.jsp">
+            <input type="hidden" name="action" value="delete">
             <input type="hidden" name="exerciseid" value="<%=exercise.getExerciseid()%>">
 
             <table cellpadding="3" cellspacing="0" border="0">
@@ -63,38 +61,42 @@ String acl = "sysadmin";
                         <font class="formfieldnamefont">Title</font>
                     </td>
                     <td valign="top">
-                        <%=Textbox.getHtml("title", exercise.getTitle(), 255, 20, "", "")%>
+                        <%=exercise.getTitle()%>
                     </td>
                 </tr>
 
                 <tr>
                     <td valign="top">
-                        <font class="formfieldnamefont">Reps</font>
+                        <font class="formfieldnamefont">Be Careful Plz!</font>
                     </td>
                     <td valign="top">
-                        <%=Textbox.getHtml("reps", String.valueOf(exercise.getReps()), 255, 20, "", "")%>
-                    </td>
-                </tr>
-
-
-                <tr>
-                    <td valign="top">
-                        <font class="formfieldnamefont">Description</font>
-                    </td>
-                    <td valign="top">
-                        <%=Textarea.getHtml("description", exercise.getDescription(), 10, 50, "", "")%>
+                        This exercise will be removed from all exercise lists that use it.  And it'll be removed from any exercise histories of people that used it.  This is hardcore stuff here.
                     </td>
                 </tr>
 
                 <tr>
                     <td valign="top">
-                        <font class="formfieldnamefont">Image</font>
+                        <font class="formfieldnamefont">Number of Exercise Lists</font>
                     </td>
                     <td valign="top">
-                        <%=Textbox.getHtml("image", exercise.getImage(), 255, 20, "", "")%>
+                        <%
+                        int numlists = NumFromUniqueResult.getInt("select count(*) from Exerciselistitem where exerciseid='"+exercise.getExerciseid()+"'");
+                        %>
+                        This exercise appears in <%=numlists%> exercise lists.
                     </td>
                 </tr>
 
+                <tr>
+                    <td valign="top">
+                        <font class="formfieldnamefont">Number of Times People've Exercised</font>
+                    </td>
+                    <td valign="top">
+                        <%
+                        int numtimesused = NumFromUniqueResult.getInt("select count(*) from Pingback where exerciseid='"+exercise.getExerciseid()+"'");
+                        %>
+                        This exercise has been recorded <%=numtimesused%> times by users.
+                    </td>
+                </tr>
 
 
                 <tr>
@@ -102,9 +104,9 @@ String acl = "sysadmin";
                     </td>
                     <td valign="top">
                         <br/><br/>
-                        <input type="submit" class="formsubmitbutton" value="Save">
+                        <input type="submit" class="formsubmitbutton" value="Yes, Delete It">
                         <br/><br/>
-                        <a href="/sysadmin/exercisedelete.jsp?exerciseid=<%=exercise.getExerciseid()%>">Delete This Exercise</a>
+                        <a href="/sysadmin/exercisedetail.jsp?exerciseid=<%=exercise.getExerciseid()%>">Nevermind, Just Kidding</a>
                     </td>
                 </tr>
 

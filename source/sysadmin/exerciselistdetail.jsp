@@ -140,6 +140,8 @@ String acl = "sysadmin";
                         <td valign="top">
                             <br/><br/>
                             <input type="submit" class="formsubmitbutton" value="Save Exercise List">
+                            <br/><br/>
+                            <a href="/sysadmin/exerciselistdelete.jsp?exerciselistid=<%=exerciselist.getExerciselistid()%>">Delete This List</a>
                         </td>
                     </tr>
 
