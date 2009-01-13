@@ -34,8 +34,9 @@ a, a:link, a:visited, a:active {
     font-family: Tahoma, Geneva, sans-serif;
     font-size: 16px;
     font-weight: bolder;
-    color: #333333;
+    color: #006699;
     padding-left: 8px;
+    text-decoration: none;
 }
 
 .subnavfont, .subnavfont a, .subnavfont a:link, .subnavfont a:visited, .subnavfont a:active {

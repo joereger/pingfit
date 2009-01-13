@@ -13,7 +13,7 @@
           content="PingFit"/>
     <meta name="keywords" content="fitness,workout"/>
     <script type="text/javascript" src="/js/mootools/mootools-release-1.11.js"></script>
-    <script type="text/javascript" src="/js/niftycube/niftycube.js"></script>
+    <!--<script type="text/javascript" src="/js/niftycube/niftycube.js"></script>-->
     <!--<script type="text/javascript">-->
         <!--NiftyLoad = function() {-->
             <!--Nifty("div.rounded", "big");-->
