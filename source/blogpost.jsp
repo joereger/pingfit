@@ -23,16 +23,11 @@ PublicBlogPost publicBlogPost = (PublicBlogPost) Pagez.getBeanMgr().get("PublicB
             publicBlogPost.setName(Textbox.getValueFromRequest("name", "Name", false, DatatypeString.DATATYPEID));
             publicBlogPost.setUrl(Textbox.getValueFromRequest("url", "Url", false, DatatypeString.DATATYPEID));
             publicBlogPost.setComment(Textarea.getValueFromRequest("comment", "Comment", true));
-            publicBlogPost.setJ_captcha_response(Textbox.getValueFromRequest("j_captcha_response", "Squiggly Letters", false, DatatypeString.DATATYPEID));
-            publicBlogPost.setCaptchaId(request.getParameter("captchaId"));
             publicBlogPost.postComment();
         } catch (ValidationException vex) {
             Pagez.getUserSession().setMessage(vex.getErrorsAsSingleString());
         }
     }
-%>
-<%
-    String captchaId=RandomString.randomAlphanumeric(10);
 %>
 <%@ include file="/template/header.jsp" %>
 
@@ -64,78 +59,66 @@ PublicBlogPost publicBlogPost = (PublicBlogPost) Pagez.getBeanMgr().get("PublicB
             <%=Grid.render(Util.setToArrayList(publicBlogPost.getBlogpost().getBlogpostcomments()), cols, 100, "/blogpost.jsp?blogpostid" + publicBlogPost.getBlogpost().getBlogpostid(), "page")%>
         <%}%>
 
-        <form action="/blogpost.jsp" method="post">
-            <input type="hidden" name="dpage" value="/blogpost.jsp">
-            <input type="hidden" name="action" value="addcomment">
-            <input type="hidden" name="blogpostid" value="<%=publicBlogPost.getBlogpost().getBlogpostid()%>">
-            <input type="hidden" name="captchaId" value="<%=captchaId%>">
-            <br/><br/>
-            <font class="formfieldnamefont">Post a comment:</font>
-            <br/>
-            <table cellpadding="0" cellspacing="0" border="0">
-                <tr>
-                    <td valign="top">
-                        <font class="formfieldnamefont">Name</font>
-                    </td>
-                    <td valign="top">
-                        <%=Textbox.getHtml("name", publicBlogPost.getName(), 255, 35, "", "")%>
-                    </td>
-                </tr>
+        <br/><br/>
+        <div id="disqus_thread"></div><script type="text/javascript" src="http://disqus.com/forums/pingfit/embed.js"></script><noscript><a href="http://pingfit.disqus.com/?url=ref">View the discussion thread.</a></noscript><a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
 
-                <tr>
-                    <td valign="top">
-                        <font class="formfieldnamefont">Url</font>
-                    </td>
-                    <td valign="top">
-                        <%=Textbox.getHtml("url", publicBlogPost.getUrl(), 255, 35, "", "")%>
-                    </td>
-                </tr>
+        <%--<form action="/blogpost.jsp" method="post">--%>
+            <%--<input type="hidden" name="dpage" value="/blogpost.jsp">--%>
+            <%--<input type="hidden" name="action" value="addcomment">--%>
+            <%--<input type="hidden" name="blogpostid" value="<%=publicBlogPost.getBlogpost().getBlogpostid()%>">--%>
+            <%--<br/><br/>--%>
+            <%--<font class="formfieldnamefont">Post a comment:</font>--%>
+            <%--<br/>--%>
+            <%--<table cellpadding="0" cellspacing="0" border="0">--%>
+                <%--<tr>--%>
+                    <%--<td valign="top">--%>
+                        <%--<font class="formfieldnamefont">Name</font>--%>
+                    <%--</td>--%>
+                    <%--<td valign="top">--%>
+                        <%--<%=Textbox.getHtml("name", publicBlogPost.getName(), 255, 35, "", "")%>--%>
+                    <%--</td>--%>
+                <%--</tr>--%>
 
-                <tr>
-                    <td valign="top">
-                        <font class="formfieldnamefont">Comment</font>
-                    </td>
-                    <td valign="top">
-                        <%=Textarea.getHtml("comment", publicBlogPost.getComment(), 5, 40, "", "")%>
-                    </td>
-                </tr>
+                <%--<tr>--%>
+                    <%--<td valign="top">--%>
+                        <%--<font class="formfieldnamefont">Url</font>--%>
+                    <%--</td>--%>
+                    <%--<td valign="top">--%>
+                        <%--<%=Textbox.getHtml("url", publicBlogPost.getUrl(), 255, 35, "", "")%>--%>
+                    <%--</td>--%>
+                <%--</tr>--%>
 
-                <tr>
-                    <td valign="top">
-                        <font class="formfieldnamefont">Prove You're a Human</font>
-                    </td>
-                    <td valign="top">
-                        <div style="border: 1px solid #ccc; padding: 3px;">
-                        <%=Textbox.getHtml("j_captcha_response", publicBlogPost.getJ_captcha_response(), 255, 35, "", "")%>
-                        <br/>
-                        <font class="tinyfont">(type the squiggly letters that appear below)</font>
-                        <br/>
-                        <table cellpadding="0" cellspacing="0" border="0">
-                            <tr>
-                                <td><img src="/images/clear.gif" alt="" width="1" height="100"></img></td>
-                                <td style="background: url(/images/loading-captcha.gif);">
-                                    <img src="/images/clear.gif" alt="" width="200" height="1"></img><br/>
-                                    <img src="/jcaptcha?captchaId=<%=captchaId%>" alt=""/>
-                                </td>
-                            </tr>
-                        </table>
-                        </div>
-                    </td>
-                </tr>
+                <%--<tr>--%>
+                    <%--<td valign="top">--%>
+                        <%--<font class="formfieldnamefont">Comment</font>--%>
+                    <%--</td>--%>
+                    <%--<td valign="top">--%>
+                        <%--<%=Textarea.getHtml("comment", publicBlogPost.getComment(), 5, 40, "", "")%>--%>
+                    <%--</td>--%>
+                <%--</tr>--%>
 
-                <tr>
-                    <td valign="top">
-                    </td>
-                    <td valign="top">
-                        <input type="submit" class="formsubmitbutton" value="Post Comment">
-                    </td>
-                </tr>
+                <%--<tr>--%>
+                    <%--<td valign="top">--%>
+                        <%--<font class="formfieldnamefont">Prove You're a Human</font>--%>
+                    <%--</td>--%>
+                    <%--<td valign="top">--%>
+
+                    <%--</td>--%>
+                <%--</tr>--%>
+
+                <%--<tr>--%>
+                    <%--<td valign="top">--%>
+                    <%--</td>--%>
+                    <%--<td valign="top">--%>
+                        <%--<input type="submit" class="formsubmitbutton" value="Post Comment">--%>
+                    <%--</td>--%>
+                <%--</tr>--%>
 
 
 
-             </table>
+             <%--</table>--%>
 
-         </form>
+         <!--</form>-->
      <%}%>
 
 <%@ include file="/template/footer.jsp" %>

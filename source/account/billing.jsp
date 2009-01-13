@@ -1,32 +1,31 @@
 <%@ page import="org.apache.log4j.Logger" %>
-<%@ page import="com.pingfit.htmluibeans.ResearcherBilling" %>
 <%@ page import="com.pingfit.htmlui.*" %>
 <%@ page import="com.pingfit.htmluibeans.AccountBilling" %>
 <%
 Logger logger = Logger.getLogger(this.getClass().getName());
 String pagetitle = "Billing Details";
-String navtab = "researchers";
+String navtab = "youraccount";
 String acl = "account";
 %>
 <%@ include file="/template/auth.jsp" %>
 <%
-    AccountBilling researcherBilling = (AccountBilling) Pagez.getBeanMgr().get("AccountBilling");
+    AccountBilling billing= (AccountBilling) Pagez.getBeanMgr().get("AccountBilling");
 %>
 <%
     if (request.getParameter("action") != null && request.getParameter("action").equals("save")) {
         try {
-            researcherBilling.setCccity(Textbox.getValueFromRequest("cccity", "City", true, DatatypeString.DATATYPEID));
-            researcherBilling.setCcexpmo(Dropdown.getIntFromRequest("ccexpmo", "Expiration Month", true));
-            researcherBilling.setCcexpyear(Dropdown.getIntFromRequest("ccexpyear", "Expiration Year", true));
-            researcherBilling.setCcnum(Textbox.getValueFromRequest("ccnum", "Credit Card Number", true, DatatypeString.DATATYPEID));
-            researcherBilling.setCcstate(Textbox.getValueFromRequest("ccstate", "State", true, DatatypeString.DATATYPEID));
-            researcherBilling.setCctype(Dropdown.getIntFromRequest("cctype", "Credit Card Type", true));
-            researcherBilling.setCvv2(Textbox.getValueFromRequest("cvv2", "CVV2", true, DatatypeString.DATATYPEID));
-            researcherBilling.setFirstname(Textbox.getValueFromRequest("firstname", "First Name", true, DatatypeString.DATATYPEID));
-            researcherBilling.setLastname(Textbox.getValueFromRequest("lastname", "Last Name", true, DatatypeString.DATATYPEID));
-            researcherBilling.setPostalcode(Textbox.getValueFromRequest("postalcode", "Zip", true, DatatypeString.DATATYPEID));
-            researcherBilling.setStreet(Textbox.getValueFromRequest("street", "Street", true, DatatypeString.DATATYPEID));
-            researcherBilling.saveAction();
+            billing.setCccity(Textbox.getValueFromRequest("cccity", "City", true, DatatypeString.DATATYPEID));
+            billing.setCcexpmo(Dropdown.getIntFromRequest("ccexpmo", "Expiration Month", true));
+            billing.setCcexpyear(Dropdown.getIntFromRequest("ccexpyear", "Expiration Year", true));
+            billing.setCcnum(Textbox.getValueFromRequest("ccnum", "Credit Card Number", true, DatatypeString.DATATYPEID));
+            billing.setCcstate(Textbox.getValueFromRequest("ccstate", "State", true, DatatypeString.DATATYPEID));
+            billing.setCctype(Dropdown.getIntFromRequest("cctype", "Credit Card Type", true));
+            billing.setCvv2(Textbox.getValueFromRequest("cvv2", "CVV2", true, DatatypeString.DATATYPEID));
+            billing.setFirstname(Textbox.getValueFromRequest("firstname", "First Name", true, DatatypeString.DATATYPEID));
+            billing.setLastname(Textbox.getValueFromRequest("lastname", "Last Name", true, DatatypeString.DATATYPEID));
+            billing.setPostalcode(Textbox.getValueFromRequest("postalcode", "Zip", true, DatatypeString.DATATYPEID));
+            billing.setStreet(Textbox.getValueFromRequest("street", "Street", true, DatatypeString.DATATYPEID));
+            billing.saveAction();
             Pagez.getUserSession().setMessage("Billing information saved.");
             Pagez.sendRedirect("/researcher/index.jsp");
             return;
@@ -39,14 +38,21 @@ String acl = "account";
 %>
 <%@ include file="/template/header.jsp" %>
 
-    <form action="/researcher/researcherbilling.jsp" method="post">
-        <input type="hidden" name="dpage" value="/researcher/researcherbilling.jsp">
+
+    <div style="padding: 5px; margin: 5px; background: #e6e6e6;">
+        <div style="padding: 10px; margin: 5px; background: #ffffff;">
+            <font class="normalfont">We're not charging for this service while we get it up and running. Once it is going we may charge a small monthly fee like $1 to keep the power and electricity on.</font>
+        </div>
+    </div>
+
+    <form action="/account/billing.jsp" method="post">
+        <input type="hidden" name="dpage" value="/account/billing.jsp">
         <input type="hidden" name="action" value="save">
            <table cellpadding="0" cellspacing="0" border="0">
                <tr>
 
                    <td valign="top" align="left">
-                        <font class="mediumfont" style="color: #cccccc;">Credit Card Info</font>
+                        <font class="mediumfont" style="color: #000000;">Credit Card Info</font>
                             <br/>
 
                             <table cellpadding="3" cellspacing="0" border="0">
@@ -58,8 +64,8 @@ String acl = "account";
                                     <font class="tinyfont">(first then last)</font>
                                </td>
                                <td valign="top" align="left">
-                                    <%=Textbox.getHtml("firstname", researcherBilling.getFirstname(), 255, 15, "", "")%>
-                                    <%=Textbox.getHtml("lastname", researcherBilling.getLastname(), 255, 15, "", "")%>
+                                    <%=Textbox.getHtml("firstname", billing.getFirstname(), 255, 15, "", "")%>
+                                    <%=Textbox.getHtml("lastname", billing.getLastname(), 255, 15, "", "")%>
                                </td>
                             </tr>
 
@@ -68,7 +74,7 @@ String acl = "account";
                                     <font class="formfieldnamefont">Street Address</font>
                                </td>
                                <td valign="top" align="left">
-                                    <%=Textbox.getHtml("street", researcherBilling.getStreet(), 255, 30, "", "")%>
+                                    <%=Textbox.getHtml("street", billing.getStreet(), 255, 30, "", "")%>
                                </td>
                             </tr>
 
@@ -78,9 +84,9 @@ String acl = "account";
                                     <font class="formfieldnamefont">City, State, Zip</font>
                                </td>
                                <td valign="top" align="left">
-                                    <%=Textbox.getHtml("cccity", researcherBilling.getCccity(), 255, 20, "", "")%>
-                                    <%=Textbox.getHtml("ccstate", researcherBilling.getCcstate(), 255, 2, "", "")%>
-                                    <%=Textbox.getHtml("postalcode", researcherBilling.getPostalcode(), 255, 6, "", "")%>
+                                    <%=Textbox.getHtml("cccity", billing.getCccity(), 255, 20, "", "")%>
+                                    <%=Textbox.getHtml("ccstate", billing.getCcstate(), 255, 2, "", "")%>
+                                    <%=Textbox.getHtml("postalcode", billing.getPostalcode(), 255, 6, "", "")%>
                                </td>
                             </tr>
 
@@ -90,7 +96,7 @@ String acl = "account";
                                     <font class="formfieldnamefont">Credit Card Type</font>
                                </td>
                                <td valign="top" align="left">
-                                    <%=Dropdown.getHtml("cctype", String.valueOf(researcherBilling.getCctype()), researcherBilling.getCreditcardtypes(), "","")%>
+                                    <%=Dropdown.getHtml("cctype", String.valueOf(billing.getCctype()), billing.getCreditcardtypes(), "","")%>
                                </td>
                             </tr>
 
@@ -99,7 +105,7 @@ String acl = "account";
                                     <font class="formfieldnamefont">Credit Card Number</font>
                                </td>
                                <td valign="top" align="left">
-                                    <%=Textbox.getHtml("ccnum", researcherBilling.getCcnum(), 255, 18, "", "")%>
+                                    <%=Textbox.getHtml("ccnum", billing.getCcnum(), 255, 18, "", "")%>
                                </td>
                             </tr>
 
@@ -109,9 +115,9 @@ String acl = "account";
                                     <font class="formfieldnamefont">Expiration Date</font>
                                </td>
                                <td valign="top" align="left">
-                                    <%=Dropdown.getHtml("ccexpmo", String.valueOf(researcherBilling.getCcexpmo()), researcherBilling.getMonthsForCreditcard(), "","")%>
+                                    <%=Dropdown.getHtml("ccexpmo", String.valueOf(billing.getCcexpmo()), billing.getMonthsForCreditcard(), "","")%>
                                     /
-                                    <%=Dropdown.getHtml("ccexpyear", String.valueOf(researcherBilling.getCcexpyear()), researcherBilling.getYearsForCreditcard(), "","")%>
+                                    <%=Dropdown.getHtml("ccexpyear", String.valueOf(billing.getCcexpyear()), billing.getYearsForCreditcard(), "","")%>
                                </td>
                             </tr>
 
@@ -124,7 +130,7 @@ String acl = "account";
                                     <font class="tinyfont">(three digit number on back of card)</font>
                                </td>
                                <td valign="top" align="left">
-                                    <%=Textbox.getHtml("cvv2", researcherBilling.getCvv2(), 255, 3, "", "")%>
+                                    <%=Textbox.getHtml("cvv2", billing.getCvv2(), 255, 3, "", "")%>
                                </td>
                             </tr>
 

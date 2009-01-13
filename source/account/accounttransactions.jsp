@@ -17,7 +17,7 @@ AccountBalancetransaction accountBalancetransaction = (AccountBalancetransaction
 <%@ include file="/template/header.jsp" %>
 
         <%if (accountBalancetransaction.getBalances() == null || accountBalancetransaction.getBalances().size() == 0) {%>
-            <font class="normalfont">There are not yet any financial transactions on your account.  Go fill out some surveys!  Or create some!</font>
+            <font class="normalfont">There are not yet any financial transactions on your account.</font>
         <%} else {%>
             <%
                 ArrayList<GridCol> cols=new ArrayList<GridCol>();

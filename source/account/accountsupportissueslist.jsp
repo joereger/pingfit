@@ -41,12 +41,12 @@ AccountNewSupportIssue accountNewSupportIssue = (AccountNewSupportIssue) Pagez.g
         <%=Grid.render(((AccountSupportIssuesList) Pagez.getBeanMgr().get("AccountSupportIssuesList")).getSupportissues(), cols, 10, "/account/accountsupportissueslist.jsp", "page")%>
     <%}%>
 
-
+    <br/><br/>
     <form action="/account/accountsupportissueslist.jsp" method="post">
         <input type="hidden" name="dpage" value="/account/accountsupportissueslist.jsp">
         <input type="hidden" name="action" value="save">
             <br/>
-            <font class="mediumfont">Ask a Question. Make an Observation. Recommend an Improvement.</font>
+            <font class="mediumfont">Ask a Private Question.</font>
             <br/>
             <font class="smallfont">Use this form to ask us anything at all about your account.  Report bugs.  Tell us where you're confused.  Tell us what could be better.  All communications will be archived and tracked for you here in the support section.</font>
             <br/><br/>

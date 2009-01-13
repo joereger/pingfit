@@ -21,7 +21,7 @@ AccountBalance accountBalance = (AccountBalance)Pagez.getBeanMgr().get("AccountB
             <%if (accountBalance.getCurrentbalanceDbl()>0){%>
                 <font class="smallfont" style="color: #000000;">(We owe you money.  Once a day, if you have a balance of over $20 and don't have any live surveys that you've launched yourself then we'll send money to the PayPal address in your account settings.)</font>
             <%} else if (accountBalance.getCurrentbalanceDbl()<0){%>
-                <font class="smallfont" style="color: #000000;">(You owe us money.)</font>
+                <font class="smallfont" style="color: #000000;"></font>
             <%}%>
         </div>
     <%}%>
@@ -29,7 +29,7 @@ AccountBalance accountBalance = (AccountBalance)Pagez.getBeanMgr().get("AccountB
     
 
     <%if (accountBalance.getBalances()==null || accountBalance.getBalances().size()==0){%>
-        <font class="normalfont">There are not yet any financial transactions on your account.  Go fill out some surveys!  Or create some!</font>
+        <font class="normalfont">There are not yet any financial transactions on your account.</font>
     <%} else {%>
         <%
         ArrayList<GridCol> cols=new ArrayList<GridCol>();

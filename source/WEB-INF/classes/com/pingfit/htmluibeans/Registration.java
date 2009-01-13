@@ -6,7 +6,6 @@ import org.hibernate.criterion.Restrictions;
 import com.pingfit.dao.*;
 import com.pingfit.dao.hibernate.HibernateUtil;
 import com.pingfit.util.*;
-import com.pingfit.util.jcaptcha.CaptchaServiceSingleton;
 import com.pingfit.htmlui.UserSession;
 import com.pingfit.htmlui.Pagez;
 import com.pingfit.htmlui.ValidationException;
@@ -22,7 +21,7 @@ import com.pingfit.facebook.FacebookPendingReferrals;
 import com.pingfit.cache.providers.CacheFactory;
 import com.pingfit.api.SaveCompletedExercisesFromMemory;
 import com.pingfit.exercisechoosers.ExerciseChooserRandom;
-import com.octo.captcha.service.CaptchaServiceException;
+
 
 import javax.servlet.http.Cookie;
 import java.util.*;
@@ -41,8 +40,6 @@ public class Registration implements Serializable {
     private String passwordverify;
     private String firstname;
     private String lastname;
-    private String j_captcha_response;
-    private String captchaId;
     private String eula;
     private boolean displaytempresponsesavedmessage;
 
@@ -110,16 +107,7 @@ public class Registration implements Serializable {
             //haveErrors = true;
         }
 
-//        boolean isCaptchaCorrect = false;
-//        try {
-//            isCaptchaCorrect = CaptchaServiceSingleton.getInstance().validateResponseForID(captchaId, j_captcha_response);
-//        } catch (CaptchaServiceException e) {
-//             //should not happen, may be thrown if the id is not valid
-//        }
-//        if (!isCaptchaCorrect){
-//            vex.addValidationError("You failed to correctly type the letters into the box.");
-//            haveErrors = true;
-//        }
+
 
         List<User> users = HibernateUtil.getSession().createQuery("from User where email='"+ Str.cleanForSQL(email)+"'").list();
         if (users.size()>0){
@@ -259,22 +247,7 @@ public class Registration implements Serializable {
         this.userid = userid;
     }
 
-    public String getJ_captcha_response() {
-        return j_captcha_response;
-    }
 
-    public void setJ_captcha_response(String j_captcha_response) {
-        this.j_captcha_response = j_captcha_response;
-    }
-
-
-    public String getCaptchaId() {
-        return captchaId;
-    }
-
-    public void setCaptchaId(String captchaId) {
-        this.captchaId=captchaId;
-    }
 
     public String getEula() {
         return eula;

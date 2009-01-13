@@ -82,20 +82,7 @@ AccountExercise accountExercise = (AccountExercise) Pagez.getBeanMgr().get("Acco
     Exercise exercise = Exercise.get(Pagez.getUserSession().getExerciser().getNextexerciseid());
 %>
 
-<%if (!Pagez.getUserSession().getIstrayui() && !Pagez.getUserSession().getIsfacebookui()){%>
-    <table cellpadding="5" cellspacing="0" border="0" width="100%">
-        <tr>
-            <td valign="top">
-                <div style="padding: 5px; margin: 5px; background: #e6e6e6;">
-                    <div style="padding: 10px; margin: 5px; background: #ffffff;">
-                        <b><a href="http://www.frogfire.com/pingfit/PingFit_Installer.exe">Download</a> and install the PingFit application.</b>  Once you start the application, right-click the icon in the system tray and choose Profile.  Enter your email and PingFit password.  PingFit will alert you when it's time to workout.
-                    </div>
-                </div>
-            </td>
-        </tr>
-    </table>
 
-<%}%>
 
 
 <%if (1==2 && !Pagez.getUserSession().getIstrayui() && !Pagez.getUserSession().getIsfacebookui()){%>
@@ -263,8 +250,10 @@ AccountExercise accountExercise = (AccountExercise) Pagez.getBeanMgr().get("Acco
                         </select>
                         <br/>
                         <input type="submit" value="Save Settings" class="formsubmitbutton" style="font-size: 9px;">
-                        <br/><br/>
-                        <center><a href="/exercises.jsp"><font class="tinyfont">More Exercise Lists</font></a></center>
+                        <%if (Pagez.getUserSession().getIsloggedin()){%>
+                            <br/><br/>
+                            <a href="/account/exerciselistlist.jsp"><font class="tinyfont">More Exercise Lists</font></a>
+                        <%}%>
                     </form>
                 </div>
 
@@ -299,6 +288,20 @@ AccountExercise accountExercise = (AccountExercise) Pagez.getBeanMgr().get("Acco
 
 
 
+<%}%>
+
+<%if (!Pagez.getUserSession().getIstrayui() && !Pagez.getUserSession().getIsfacebookui()){%>
+    <table cellpadding="5" cellspacing="0" border="0" width="100%">
+        <tr>
+            <td valign="top">
+                <div style="padding: 5px; margin: 5px; background: #e6e6e6;">
+                    <div style="padding: 10px; margin: 5px; background: #ffffff;">
+                        <b><a href="http://www.frogfire.com/pingfit/PingFit_Installer.exe">Download</a> and install the PingFit application.</b>  Once you start the application, right-click the icon in the system tray and choose Profile.  Enter your email and PingFit password.  PingFit will alert you when it's time to workout.
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
 <%}%>
 
 

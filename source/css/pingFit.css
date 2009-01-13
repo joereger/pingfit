@@ -2,7 +2,7 @@ body {
     padding:0px;
     margin:0px;
     background:#FFFFFF;
-    background-image: url("/images/template-v1/bg2.gif");
+    background-image: url("/images/bg-v2.gif");
     font-family: Verdana, Arial, Helvetica, sans-serif;
     font-size: 12px;
     font-weight: normal;
@@ -30,6 +30,14 @@ a, a:link, a:visited, a:active {
     font-size: 12px;
 }
 
+.navtabfontlevel1, .navtabfontlevel1 a, .navtabfontlevel1 a:link, .navtabfontlevel1 a:visited, .navtabfontlevel1 a:active {
+    font-family: Tahoma, Geneva, sans-serif;
+    font-size: 16px;
+    font-weight: bolder;
+    color: #333333;
+    padding-left: 8px;
+}
+
 .subnavfont, .subnavfont a, .subnavfont a:link, .subnavfont a:visited, .subnavfont a:active {
     font-family: Tahoma, Geneva, sans-serif;
     font-size: 10px;
@@ -54,6 +62,8 @@ a, a:link, a:visited, a:active {
     font-family: Impact, Verdana, Arial, Helvetica, sans-serif;
     font-size: 34px;
 }
+
+
 
 .pagetitlefont {
     font-family: Impact, Verdana, Arial, Helvetica, sans-serif;

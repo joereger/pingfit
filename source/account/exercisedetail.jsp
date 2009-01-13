@@ -13,7 +13,7 @@
 <%
 Logger logger = Logger.getLogger(this.getClass().getName());
 String pagetitle = "Exercise Detail";
-String navtab = "youraccount";
+String navtab = "exercise";
 String acl = "account";
 %>
 <%@ include file="/template/auth.jsp" %>

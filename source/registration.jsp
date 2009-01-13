@@ -3,6 +3,9 @@
 <%@ page import="com.pingfit.htmlui.*" %>
 <%@ page import="com.pingfit.systemprops.SystemProperty" %>
 <%@ page import="com.pingfit.util.RandomString" %>
+<%@ page import="net.tanesha.recaptcha.ReCaptcha" %>
+<%@ page import="net.tanesha.recaptcha.ReCaptchaFactory" %>
+<%@ page import="net.tanesha.recaptcha.ReCaptchaResponse" %>
 <%
 Logger logger = Logger.getLogger(this.getClass().getName());
 String pagetitle = "Sign Up for an Account";
@@ -14,33 +17,44 @@ String acl = "public";
 Registration registration = (Registration)Pagez.getBeanMgr().get("Registration");
 %>
 <%
+if (Pagez.getUserSession().getIsloggedin()){
+    Pagez.sendRedirect("/account/exercise.jsp");
+    return;
+}
+%>
+<%
     if (request.getParameter("action") != null && request.getParameter("action").equals("register")) {
         try {
             registration.setEmail(Textbox.getValueFromRequest("email", "Email", true, DatatypeString.DATATYPEID));
             registration.setEula(Textarea.getValueFromRequest("eula", "Eula", true));
             registration.setFirstname(Textbox.getValueFromRequest("firstname", "First Name", true, DatatypeString.DATATYPEID));
-            registration.setJ_captcha_response(Textbox.getValueFromRequest("j_captcha_response", "Squiggly Letters", true, DatatypeString.DATATYPEID));
-            registration.setCaptchaId(request.getParameter("captchaId"));
             registration.setLastname(Textbox.getValueFromRequest("lastname", "Last Name", true, DatatypeString.DATATYPEID));
             registration.setPassword(TextboxSecret.getValueFromRequest("password", "Password", true, DatatypeString.DATATYPEID));
             registration.setPasswordverify(TextboxSecret.getValueFromRequest("passwordverify", "Password Verify", true, DatatypeString.DATATYPEID));
-            registration.registerAction();
-            //Redir if https is on
-            if (SystemProperty.getProp(SystemProperty.PROP_ISSSLON).equals("1")) {
-                try {
-                    logger.debug("redirecting to https - " + BaseUrl.get(true) + "index.jsp");
-                    Pagez.sendRedirect(BaseUrl.get(true) + "index.jsp");
-                    return;
-                } catch (Exception ex) {
-                    logger.error("", ex);
+
+            ReCaptcha captcha = ReCaptchaFactory.newReCaptcha("6LeIqAQAAAAAALFIlYeWpO4tV_mGwfssSd7nAiul", "6LeIqAQAAAAAAE9cMX9WGmGKEgQfXl-8PAPYmJyn", false);
+            ReCaptchaResponse capResp = captcha.checkAnswer(request.getRemoteAddr(), request.getParameter("recaptcha_challenge_field"), request.getParameter("recaptcha_response_field"));
+            if (capResp.isValid()) {
+                registration.registerAction();
+                //Redir if https is on
+                if (SystemProperty.getProp(SystemProperty.PROP_ISSSLON).equals("1")) {
+                    try {
+                        logger.debug("redirecting to https - " + BaseUrl.get(true) + "/account/exercise.jsp");
+                        Pagez.sendRedirect(BaseUrl.get(true) + "/account/exercise.jsp");
+                        return;
+                    } catch (Exception ex) {
+                        logger.error("", ex);
+                        //@todo setIsfirsttimelogin(true) on AccountIndex bean
+                        Pagez.sendRedirect("/account/exercise.jsp");
+                        return;
+                    }
+                } else {
                     //@todo setIsfirsttimelogin(true) on AccountIndex bean
-                    Pagez.sendRedirect("index.jsp");
+                    Pagez.sendRedirect("/account/exercise.jsp");
                     return;
                 }
             } else {
-                //@todo setIsfirsttimelogin(true) on AccountIndex bean
-                Pagez.sendRedirect("index.jsp");
-                return;
+                Pagez.getUserSession().setMessage("Sorry, you need to type the squiggly letters properly.");
             }
         } catch (ValidationException vex) {
             Pagez.getUserSession().setMessage(vex.getErrorsAsSingleString());
@@ -125,21 +139,11 @@ Registration registration = (Registration)Pagez.getBeanMgr().get("Registration")
                             <font class="formfieldnamefont">Prove You're a Human</font>
                         </td>
                         <td valign="top">
-                            <div style="border: 1px solid #ccc; padding: 3px;">
-                            <%=Textbox.getHtml("j_captcha_response", registration.getJ_captcha_response(), 255, 35, "", "")%>
-                            <br/>
-                            <font class="tinyfont">(type the squiggly letters that appear below)</font>
-                            <br/>
-                            <table cellpadding="0" cellspacing="0" border="0">
-                                <tr>
-                                    <td><img src="/images/clear.gif" alt="" width="1" height="100"></img></td>
-                                    <td style="background: url(/images/loading-captcha.gif);">
-                                        <img src="/images/clear.gif" alt="" width="200" height="1"></img><br/>
-                                        <img src="/jcaptcha?captchaId=<%=captchaId%>" width="200" height="100"/>
-                                    </td>
-                                </tr>
-                            </table>
-                            </div>
+                            <%
+                            ReCaptcha captcha = ReCaptchaFactory.newReCaptcha("6LeIqAQAAAAAALFIlYeWpO4tV_mGwfssSd7nAiul", "6LeIqAQAAAAAAE9cMX9WGmGKEgQfXl-8PAPYmJyn", false);
+                            String captchaScript = captcha.createRecaptchaHtml(request.getParameter("error"), null);
+                            out.print(captchaScript);
+                            %>
                         </td>
                     </tr>
 

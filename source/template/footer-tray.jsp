@@ -11,11 +11,9 @@
 
     <tr>
         <td bgcolor="#dadada" style="text-align: right; vertical-align: middle;" height="25">
-            <font class="tinyfont">Copyright 2008. All rights reserved.</font>
+            <font class="tinyfont">Copyright 2009. All rights reserved.</font>
             |
             <a href="/eula.jsp"><font class="tinyfont">terms of use and privacy statement</font></a>
-            |
-            <a href="/aboutus.jsp"><font class="tinyfont">about us</font></a>
             <%if (Pagez.getUserSession().getIsloggedin()) {%>
                     |
                     <a href="/account/accountsupportissueslist.jsp"><font class="tinyfont">need help?</font></a>

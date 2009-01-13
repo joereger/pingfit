@@ -1,7 +1,7 @@
 package com.pingfit.htmluibeans;
 
 import org.apache.log4j.Logger;
-import com.pingfit.util.jcaptcha.CaptchaServiceSingleton;
+
 
 import com.pingfit.util.GeneralException;
 import com.pingfit.util.Num;
@@ -11,7 +11,7 @@ import com.pingfit.email.LostPasswordSend;
 import com.pingfit.htmlui.Pagez;
 import com.pingfit.htmlui.ValidationException;
 import com.pingfit.htmlui.UserSession;
-import com.octo.captcha.service.CaptchaServiceException;
+
 
 import java.util.List;
 import java.util.Iterator;
@@ -27,10 +27,8 @@ public class LostPasswordChoose implements Serializable {
     //Form props
     private String password;
     private String passwordverify;
-    private String j_captcha_response;
     private String u;
     private String k;
-    private String captchaId;
 
     public LostPasswordChoose(){
 
@@ -95,17 +93,7 @@ public class LostPasswordChoose implements Serializable {
             haveErrors = true;
         }
 
-        boolean isCaptchaCorrect = false;
-        try {
-            isCaptchaCorrect = CaptchaServiceSingleton.getInstance().validateResponseForID(captchaId, j_captcha_response);
-        } catch (CaptchaServiceException e) {
-             //should not happen, may be thrown if the id is not valid
-             logger.error("", e);
-        }
-        if (!isCaptchaCorrect){
-            Pagez.getUserSession().setMessage("You failed to correctly type the letters into the box.");
-            haveErrors = true;
-        }
+
 
         
         if (haveErrors){
@@ -152,13 +140,7 @@ public class LostPasswordChoose implements Serializable {
     }
 
 
-    public String getJ_captcha_response() {
-        return j_captcha_response;
-    }
 
-    public void setJ_captcha_response(String j_captcha_response) {
-        this.j_captcha_response = j_captcha_response;
-    }
 
     public String getU() {
         return u;
@@ -176,11 +158,5 @@ public class LostPasswordChoose implements Serializable {
         this.k=k;
     }
 
-    public String getCaptchaId() {
-        return captchaId;
-    }
 
-    public void setCaptchaId(String captchaId) {
-        this.captchaId=captchaId;
-    }
 }

@@ -27,14 +27,7 @@ String acl = "public";
 <%@ include file="/template/header.jsp" %>
 
 
-<br/><br/>
-<font class="mediumfont">
-    <b>PingFit is a fitness site.</b>  But you'll find no workouts here.  Just a lifestyle.
-    <br/><br/>
-    You go about your life and PingFit recommends exercises every 20 minutes.
-    <br/><br/>
-    Get fit throughout the day!  <a href="/registration.jsp">Let's begin</a>.
-</font>
+<center><a href="/registration.jsp"><img src="/images/homepage-v1.gif" alt="" border=""></a></center>
 
 
 <%@ include file="/template/footer.jsp" %>

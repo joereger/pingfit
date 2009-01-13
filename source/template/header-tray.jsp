@@ -19,7 +19,7 @@
     <tr>
         <td valign="top">
             <img src="/images/clear.gif" width="10" height="1" align="left"/>
-            <a href="/"><img src="/images/pingfit-logo.gif" border="0" height="75" align="left"/></a>
+            <a href="/"><img src="/images/pingfit-logo.gif" border="0" width="200" height="48" align="left"/></a>
         </td>
         <td valign="top" style="text-align: right;">
 

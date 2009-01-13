@@ -18,7 +18,7 @@
 <%
 Logger logger = Logger.getLogger(this.getClass().getName());
 String pagetitle = "Exercise List Detail";
-String navtab = "youraccount";
+String navtab = "exercise";
 String acl = "account";
 %>
 <%@ include file="/template/auth.jsp" %>

@@ -5,7 +5,7 @@ import com.pingfit.dao.Blogpostcomment;
 import com.pingfit.xmpp.SendXMPPMessage;
 import com.pingfit.htmlui.Pagez;
 import com.pingfit.htmlui.ValidationException;
-import com.octo.captcha.service.CaptchaServiceException;
+
 
 import java.io.Serializable;
 import java.util.List;
@@ -24,8 +24,6 @@ public class PublicBlogPost implements Serializable {
     private String name;
     private String url;
     private String comment;
-    private String j_captcha_response;
-    private String captchaId;
 
     public PublicBlogPost(){
 
@@ -55,16 +53,6 @@ public class PublicBlogPost implements Serializable {
         if (url==null || url.equals("")){
             url = "#";
         }
-//        boolean isCaptchaCorrect = false;
-//        try {
-//            isCaptchaCorrect = CaptchaServiceSingleton.getInstance().validateResponseForID(captchaId, j_captcha_response);
-//        } catch (CaptchaServiceException e) {
-//            //should not happen, may be thrown if the id is not valid
-//        }
-//        if (!isCaptchaCorrect){
-//            Pagez.getUserSession().setMessage("You failed to correctly type the letters into the box.");
-//            return null;
-//        }
        if (comment!=null && !comment.equals("")){
             Blogpostcomment blogpostcomment = new Blogpostcomment();
             blogpostcomment.setBlogpostid(blogpost.getBlogpostid());
@@ -120,19 +108,5 @@ public class PublicBlogPost implements Serializable {
         this.comment = comment;
     }
 
-    public String getJ_captcha_response() {
-        return j_captcha_response;
-    }
 
-    public void setJ_captcha_response(String j_captcha_response) {
-        this.j_captcha_response = j_captcha_response;
-    }
-
-    public String getCaptchaId() {
-        return captchaId;
-    }
-
-    public void setCaptchaId(String captchaId) {
-        this.captchaId=captchaId;
-    }
 }

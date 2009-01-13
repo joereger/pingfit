@@ -11,20 +11,13 @@ import javax.servlet.ServletOutputStream;
 import java.io.IOException;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
-import java.awt.image.BufferedImage;
 
-import com.pingfit.util.jcaptcha.CaptchaServiceSingleton;
-import com.pingfit.util.GeneralException;
 import com.pingfit.dao.User;
 import com.pingfit.systemprops.SystemProperty;
 import com.pingfit.htmlui.Pagez;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.octo.captcha.service.CaptchaServiceException;
 
-/**
- * Serves a captcha image
- */
+
+
 public class EmailActivationServlet extends HttpServlet {
 
     Logger logger = Logger.getLogger(this.getClass().getName());
@@ -58,7 +51,7 @@ public class EmailActivationServlet extends HttpServlet {
             //@todo send a welcome email message after successful email activation
             if(user.getFacebookuserid()<=0){
                 Pagez.getUserSession().setMessage("Email activation was successful!  Your account is ready to roll!");
-                response.sendRedirect("/account/index.jsp");
+                response.sendRedirect("/account/exercise.jsp");
                 return;
             } else {
                 response.sendRedirect("http://apps.facebook.com/"+ SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_APP_NAME)+"/");
