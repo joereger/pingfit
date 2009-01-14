@@ -18,7 +18,7 @@ String acl = "public";
 PublicBlogPost publicBlogPost = (PublicBlogPost) Pagez.getBeanMgr().get("PublicBlogPost");
 %>
 <%
-    if (request.getParameter("action") != null && request.getParameter("action").equals("addcomment")) {
+    if (request.getParameter("action") != null && request.getParameter("action").equals("addcommentXXX")) {
         try {
             publicBlogPost.setName(Textbox.getValueFromRequest("name", "Name", false, DatatypeString.DATATYPEID));
             publicBlogPost.setUrl(Textbox.getValueFromRequest("url", "Url", false, DatatypeString.DATATYPEID));

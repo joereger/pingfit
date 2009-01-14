@@ -1,18 +1,22 @@
 body {
     padding:0px;
     margin:0px;
-    background:#FFFFFF;
-
     font-family: Verdana, Arial, Helvetica, sans-serif;
     font-size: 12px;
     font-weight: normal;
     color: #000000;
-    background-color: #ffffff;
+    background: #ffffff;
+}
+
+.mainbgdiv {
+    background: url("/images/bg-v2.gif");
 }
 
 a, a:link, a:visited, a:active {
 
 }
+
+
 
 .tinyfont {
     font-family: Arial, sans-serif;
@@ -27,6 +31,13 @@ a, a:link, a:visited, a:active {
 .normalfont {
     font-family: Verdana, Arial, Helvetica, sans-serif;
     font-size: 12px;
+}
+
+.navfont, .navfont a, .navfont a:link, .navfont a:visited, .navfont a:active {
+    font-family: Tahoma, Geneva, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    color: #ffffff;
 }
 
 .subnavfont, .subnavfont a, .subnavfont a:link, .subnavfont a:visited, .subnavfont a:active {
