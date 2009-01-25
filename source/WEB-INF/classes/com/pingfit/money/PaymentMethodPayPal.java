@@ -34,7 +34,7 @@ public class PaymentMethodPayPal extends PaymentMethodBase implements PaymentMet
             notes =  notes + "PayPal Temporarily Down: "+user.getUserid()+" : amt="+amt;
             issuccessful = false;
             logger.debug("PayPal Temporarily Disabled: would have paid userid="+user.getUserid()+" amt="+amt);
-            EmailTemplateProcessor.sendGenericEmail("joe@joereger.com", "dNeero PayPal Test Transaction", "PayPal Temporarily Disabled: would have paid userid="+user.getUserid()+"\n"+"email="+user.getEmail()+"\n"+"name="+user.getFirstname()+" "+user.getLastname()+"\n"+" amt="+amt);
+            EmailTemplateProcessor.sendGenericEmail("support@pingfit.com", "PingFit PayPal Test Transaction", "PayPal Temporarily Disabled: would have paid userid="+user.getUserid()+"\n"+"email="+user.getEmail()+"\n"+"name="+user.getFirstname()+" "+user.getLastname()+"\n"+" amt="+amt);
             return;
         }
 
@@ -122,7 +122,7 @@ public class PaymentMethodPayPal extends PaymentMethodBase implements PaymentMet
             debug.append("ex.getMessage()="+ex.getMessage()+"<br/>\n");
         }
         debug.append("End PayPal run."+"\n");
-        EmailTemplateProcessor.sendGenericEmail("joe@joereger.com", "dNeero PayPal Transaction", debug.toString());
+        EmailTemplateProcessor.sendGenericEmail("support@pingfit.com", "PingFit PayPal Transaction", debug.toString());
         logger.debug("---------- PayPal Call End ----------");
     }
 

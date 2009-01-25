@@ -17,6 +17,7 @@ public class Pingback extends BasePersistentClass implements java.io.Serializabl
      private Date date;
      private int exerciseid;
      private int reps;
+     private int userinterface;
 
 
     public static Pingback get(int id) {
@@ -96,5 +97,13 @@ public class Pingback extends BasePersistentClass implements java.io.Serializabl
 
     public void setReps(int reps) {
         this.reps = reps;
+    }
+
+    public int getUserinterface() {
+        return userinterface;
+    }
+
+    public void setUserinterface(int userinterface) {
+        this.userinterface=userinterface;
     }
 }

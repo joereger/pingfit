@@ -2,6 +2,7 @@ package com.pingfit.api;
 
 import com.pingfit.dao.User;
 import com.pingfit.dao.Pingback;
+import com.pingfit.helpers.Userinterfaces;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -33,6 +34,8 @@ public class SaveCompletedExercisesFromMemory {
                         pingback.setExerciseid(completedExercise.getExerciseid());
                         pingback.setReps(completedExercise.getReps());
                         pingback.setUserid(exerciser.getUserid());
+                        //@todo Set this dynamically
+                        pingback.setUserinterface(Userinterfaces.WEB);
                         try{pingback.save();}catch(Exception ex){logger.error("", ex);}
                     }
                 }

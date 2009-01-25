@@ -9,6 +9,7 @@ import com.pingfit.dao.Exercise;
 import com.pingfit.dao.hibernate.NumFromUniqueResult;
 import com.pingfit.exercisechoosers.ExerciseChooserFactory;
 import com.pingfit.exercisechoosers.ExerciseChooser;
+import com.pingfit.helpers.Userinterfaces;
 
 import java.util.Calendar;
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ import org.apache.log4j.Logger;
 public class CoreMethods {
 
 
-    public static void doExercise(Exerciser exerciser, int exerciseid, int reps) throws GeneralException {
+    public static void doExercise(Exerciser exerciser, int exerciseid, int reps, int userinterface) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
             //Record to database
@@ -35,6 +36,7 @@ public class CoreMethods {
                 pingback.setExerciseid(exerciseid);
                 pingback.setReps(reps);
                 pingback.setUserid(exerciser.getUserid());
+                pingback.setUserinterface(userinterface);
                 pingback.save();
             }
             //Clean out memory a bit, if necessary

@@ -21,7 +21,7 @@ import com.pingfit.threadpool.ThreadPool;
 public class EmailSendThread implements Runnable, Serializable {
 
     public HtmlEmail htmlEmail;
-    public static String DEFAULTFROM = "joe@joereger.com";
+    public static String DEFAULTFROM = "support@pingfit.com";
     private static ThreadPool tp;
 
     Logger logger = Logger.getLogger(this.getClass().getName());

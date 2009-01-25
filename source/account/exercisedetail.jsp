@@ -23,6 +23,7 @@ String acl = "account";
     exercise.setImage("");
     exercise.setIssystem(false);
     exercise.setIspublic(true);
+    exercise.setImagecredit("");
     exercise.setUseridofcreator(Pagez.getUserSession().getUser().getUserid());
     if (request.getParameter("exerciseid") != null && !request.getParameter("exerciseid").equals("0") && Num.isinteger(request.getParameter("exerciseid"))) {
         exercise = Exercise.get(Integer.parseInt(request.getParameter("exerciseid")));

@@ -20,6 +20,7 @@ public class Exercise extends BasePersistentClass implements java.io.Serializabl
      private boolean issystem;
      private int useridofcreator;
      private boolean ispublic;
+     private String imagecredit;
 
 
     public static Exercise get(int id) {
@@ -120,5 +121,13 @@ public class Exercise extends BasePersistentClass implements java.io.Serializabl
 
     public void setIspublic(boolean ispublic) {
         this.ispublic = ispublic;
+    }
+
+    public String getImagecredit() {
+        return imagecredit;
+    }
+
+    public void setImagecredit(String imagecredit) {
+        this.imagecredit=imagecredit;
     }
 }

@@ -84,7 +84,7 @@ public class AccountNewSupportIssue implements Serializable {
                 body.append(sicom.getNotes());
                 body.append("<br><br>");
             }
-            EmailTemplateProcessor.sendGenericEmail("joe@joereger.com", "dNeero Support Issue: "+supportissue.getSubject(), body.toString());
+            EmailTemplateProcessor.sendGenericEmail("support@pingfit.com", "PingFit Support Issue: "+supportissue.getSubject(), body.toString());
         } catch (Exception ex){
             logger.error("",ex);
         }

@@ -2,6 +2,7 @@ package com.pingfit.htmlui;
 
 import com.pingfit.dao.Pingback;
 import com.pingfit.dao.Exercise;
+import com.pingfit.dao.User;
 
 /**
  * User: Joe Reger Jr
@@ -12,6 +13,8 @@ public class PingbackListItem {
 
     private Pingback pingback;
     private Exercise exercise;
+    private User user;
+    private String userinterfaceStr = "";
 
     public Pingback getPingback() {
         return pingback;
@@ -27,5 +30,21 @@ public class PingbackListItem {
 
     public void setExercise(Exercise exercise) {
         this.exercise = exercise;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user=user;
+    }
+
+    public String getUserinterfaceStr() {
+        return userinterfaceStr;
+    }
+
+    public void setUserinterfaceStr(String userinterfaceStr) {
+        this.userinterfaceStr=userinterfaceStr;
     }
 }

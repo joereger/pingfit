@@ -20,7 +20,9 @@
                 |
                 <a href="/help.jsp"><font class="tinyfont">need help?</font></a>
         <%}%>
-            <img src="/images/clear.gif" width="10" height="1"/>
+        |
+        <a href="mailto:support@pingfit.com"><font class="tinyfont">contact us</font></a>
+        <img src="/images/clear.gif" width="10" height="1"/>
         </center>
         </td>
     </tr>
@@ -31,7 +33,9 @@
     </tr>
 </table>
 <br/>
-
+<br/><br/>
+<center><div style="width: 200px;"><font class="smallfont" style="color: #006699;">All users are advised to consult a physician before beginning any fitness routine.</font></div>
+<br/><br/>
     </center>
 
     <script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript"></script>

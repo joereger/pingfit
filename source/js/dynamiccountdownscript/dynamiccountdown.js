@@ -66,9 +66,9 @@ cdtime.prototype.showresults=function(){
 
 function formatresults(){
     if (this.timesup==false){//if target date/time not yet met
-        var displaystring=arguments[2]+"<sup>min</sup> "+arguments[3]+"<sup>sec</sup>"
+        var displaystring="in "+arguments[2]+"<sup>min</sup> "+arguments[3]+"<sup>sec</sup>"
     } else{ //else if target date/time met
-        var displaystring="Now!"
+        var displaystring="now!"
     }
     return displaystring
 }

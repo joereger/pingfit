@@ -8,32 +8,19 @@
 </head>
 
 <body LEFTMARGIN="0" TOPMARGIN="0" MARGINWIDTH="0" MARGINHEIGHT="0"><div class="mainbgdiv"><center>
-<table width="400" cellspacing="0" border="0" cellpadding="0">
-    <tr>
-        <td valign="top">
-            <img src="/images/clear.gif" width="10" height="1" align="left"/>
-            <a href="/"><img src="/images/pingfit-logo.gif" border="0" width="200" height="48" align="left"/></a>
-        </td>
-        <td valign="top" style="text-align: right;">
+<%--<table width="100%" cellspacing="0" border="0" cellpadding="0">--%>
+    <%--<tr>--%>
+        <%--<td valign="top" colspan="2">--%>
+                <%--<img src="/images/clear.gif" width="30" height="10"/><br/>--%>
+                <%--<%if (navtab.equals("exercise") && Pagez.getUserSession().getIsloggedin()){%><font class="navfont"><a href="/account/exercise.jsp"><b>Exercise</b></a></font>&nbsp;&nbsp;&nbsp;&nbsp;<%}%>--%>
+                <%--<%if (!navtab.equals("exercise") && Pagez.getUserSession().getIsloggedin()){%><font class="navfont"><a href="/account/exercise.jsp"><b>Exercise</b></a></font>&nbsp;&nbsp;&nbsp;&nbsp;<%}%>--%>
+                <%--<%if (!navtab.equals("help") && Pagez.getUserSession().getIsloggedin()){%><font class="navfont"><a href="/account/accountsupportissueslist.jsp"><b>Help</b></a></font><%}%>--%>
+                <%--<%if (navtab.equals("help") && Pagez.getUserSession().getIsloggedin()){%><font class="navfont"><a href="/account/accountsupportissueslist.jsp"><b>Help</b></a></font><%}%>--%>
+        <%--</td>--%>
+    <%--</tr>--%>
+<%--</table>--%>
 
-        </td>
-    </tr>
-    <tr>
-        <td valign="top" colspan="2">
-                <img src="/images/clear.gif" width="10" height="10"/><br/>
-                <%if (navtab.equals("exercise") && Pagez.getUserSession().getIsloggedin()){%><font class="navfont"><a href="/account/exercise.jsp"><b>Exercise</b></a></font>&nbsp;&nbsp;&nbsp;&nbsp;<%}%>
-                <%if (!navtab.equals("exercise") && Pagez.getUserSession().getIsloggedin()){%><font class="navfont"><a href="/account/exercise.jsp"><b>Exercise</b></a></font>&nbsp;&nbsp;&nbsp;&nbsp;<%}%>
-                <%if (!navtab.equals("help") && Pagez.getUserSession().getIsloggedin()){%><font class="navfont"><a href="/account/accountsupportissueslist.jsp"><b>Help</b></a></font><%}%>
-                <%if (navtab.equals("help") && Pagez.getUserSession().getIsloggedin()){%><font class="navfont"><a href="/account/accountsupportissueslist.jsp"><b>Help</b></a></font><%}%>
-        </td>
-    </tr>
-
-
-
-</table>
-
-    <br/><img src="/images/clear.gif" width="10" height="10"/><br/>
-    <table width="400" cellspacing="0" border="0" cellpadding="10">
+    <table width="100%" cellspacing="0" border="0" cellpadding="5">
         <tr>
             <td valign="top">
                 <%if (pagetitle!=null && !pagetitle.equals("")){%>

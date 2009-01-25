@@ -21,6 +21,9 @@
         <property name="reps" type="int">
             <column name="reps" not-null="true" />
         </property>
+        <property name="userinterface" type="int">
+            <column name="userinterface" not-null="true" />
+        </property>
 
     </class>
 </hibernate-mapping>

@@ -4,31 +4,25 @@
 </table>
 
 <br/><br/><br/><br/><br/><br/>
-<table width="400" cellspacing="0" border="0" cellpadding="0">
-    <tr>
-        <td background="/images/navtabs2/linedots.gif"><img src="/images/clear.gif" width="1" height="1"/></td>
-    </tr>
+<table width="100%" cellspacing="0" border="0" cellpadding="0">
 
     <tr>
-        <td bgcolor="#dadada" style="text-align: right; vertical-align: middle;" height="25">
+        <td style="text-align: middle; vertical-align: middle;" height="25">
             <font class="tinyfont">Copyright 2009. All rights reserved.</font>
             |
             <a href="/eula.jsp"><font class="tinyfont">terms of use and privacy statement</font></a>
             <%if (Pagez.getUserSession().getIsloggedin()) {%>
-                    |
-                    <a href="/account/accountsupportissueslist.jsp"><font class="tinyfont">need help?</font></a>
-                <%}%>
+                |
+                <a href="/account/accountsupportissueslist.jsp"><font class="tinyfont">need help?</font></a>
+            <%}%>
                 <img src="/images/clear.gif" width="10" height="1"/>
-            </td>
-        </tr>
-        <tr>
-            <td valign="top" align="right">
-                <font class="tinyfont" style="color: #cccccc; padding-right: 10px;">At Your Service is a Server Called: <%=InstanceProperties.getInstancename()%> which built this page in: <a href="/pageperformance.jsp" style="color: #cccccc;"><%=Pagez.getElapsedTime()%> milliseconds</a></font>
             </td>
         </tr>
     </table>
     <br/>
-
+    <br/><br/>
+    <center><div style="width: 200px;"><font class="smallfont" style="color: #006699;">All users are advised to consult a physician before beginning any fitness routine.</font></div>
+    <br/><br/>
     </center>
 
     <script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript"></script>

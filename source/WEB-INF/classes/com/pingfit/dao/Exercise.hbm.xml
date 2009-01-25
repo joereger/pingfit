@@ -30,5 +30,8 @@
         <property name="useridofcreator" type="int">
             <column name="useridofcreator" not-null="true" />
         </property>
+        <property name="imagecredit" type="text">
+            <column name="imagecredit" not-null="true" />
+        </property>
     </class>
 </hibernate-mapping>

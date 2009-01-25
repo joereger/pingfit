@@ -115,6 +115,7 @@
                 <a href="/sysadmin/massemaillist.jsp"><font class="subnavfont" style=" color: #ffffff;">Email</font></a>
                 <a href="/sysadmin/pageperformance.jsp"><font class="subnavfont" style=" color: #ffffff;">Perf</font></a>
                 <a href="/sysadmin/exerciselist.jsp"><font class="subnavfont" style=" color: #ffffff;">Exercises</font></a>
+                <a href="/sysadmin/simpleexercisereport.jsp"><font class="subnavfont" style=" color: #ffffff;">Reports</font></a>
                 <a href="/sysadmin/exerciselistlist.jsp"><font class="subnavfont" style=" color: #ffffff;">Exercise Lists</font></a>
                 <a href="/sysadmin/blogpost.jsp"><font class="subnavfont" style=" color: #ffffff;">Blog</font></a>
             <%}%>
@@ -144,18 +145,18 @@
     </td>
     <td valign="top" style="text-align: right;">
         <%if (!Pagez.getUserSession().getIsloggedin()){%>
-                <div style="text-align: right;">
-                    <font class="subnavfont">Already have an account?<img src="/images/clear.gif" width="20" height="1"/><a href="/login.jsp">Log In</a></font>
-                    <br/>
-                    <font class="subnavfont">Want to get one?<img src="/images/clear.gif" width="20" height="1"/><a href="/registration.jsp">Sign Up</a></font>
-                </div>
-            <%}%>
-            <%if (Pagez.getUserSession().getIsloggedin()){%>
-                <div style="text-align: right;">
-                    <font class="subnavfont">Hi, <%=Pagez.getUserSession().getUser().getFirstname()%> <%=Pagez.getUserSession().getUser().getLastname()%>! <a href="/login.jsp?action=logout">Log Out</a></font>
-                </div>
-            <%}%>
-        </td>
+            <div style="text-align: right;">
+                <font class="subnavfont">Already have an account?<img src="/images/clear.gif" width="20" height="1"/><a href="/login.jsp">Log In</a></font>
+                <br/>
+                <font class="subnavfont">Want to get one?<img src="/images/clear.gif" width="20" height="1"/><a href="/registration.jsp">Sign Up</a></font>
+            </div>
+        <%}%>
+        <%if (Pagez.getUserSession().getIsloggedin()){%>
+            <div style="text-align: right;">
+                <font class="subnavfont">Hi, <%=Pagez.getUserSession().getUser().getFirstname()%> <%=Pagez.getUserSession().getUser().getLastname()%>! <a href="/login.jsp?action=logout">Log Out</a></font>
+            </div>
+        <%}%>
+    </td>
     </tr>
 </table>
 <table width="786" cellspacing="0" border="0" cellpadding="0">

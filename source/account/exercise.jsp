@@ -17,6 +17,7 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="com.pingfit.util.Time" %>
 <%@ page import="com.pingfit.htmluibeans.AccountExercise" %>
+<%@ page import="com.pingfit.helpers.Userinterfaces" %>
 <%
 Logger logger = Logger.getLogger(this.getClass().getName());
 String pagetitle = "";
@@ -37,7 +38,11 @@ AccountExercise accountExercise = (AccountExercise) Pagez.getBeanMgr().get("Acco
                 if (request.getParameter("reps")!=null && Num.isinteger(request.getParameter("reps"))){
                     inreps = Integer.parseInt(request.getParameter("reps"));
                 }
-                CoreMethods.doExercise(Pagez.getUserSession().getExerciser(), inexid, inreps);
+                int userinterface = Userinterfaces.WEB;
+                if (Pagez.getUserSession().getIstrayui()){
+                    userinterface = Userinterfaces.TRAY;
+                }
+                CoreMethods.doExercise(Pagez.getUserSession().getExerciser(), inexid, inreps, userinterface);
             }
         }catch(Exception ex){
             logger.error("", ex);
@@ -115,80 +120,124 @@ AccountExercise accountExercise = (AccountExercise) Pagez.getBeanMgr().get("Acco
 
 <script type="text/javascript" src="/js/dynamiccountdownscript/dynamiccountdown.js"></script>
 
-<table cellpadding="5" cellspacing="0" border="0" width="100%">
+<table cellpadding="0" cellspacing="0" border="0" width="100%">
         <tr>
             <td valign="top">
-                <div style="padding: 5px; margin: 5px; background: #e6e6e6;">
-                    <div style="padding: 10px; margin: 5px; background: #ffffff;">
+                <%--<div style="padding: 5px; margin: 0px; background: #e6e6e6;">--%>
+                    <div style="padding: 0px; margin: 0px; background: #ffffff;">
                         <div id="mainexercisearea">
-                            <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                            <form action="/account/exercise.jsp" method="post" STYLE="margin: 0px; padding: 0px;">
+                            <input type="hidden" name="action" value="completeexercise">
+                            <input type="hidden" name="exerciseid" value="<%=exercise.getExerciseid()%>">
+                            <div style="background: url('/images/exercise-sentence-bg.gif');">
+                            <%if (!Pagez.getUserSession().getIstrayui()){%>
+                                <img src="/images/clear.gif" width="1" height="14" alt=""/><br/>
+                            <%} else {%>
+                                <img src="/images/clear.gif" width="1" height="35" alt=""/><br/>
+                            <%}%>
+                            <table cellpadding="0" cellspacing="0" border="0" width="750">
                                 <tr>
-                                    <td valign="top">
-                                        <!--<center>-->
-                                            <font class="mediumfont" style="color: #666666; font-size: 30px; font-weight: bold;"><%=exercise.getTitle()%></font>
-                                            <br/>
-                                            <%--<font class="largefont" style="font-size: 35px; color: #996699;">--%>
-                                                <%--<span id="countdown1"><%=AjaxExercisePage.getNextExerciseTimeFormattedForCountdownJavascript(Pagez.getUserSession().getExerciser())%></span>--%>
-                                            <%--</font>--%>
-                                            <%
-                                                Calendar now = Calendar.getInstance();
-                                                Calendar nextEx = Pagez.getUserSession().getExerciser().getNextexercisetime();
-                                                double secondsuntilnextexercise = (nextEx.getTimeInMillis() - now.getTimeInMillis())/1000;
-                                            %>
-                                            <div id="countdowncontainer" class="largefont" style="font-size: 50px; color: #996699;"></div>
-                                            <script type="text/javascript">
-                                            var futuredate=new cdtime("countdowncontainer", <%=String.valueOf(secondsuntilnextexercise)%>)
-                                            futuredate.displaycountdown("minutes", formatresults)
-                                            </script>
-                                        <!--</center>-->
+                                    <td width="30">
+                                        <%if (!Pagez.getUserSession().getIstrayui()){%>
+                                            <img src="/images/clear.gif" width="1" height="80" alt=""/><br/>
+                                        <%} else {%>
+                                            <img src="/images/clear.gif" width="1" height="60" alt=""/><br/>
+                                        <%}%>
                                     </td>
-                                    <td valign="top" width="175">
-                                        <div style="padding: 10px; margin: 5px; background: #e6e6e6;">
-                                            <font class="tinyfont">
-                                            <form action="/account/exercise.jsp" method="post">
-                                                <input type="hidden" name="action" value="completeexercise">
-                                                <input type="hidden" name="exerciseid" value="<%=exercise.getExerciseid()%>">
-                                                <select name="reps" style="font-size: 12px;">
-                                                <%
-                                                    for (int i = 1; i <= 100; i++) {
-                                                        String sel = "";
-                                                        if (i==exercise.getReps()){
-                                                            sel = " selected";
-                                                        }
-                                                        %><option value="<%=i%>" <%=sel%>><%=i%> reps</option><%
-                                                    }
-                                                %>
-                                                </select>
-                                                <input type="submit" class="formsubmitbutton" value="I Did It" style="font-size: 10px;">
-                                            </form>
-                                            </font>
-                                        </div>
-                                        <div style="padding: 10px; margin: 5px; background: #e6e6e6;">
-                                            <form action="/account/exercise.jsp" method="post">
-                                                <input type="hidden" name="action" value="skipexercise">
-                                                <center>
-                                                <input type="submit" class="formsubmitbutton" value="Skip this Exercise" style="font-size: 10px;">
-                                                </center>
-                                            </form>
-                                        </div>
+                                    <td width="120" style="vertical-align: middle; text-align: center;">
+                                        <%--<div id="doex" class="largefont" style="font-size: 30px; color: #cccccc;">--%>
+                                        <font class="mediumfont" style="font-size: 12px; color: #666666;  font-weight: bold;"><b>start to do</b></font><br/>
+                                        <%
+                                            for (int i = 1; i <= 100; i++) {
+                                                if (i==exercise.getReps()){
+                                                    %><font class="mediumfont" style="font-size: 30px; color: #666666;font-weight: bold;"><%=i%></font><%
+                                                }
+                                            }
+                                        %>
+                                        <br/><font class="mediumfont" style="font-size: 14px; color: #666666;  font-weight: bold;"><b>&nbsp;</b></font>
+                                        <!--</div>-->
+                                    </td>
+                                    <td width="25">
+                                    </td>
+                                    <td width="210" style="vertical-align: middle; text-align: center;">
+                                        <div id="extitle" class="largefont" style="font-size: 30px; color: #666666;"><font class="mediumfont" style="font-size: 30px; color: #666666;  font-weight: bold;"><%=exercise.getTitle()%></font></div>
+                                    </td>
+                                    <td width="35">
+                                    </td>
+                                    <td width="135" style="vertical-align: middle; text-align: center;">
+                                        <center>
+                                        <%
+                                            Calendar now = Calendar.getInstance();
+                                            Calendar nextEx = Pagez.getUserSession().getExerciser().getNextexercisetime();
+                                            double secondsuntilnextexercise = (nextEx.getTimeInMillis() - now.getTimeInMillis())/1000;
+                                        %>
+                                        <div id="countdowncontainer" class="largefont" style="font-size: 18px; color: #996699;"></div>
+                                        <script type="text/javascript">
+                                        var futuredate=new cdtime("countdowncontainer", <%=String.valueOf(secondsuntilnextexercise)%>)
+                                        futuredate.displaycountdown("minutes", formatresults)
+                                        </script>
+                                        </center>
+                                    </td>
+                                    <td width="35">
+                                    </td>
+                                    <td width="60" style="vertical-align: middle;">
+                                        <img src="/images/clear.gif" width="1" height="10" alt=""/><br/>
+                                        <input type="submit" class="formsubmitbutton" value="I Did" style="font-size: 10px;">
+                                        <br/><a href="/account/exercise.jsp?action=skipexercise"><font class="tinyfont" style="color: #666666;">skip it</font></a>
+                                    </td>
+                                    <td width="*" style="vertical-align: middle;">
+                                        <img src="/images/clear.gif" width="1" height="10" alt=""/><br/>
+                                        <select name="reps" style="font-size: 12px;">
+                                        <%
+                                            for (int i = 1; i <= 100; i++) {
+                                                String sel = "";
+                                                if (i==exercise.getReps()){
+                                                    sel = " selected";
+                                                }
+                                                %><option value="<%=i%>" <%=sel%>><%=i%></option><%
+                                            }
+                                        %>
+                                        </select>
+                                        <br/><font class="tinyfont" style="color: #666666;">&nbsp;</font>
                                     </td>
                                 </tr>
                             </table>
-                            <%if (exercise.getImage()!=null && !exercise.getImage().equals("")){%>
-                                <center>
-                                <div style="padding: 10px; margin: 5px; background: #e6e6e6;">
-                                    <img src="/images/exercises/<%=exercise.getImage()%>" border="0">
-                                </div>
-                                </center>
-                                <br/>
-                            <%}%>
-                            <font class="smallfont" style="font-weight: bold;"><%=exercise.getTitle()%>: </font>
-                            <font class="smallfont"><%=exercise.getDescription()%></font>
-                            <br/><br/>
-                            <font class="tinyfont"><b>Coming Up:</b> <%=AjaxExercisePage.getUpcomingExercisesHtml(Pagez.getUserSession().getExerciser())%></font>
+                            <img src="/images/clear.gif" width="1" height="10" alt=""/><br/>
+                            </div>
+                            </form>
+
+                            <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                <tr>
+                                    <td valign="top">
+                                        <%if (exercise.getImage()!=null && !exercise.getImage().equals("")){%>
+                                            <div style="padding: 10px; margin: 5px; background: #e6e6e6;">
+                                                <%
+                                                String widthStr = "";
+                                                if (Pagez.getUserSession().getIstrayui()){
+                                                    widthStr = " width=\"200\" ";
+                                                }
+                                                %>
+                                                <img src="/images/exercises/<%=exercise.getImage()%>" <%=widthStr%> border="0">
+                                                <%if (exercise.getImagecredit()!=null && !exercise.getImagecredit().equals("")){%>
+                                                    <br/><font class="tinyfont" style="color: #666666;"><%=exercise.getImagecredit()%></font>
+                                                <%}%>
+                                            </div>
+                                        <%}%>
+                                    </td>
+                                    <td valign="top">
+                                        <img src="/images/clear.gif" width="1" height="8" alt=""/><br/>
+                                        <font class="smallfont"><b>Instructions</b></font>
+                                        <br/>
+                                        <font class="smallfont"><%=exercise.getDescription()%></font>
+                                        <br/><br/>
+                                        <font class="smallfont"><b>Coming Up Soon</b><br/><%=AjaxExercisePage.getUpcomingExercisesHtml(Pagez.getUserSession().getExerciser())%></font>
+                                    </td>
+                                </tr>
+                            </table>
+
                         </div>
                     </div>
-                </div>
+                <!--</div>-->
             </td>
         </tr>
         <tr>
