@@ -89,10 +89,10 @@ public class ExerciseChooserList implements ExerciseChooser {
         int i = 0;
         int attempts = 0;
         while(out.size()<=numbertoget && attempts<=(exerciselistitems.size()+numbertoget+10)){
-            logger.debug("====");
-            logger.debug("i="+i);
-            logger.debug("attempts="+attempts);
-            logger.debug("out.size()="+out.size());
+            //logger.debug("====");
+            //logger.debug("i="+i);
+            //logger.debug("attempts="+attempts);
+            //logger.debug("out.size()="+out.size());
             try{
                 if (exerciselistitems.get(i)!=null){
                     logger.debug("exerciseid="+exerciselistitems.get(i).getExerciseid());
@@ -129,16 +129,22 @@ public class ExerciseChooserList implements ExerciseChooser {
 
     public int getSecondsUntilNextExercise(User user) {
         Logger logger = Logger.getLogger(this.getClass().getName());
+        logger.debug("getSecondsUntilNextExercise(User user) called");
         int secondsuntilnext = 0;
         Calendar last = Time.getCalFromDate(user.getLastexercisetime());
-        Calendar next = Time.xSecondsAgo(last, user.getExerciseeveryxminutes()*60);
+        Calendar next = Time.xSecondsAgo(last, (-1)*user.getExerciseeveryxminutes()*60);
+        logger.debug("last="+Time.dateformatcompactwithtime(last));
+        logger.debug("next="+Time.dateformatcompactwithtime(next));
+        logger.debug("Calendar.getInstance()="+Time.dateformatcompactwithtime(Calendar.getInstance()));
         if (!next.before(Calendar.getInstance())){
-            secondsuntilnext = DateDiff.dateDiff("second", Calendar.getInstance(), next);
+            secondsuntilnext = DateDiff.dateDiff("second", next, Calendar.getInstance());
+            logger.debug("DateDiff.dateDiff(\"second\", Calendar.getInstance(), next)="+secondsuntilnext);
             if (secondsuntilnext<0){
                 logger.debug("secondsuntilnext="+secondsuntilnext+" so making it 0");
                 secondsuntilnext = 0;
             }
         }
+        logger.debug("getSecondsUntilNextExercise() returning secondsuntilnext="+secondsuntilnext);
         return secondsuntilnext;
     }
 
