@@ -70,20 +70,17 @@
         <property name="exerciseeveryxminutes" type="int">
             <column name="exerciseeveryxminutes" not-null="true" />
         </property>
-        <property name="nextexercisetime" type="timestamp">
-            <column name="nextexercisetime" not-null="true" />
-        </property>
-        <property name="upcomingexercises" type="string">
-            <column name="upcomingexercises" not-null="true" />
-        </property>
         <property name="exercisechooserid" type="int">
             <column name="exercisechooserid" not-null="true" />
         </property>
         <property name="exerciselistid" type="int">
             <column name="exerciselistid" not-null="true" />
         </property>
-        <property name="currentexercisenum" type="int">
-            <column name="currentexercisenum" not-null="true" />
+        <property name="lastexercisetime" type="timestamp">
+            <column name="lastexercisetime" not-null="true" />
+        </property>
+        <property name="lastexerciseplaceinlist" type="string">
+            <column name="lastexerciseplaceinlist" not-null="true" />
         </property>
 
     </class>

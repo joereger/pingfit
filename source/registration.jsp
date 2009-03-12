@@ -18,13 +18,14 @@ Registration registration = (Registration)Pagez.getBeanMgr().get("Registration")
 %>
 <%
 if (Pagez.getUserSession().getIsloggedin()){
-    Pagez.sendRedirect("/account/exercise.jsp");
+    Pagez.sendRedirect("/account/index.jsp");
     return;
 }
 %>
 <%
     if (request.getParameter("action") != null && request.getParameter("action").equals("register")) {
         try {
+            registration.setIsflashsignup(false);
             registration.setEmail(Textbox.getValueFromRequest("email", "Email", true, DatatypeString.DATATYPEID));
             registration.setEula(Textarea.getValueFromRequest("eula", "Eula", true));
             registration.setFirstname(Textbox.getValueFromRequest("firstname", "First Name", true, DatatypeString.DATATYPEID));
@@ -39,18 +40,18 @@ if (Pagez.getUserSession().getIsloggedin()){
                 //Redir if https is on
                 if (SystemProperty.getProp(SystemProperty.PROP_ISSSLON).equals("1")) {
                     try {
-                        logger.debug("redirecting to https - " + BaseUrl.get(true) + "/account/exercise.jsp");
-                        Pagez.sendRedirect(BaseUrl.get(true) + "/account/exercise.jsp");
+                        logger.debug("redirecting to https - " + BaseUrl.get(true) + "/account/index.jsp");
+                        Pagez.sendRedirect(BaseUrl.get(true) + "/account/index.jsp");
                         return;
                     } catch (Exception ex) {
                         logger.error("", ex);
                         //@todo setIsfirsttimelogin(true) on AccountIndex bean
-                        Pagez.sendRedirect("/account/exercise.jsp");
+                        Pagez.sendRedirect("/account/index.jsp");
                         return;
                     }
                 } else {
                     //@todo setIsfirsttimelogin(true) on AccountIndex bean
-                    Pagez.sendRedirect("/account/exercise.jsp");
+                    Pagez.sendRedirect("/account/index.jsp");
                     return;
                 }
             } else {

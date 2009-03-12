@@ -6,17 +6,19 @@ import com.pingfit.util.Util;
 import com.pingfit.dao.Pingback;
 import com.pingfit.dao.User;
 import com.pingfit.dao.Exercise;
-import com.pingfit.dao.hibernate.NumFromUniqueResult;
+import com.pingfit.dao.Exerciselist;
+import com.pingfit.dao.hibernate.HibernateUtil;
 import com.pingfit.exercisechoosers.ExerciseChooserFactory;
 import com.pingfit.exercisechoosers.ExerciseChooser;
-import com.pingfit.helpers.Userinterfaces;
+import com.pingfit.exercisechoosers.ExerciseExtended;
+import com.pingfit.htmluibeans.Registration;
+import com.pingfit.eula.EulaHelper;
+import com.pingfit.htmlui.ValidationException;
 
-import java.util.Calendar;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
+import java.util.*;
 
 import org.apache.log4j.Logger;
+import org.hibernate.criterion.Restrictions;
 
 /**
  * User: Joe Reger Jr
@@ -25,182 +27,224 @@ import org.apache.log4j.Logger;
  */
 public class CoreMethods {
 
+    private static boolean isUserOk(User user){
+        if (user==null || user.getUserid()<0 || !user.getIsenabled()){
+            return false;
+        }
+        return true;
+    }
 
-    public static void doExercise(Exerciser exerciser, int exerciseid, int reps, int userinterface) throws GeneralException {
+    public static boolean testApi(User user) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
-            //Record to database
-            if (exerciser.getUserid()>0){
-                Pingback pingback = new Pingback();
-                pingback.setDate(new Date());
-                pingback.setExerciseid(exerciseid);
-                pingback.setReps(reps);
-                pingback.setUserid(exerciser.getUserid());
-                pingback.setUserinterface(userinterface);
-                pingback.save();
+            if (!isUserOk(user)){
+                return false;
             }
-            //Clean out memory a bit, if necessary
-            int maxinmemory = 100;
-            if (exerciser.getCompletedexercises()!=null && exerciser.getCompletedexercises().size()>maxinmemory){
-                exerciser.getCompletedexercises().remove(0);
-            }
-            //Save completed exercise to memory
-            CompletedExercise ce = new CompletedExercise();
-            ce.setDate(Calendar.getInstance());
-            ce.setExerciseid(exerciseid);
-            ce.setReps(reps);
-            exerciser.getCompletedexercises().add(ce);
-            //Advance exercises
-            advanceOneExercise(exerciser);
-            //Calculate next exercisetime
-            resetNextExerciseTime(exerciser);
+            return true;
         } catch (Exception ex) {
             logger.error("", ex);
             throw new GeneralException("Database error... sorry... please try again.");
         }
     }
 
-    public static void resetNextExerciseTime(Exerciser exerciser) throws GeneralException {
+
+    public static void doExercise(User user, int exerciseid, int reps, String exerciseplaceinlist) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
-            //Add the correct number of minutes
-            Calendar nexttime = Time.xMinutesAgo(Calendar.getInstance(), (-1)*exerciser.getExerciseeveryxminutes());
-            exerciser.setNextexercisetime(nexttime);
-            //Store in db if there's a user
-            if (exerciser.getUserid()>0){
-                User user = User.get(exerciser.getUserid());
-                user.setNextexercisetime(nexttime.getTime());
-                user.save();
+            if (!isUserOk(user)){
+                return;
             }
+            //Record to database
+            Pingback pingback = new Pingback();
+            pingback.setUserid(user.getUserid());
+            pingback.setDate(new Date());
+            pingback.setExerciseid(exerciseid);
+            pingback.setReps(reps);
+            pingback.setUserinterface(0);
+            pingback.save();
+            //Advance user by one exercise
+            user.setLastexerciseplaceinlist(exerciseplaceinlist);
+            user.setLastexercisetime(new Date());
+            user.save();
         } catch (Exception ex) {
             logger.error("", ex);
-            throw new GeneralException("Error... sorry... please try again.");
+            throw new GeneralException("Database error... sorry... please try again.");
         }
     }
 
-    public static void skipCurrentOrNextExercise(Exerciser exerciser) throws GeneralException {
+    public static ArrayList<Exerciselist> getExerciseLists(User user) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
-            //Advance one exercise without recording anythign to database
-            advanceOneExercise(exerciser);
-            //Reset next time
-            resetNextExerciseTime(exerciser);
+            if (!isUserOk(user)){
+                throw new GeneralException("User invalid.");
+            }
+            ArrayList<Exerciselist> out = new ArrayList<Exerciselist>();
+            if (1==1){
+                List<Exerciselist> systemlists = HibernateUtil.getSession().createCriteria(Exerciselist.class)
+                                                   .add(Restrictions.eq("issystem", true))
+                                                   .setCacheable(true)
+                                                   .list();
+                for (Iterator<Exerciselist> exerciselistIterator=systemlists.iterator(); exerciselistIterator.hasNext();) {
+                    Exerciselist exerciselist=exerciselistIterator.next();
+                    out.add(exerciselist);
+                }
+            }
+            if (1==1){
+                List<Exerciselist> userlists = HibernateUtil.getSession().createCriteria(Exerciselist.class)
+                                                   .add(Restrictions.eq("issystem", false))
+                                                   .add(Restrictions.eq("useridofcreator", user.getUserid()))
+                                                   .setCacheable(true)
+                                                   .list();
+                for (Iterator<Exerciselist> exerciselistIterator=userlists.iterator(); exerciselistIterator.hasNext();) {
+                    Exerciselist exerciselist=exerciselistIterator.next();
+                    out.add(exerciselist);
+                }
+            }
+            return out;
         } catch (Exception ex) {
             logger.error("", ex);
-            throw new GeneralException("Error... sorry... please try again.");
+            throw new GeneralException("Database error... sorry... please try again.");
         }
     }
 
-    public static void flushUpcomingExercises(Exerciser exerciser) throws GeneralException {
+    public static ExerciseExtended getCurrentExercise(User user) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
-            exerciser.setUpcomingexercises(new ArrayList<Integer>());
-            exerciser.setCurrentexercisenum(1);
-            //Store in db if there's a user
-            if (exerciser.getUserid()>0){
-                User user = User.get(exerciser.getUserid());
-                user.setUpcomingexercises("");
-                user.setCurrentexercisenum(1);
-                user.save();
-            }
-        } catch (Exception ex) {
-            logger.error("", ex);
-            throw new GeneralException("Error... sorry... please try again.");
-        }
-    }
-
-    public static void advanceOneExercise(Exerciser exerciser) throws GeneralException {
-        Logger logger = Logger.getLogger(CoreMethods.class);
-        try{
-            //Get the current exercisechooser
-            int exercisechooserid = exerciser.getExercisechooserid();
-            if (exerciser.getUserid()>0){
-                User user = User.get(exerciser.getUserid());
-                exercisechooserid = user.getExercisechooserid();
-            }
-            //Increment currentexercisenum
-            exerciser.setCurrentexercisenum(exerciser.getCurrentexercisenum()+1);
-            int maxNumInList = NumFromUniqueResult.getInt("select max(num) from Exerciselistitem where exerciselistid='"+exerciser.getExerciselistid()+"'");
-            if (exerciser.getCurrentexercisenum()>maxNumInList){
-                exerciser.setCurrentexercisenum(1);
+            if (!isUserOk(user)){
+                return null;
             }
             //Find the next exercise using the ExerciseChooser infrastructure
-            ArrayList<Integer> upcomingexercises = ((ExerciseChooser)ExerciseChooserFactory.get(exercisechooserid)).getNextExercises(exerciser, 6);
-            //Store in Exerciser
-            exerciser.setUpcomingexercises(upcomingexercises);
-            exerciser.setNextexerciseid(upcomingexercises.get(0));
-            //Store in db if there's a user
-            if (exerciser.getUserid()>0){
-                User user = User.get(exerciser.getUserid());
-                user.setUpcomingexercises(Util.integerArrayListToString(upcomingexercises));
-                user.save();
+            logger.debug("user.getExercisechooserid()="+user.getExercisechooserid());
+            ExerciseChooser exerciseChooser = ExerciseChooserFactory.get(user.getExercisechooserid());
+            if(exerciseChooser!=null){
+                ArrayList<ExerciseExtended> upcomingexercise = exerciseChooser.getNextExercises(user, 1);
+                if (upcomingexercise!=null && upcomingexercise.size()>0){
+                    return upcomingexercise.get(0);
+                }
+            } else {
+                throw new GeneralException("ExerciseChooser is null... a sysadmin is working on it.");    
             }
+        } catch (Exception ex) {
+            logger.error("", ex);
+            throw new GeneralException("Database error... sorry... please try again.");
+        }
+        return null;
+    }
+
+    public static Exercise getExercise(int exerciseid) throws GeneralException {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        try{
+            return Exercise.get(exerciseid);
+        } catch (Exception ex) {
+            logger.error("", ex);
+            throw new GeneralException("Database error... sorry... please try again.");
+        }
+    }
+
+    public static Exerciselist getExerciselist(int exerciselistid) throws GeneralException {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        try{
+            return Exerciselist.get(exerciselistid);
+        } catch (Exception ex) {
+            logger.error("", ex);
+            throw new GeneralException("Database error... sorry... please try again.");
+        }
+    }
+
+    public static int getSecondsUntilNextExercise(User user) throws GeneralException {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        try{
+            if (!isUserOk(user)){
+                return 0;
+            }
+            //Find the next exercise using the ExerciseChooser infrastructure
+            int secondsuntilnextexercise = ((ExerciseChooser)ExerciseChooserFactory.get(user.getExercisechooserid())).getSecondsUntilNextExercise(user);
+            return secondsuntilnextexercise;
+        } catch (Exception ex) {
+            logger.error("", ex);
+            throw new GeneralException("Database error... sorry... please try again.");
+        }
+    }
+
+
+
+    public static void skipExercise(User user) throws GeneralException {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        try{
+            if (!isUserOk(user)){
+                return;
+            }
+            ExerciseExtended exExt = getCurrentExercise(user);
+            //Advance user by one exercise
+            user.setLastexerciseplaceinlist(exExt.getExerciseplaceinlist());
+            user.setLastexercisetime(new Date());
+            user.save();
         } catch (Exception ex) {
             logger.error("", ex);
             throw new GeneralException("Error... sorry... please try again.");
         }
     }
 
-    public static void setExerciseEveryXMinutes(Exerciser exerciser, int minutes) throws GeneralException {
+    public static void setExerciseEveryXMinutes(User user, int minutes) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
-            exerciser.setExerciseeveryxminutes(minutes);
-            //Store in db if there's a user
-            if (exerciser.getUserid()>0){
-                User user = User.get(exerciser.getUserid());
-                user.setExerciseeveryxminutes(minutes);
-                user.save();
+            if (!isUserOk(user)){
+                return;
             }
-            //Reset next time
-            resetNextExerciseTime(exerciser);
+            user.setExerciseeveryxminutes(minutes);
+            user.save();
         } catch (Exception ex) {
             logger.error("", ex);
             throw new GeneralException("Error... sorry... please try again.");
         }
     }
 
-    public static void setExerciselistid(Exerciser exerciser, int exerciselistid) throws GeneralException {
+    public static void setExerciselist(User user, int exerciselistid) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
-            exerciser.setExerciselistid(exerciselistid);
-            //Store in db if there's a user
-            if (exerciser.getUserid()>0){
-                User user = User.get(exerciser.getUserid());
-                user.setExerciselistid(exerciselistid);
-                user.save();
+            if (!isUserOk(user)){
+                return;
             }
-            //Flush
-            flushUpcomingExercises(exerciser);
-            //Advance one exercise without recording anythign to database
-            advanceOneExercise(exerciser);
-            //Reset next time
-            resetNextExerciseTime(exerciser);
+            user.setExerciselistid(exerciselistid);
+            user.save();
         } catch (Exception ex) {
             logger.error("", ex);
             throw new GeneralException("Error... sorry... please try again.");
         }
     }
 
-    public static void setExerciseChooserId(Exerciser exerciser, int exercisechooserid) throws GeneralException {
+    public static void setExerciseChooser(User user, int exercisechooserid) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
-            exerciser.setExercisechooserid(exercisechooserid);
-            //Store in db if there's a user
-            if (exerciser.getUserid()>0){
-                User user = User.get(exerciser.getUserid());
-                user.setExercisechooserid(exercisechooserid);
-                user.save();
+            if (!isUserOk(user)){
+                return;
             }
-            //Flush
-            flushUpcomingExercises(exerciser);
-            //Advance one exercise without recording anythign to database
-            advanceOneExercise(exerciser);
-            //Reset next time
-            resetNextExerciseTime(exerciser);
+            user.setExercisechooserid(exercisechooserid);
+            user.save();
         } catch (Exception ex) {
             logger.error("", ex);
             throw new GeneralException("Error... sorry... please try again.");
         }
+    }
+
+    public static void signUp(String email, String password, String passwordverify, String firstname, String lastname) throws GeneralException {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        try{
+            Registration registration = new Registration();
+            registration.setIsflashsignup(true);
+            registration.setEmail(email);
+            registration.setPassword(password);
+            registration.setPasswordverify(passwordverify);
+            registration.setFirstname(firstname);
+            registration.setLastname(lastname);
+            registration.setEula(EulaHelper.getMostRecentEula().getEula().trim());
+            registration.setDisplaytempresponsesavedmessage(false);
+            registration.registerAction();
+        } catch (ValidationException vex){
+            throw new GeneralException(vex.getErrorsAsSingleString());
+        } catch (Exception ex){
+            throw new GeneralException("Sorry, an unknown error occurred... please try again.");
+        } 
     }
 
 }

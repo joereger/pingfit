@@ -1,7 +1,6 @@
 package com.pingfit.htmluibeans;
 
 import org.apache.log4j.Logger;
-import org.hibernate.criterion.Restrictions;
 
 import java.util.List;
 import java.util.Iterator;
@@ -11,17 +10,11 @@ import com.pingfit.dao.User;
 import com.pingfit.dao.hibernate.HibernateUtil;
 
 import com.pingfit.util.Str;
-import com.pingfit.util.Num;
 import com.pingfit.htmlui.UserSession;
 import com.pingfit.htmlui.Pagez;
 import com.pingfit.htmlui.ValidationException;
 import com.pingfit.session.PersistentLogin;
-import com.pingfit.xmpp.SendXMPPMessage;
 import com.pingfit.eula.EulaHelper;
-import com.pingfit.systemprops.SystemProperty;
-import com.pingfit.systemprops.BaseUrl;
-import com.pingfit.api.SaveCompletedExercisesFromMemory;
-import com.pingfit.api.Exerciser;
 
 import javax.servlet.http.Cookie;
 
@@ -91,12 +84,6 @@ public class Login implements Serializable {
                 userSession.setIsfacebookui(Pagez.getUserSession().getIsfacebookui());
                 userSession.setIstrayui(Pagez.getUserSession().getIstrayui());
                 userSession.setFacebookSessionKey(Pagez.getUserSession().getFacebookSessionKey());
-                userSession.setExerciser(Pagez.getUserSession().getExerciser());
-                //Set in the Pagez Exerciser
-                Pagez.getUserSession().getExerciser().setUserid(user.getUserid());
-
-                //Record any already-completed exercises
-                SaveCompletedExercisesFromMemory.saveAll(Pagez.getUserSession().getExerciser());
 
                 //Check the eula
                 if (!EulaHelper.isUserUsingMostRecentEula(user)){

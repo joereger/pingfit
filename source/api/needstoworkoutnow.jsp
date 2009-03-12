@@ -5,8 +5,6 @@
 <%@ page import="com.pingfit.htmlui.ValidationException" %>
 <%@ page import="java.util.Calendar" %>
 <%@ page import="com.pingfit.util.Time" %>
-<%@ page import="com.pingfit.api.Exerciser" %>
-<%@ page import="com.pingfit.api.ExerciserCache" %>
 <%
 Logger logger = Logger.getLogger(this.getClass().getName());
 Login login = (Login) Pagez.getBeanMgr().get("Login");
@@ -15,15 +13,7 @@ try {
     login.setPassword(com.pingfit.htmlui.Textbox.getValueFromRequest("password", "Password", true, DatatypeString.DATATYPEID));
     login.login();
     if (Pagez.getUserSession().getIsloggedin()){
-        Calendar now = Calendar.getInstance();
-        Calendar nextexercisetime = Time.getCalFromDate(Pagez.getUserSession().getUser().getNextexercisetime());
-        logger.debug("now="+ Time.dateformatcompactwithtime(now));
-        logger.debug("nextexercisetime="+ Time.dateformatcompactwithtime(nextexercisetime));
-        if (nextexercisetime.after(now)){
-            %>false<%
-        } else {
-            %>true<%
-        }
+        %>true<%
     } else {
         %>login failure<%
     }

@@ -3,7 +3,6 @@ package com.pingfit.htmlui;
 import com.pingfit.facebook.FacebookUser;
 import com.pingfit.dao.User;
 import com.pingfit.dao.Userrole;
-import com.pingfit.api.Exerciser;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -40,7 +39,6 @@ public class UserSession implements Serializable {
     private boolean istrayui = false;
     private String message = "";
     private Calendar createdate = Calendar.getInstance();
-    private Exerciser exerciser = null;
 
     public UserSession(){
         Logger logger = Logger.getLogger(this.getClass().getName());
@@ -241,13 +239,6 @@ public class UserSession implements Serializable {
         this.createdate=createdate;
     }
 
-    public Exerciser getExerciser() {
-        return exerciser;
-    }
-
-    public void setExerciser(Exerciser exerciser) {
-        this.exerciser = exerciser;
-    }
 
     public boolean getIstrayui() {
         return istrayui;

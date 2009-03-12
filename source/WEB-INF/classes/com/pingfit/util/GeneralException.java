@@ -25,6 +25,18 @@ public class GeneralException extends Exception {
         return mb.toString();
     }
 
+    public String getErrorsAsSingleStringNoHtml(){
+        StringBuffer mb = new StringBuffer();
+        for (int i = 0; i < validationErrors.length; i++) {
+            String validationError = validationErrors[i];
+            mb.append(validationError);
+            if (i+1 < validationErrors.length){
+                mb.append(", ");
+            }
+        }
+        return mb.toString();
+    }
+
     public void addErrorsFromAnotherGeneralException(GeneralException errors){
         for (int i = 0; i < errors.getErrors().length; i++) {
             addValidationError(errors.getErrors()[i]);

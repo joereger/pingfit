@@ -38,8 +38,8 @@
         <img src="/images/clear.gif" width="1" height="6" alt=""/><br/>
 		<%if (navtab.equals("home")){%><font class="navtabfontlevel1"><a href="/index.jsp"><b>Home</b></a></font><%}%>
         <%if (!navtab.equals("home")){%><font class="navtabfontlevel1"><a href="/index.jsp"><b>Home</b></a></font><%}%>
-        <%if (navtab.equals("exercise") && Pagez.getUserSession().getIsloggedin()){%><font class="navtabfontlevel1"><a href="/account/exercise.jsp"><b>Exercise</b></a></font><%}%>
-        <%if (!navtab.equals("exercise") && Pagez.getUserSession().getIsloggedin()){%><font class="navtabfontlevel1"><a href="/account/exercise.jsp"><b>Exercise</b></a></font><%}%>
+        <%if (1==2 && navtab.equals("exercise") && Pagez.getUserSession().getIsloggedin()){%><font class="navtabfontlevel1"><a href="/account/exercise.jsp"><b>Exercise</b></a></font><%}%>
+        <%if (1==2 && !navtab.equals("exercise") && Pagez.getUserSession().getIsloggedin()){%><font class="navtabfontlevel1"><a href="/account/exercise.jsp"><b>Exercise</b></a></font><%}%>
         <%if (1==2 && !navtab.equals("reports") && Pagez.getUserSession().getIsloggedin()){%><font class="navtabfontlevel1"><a href="/account/reports.jsp"><b>Reports</b></a></font><%}%>
         <%if (1==2 && navtab.equals("reports") && Pagez.getUserSession().getIsloggedin()){%><font class="navtabfontlevel1"><a href="/account/reports.jsp"><b>Reports</b></a></font><%}%>
         <%if (!navtab.equals("youraccount") && Pagez.getUserSession().getIsloggedin()){%><font class="navtabfontlevel1"><a href="/account/accountsettings.jsp"><b>Settings</b></a></font><%}%>

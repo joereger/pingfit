@@ -537,7 +537,17 @@ public class Time {
 	}
 
 
+    /**
+     * Returns a calendar set to the earliest time x minutes ago.  Send minutesago=0 for this minute
+     */
+	public static Calendar xSecondsAgo(Calendar indate, int secondsago){
+        Calendar outCal = (Calendar) indate.clone();
 
+        //Subtract the seconds
+        outCal.add(Calendar.SECOND, (-1*secondsago));
+
+        return outCal;
+    }
 
 
 	/**

@@ -2,7 +2,6 @@ package com.pingfit.htmluibeans;
 
 import org.apache.log4j.Logger;
 import org.apache.commons.validator.EmailValidator;
-import org.hibernate.criterion.Restrictions;
 import com.pingfit.dao.*;
 import com.pingfit.dao.hibernate.HibernateUtil;
 import com.pingfit.util.*;
@@ -14,13 +13,7 @@ import com.pingfit.email.EmailActivationSend;
 import com.pingfit.money.PaymentMethod;
 import com.pingfit.xmpp.SendXMPPMessage;
 import com.pingfit.eula.EulaHelper;
-import com.pingfit.systemprops.SystemProperty;
-import com.pingfit.systemprops.BaseUrl;
-import com.pingfit.helpers.UserInputSafe;
-import com.pingfit.facebook.FacebookPendingReferrals;
-import com.pingfit.cache.providers.CacheFactory;
-import com.pingfit.api.SaveCompletedExercisesFromMemory;
-import com.pingfit.exercisechoosers.ExerciseChooserRandom;
+import com.pingfit.exercisechoosers.ExerciseChooserList;
 
 
 import javax.servlet.http.Cookie;
@@ -42,6 +35,7 @@ public class Registration implements Serializable {
     private String lastname;
     private String eula;
     private boolean displaytempresponsesavedmessage;
+    private boolean isflashsignup = true;
 
 
     //private String temp;
@@ -69,13 +63,13 @@ public class Registration implements Serializable {
         //Validation
         boolean haveErrors = false;
 
-        if (password==null || password.equals("") || password.length()<6){
-            vex.addValidationError("Password must be at least six characters long.");
+        if (firstname==null || firstname.equals("")){
+            vex.addValidationError("First Name can't be blank.");
             haveErrors = true;
         }
 
-        if (!password.equals(passwordverify)){
-            vex.addValidationError("Password and Verify Password must match.");
+        if (lastname==null || lastname.equals("")){
+            vex.addValidationError("Last Name can't be blank.");
             haveErrors = true;
         }
 
@@ -85,13 +79,19 @@ public class Registration implements Serializable {
             haveErrors = true;
         }
 
-        if (firstname==null || firstname.equals("")){
-            vex.addValidationError("First Name can't be blank.");
+        List<User> users = HibernateUtil.getSession().createQuery("from User where email='"+ Str.cleanForSQL(email)+"'").list();
+        if (users.size()>0){
+            vex.addValidationError("That email address is already in use.");
             haveErrors = true;
         }
 
-        if (lastname==null || lastname.equals("")){
-            vex.addValidationError("Last Name can't be blank.");
+        if (password==null || password.equals("") || password.length()<6){
+            vex.addValidationError("Password must be at least six characters long.");
+            haveErrors = true;
+        }
+
+        if (!password.equals(passwordverify)){
+            vex.addValidationError("Password and Verify Password must match.");
             haveErrors = true;
         }
 
@@ -109,11 +109,7 @@ public class Registration implements Serializable {
 
 
 
-        List<User> users = HibernateUtil.getSession().createQuery("from User where email='"+ Str.cleanForSQL(email)+"'").list();
-        if (users.size()>0){
-            vex.addValidationError("That email address is already in use.");
-            haveErrors = true;
-        }
+
 
         if (haveErrors){
             throw vex;
@@ -126,7 +122,11 @@ public class Registration implements Serializable {
         user.setPassword(password);
         user.setFirstname(firstname);
         user.setLastname(lastname);
-        user.setIsactivatedbyemail(false);
+        if (isflashsignup){
+            user.setIsactivatedbyemail(true);
+        } else {
+            user.setIsactivatedbyemail(false);
+        }
         user.setEmailactivationkey(RandomString.randomAlphanumeric(5));
         user.setEmailactivationlastsent(new Date());
         user.setCreatedate(new Date());
@@ -135,19 +135,18 @@ public class Registration implements Serializable {
         user.setIsenabled(true);
         user.setFacebookappremoveddate(new Date());
         user.setIsfacebookappremoved(false);
-        user.setNextexercisetime(new Date());
-        user.setUpcomingexercises("1");
         user.setExerciseeveryxminutes(20);
-        ExerciseChooserRandom rnd = new ExerciseChooserRandom();
-        user.setExercisechooserid(rnd.getId());
-        user.setExerciselistid(1);
-        user.setCurrentexercisenum(1);
+        ExerciseChooserList lst = new ExerciseChooserList();
+        user.setExercisechooserid(lst.getId());
+        user.setExerciselistid(0);
+        user.setLastexercisetime(Calendar.getInstance().getTime());
+        user.setLastexerciseplaceinlist("");
         try{
             user.save();
             userid = user.getUserid();
         } catch (GeneralException gex){
             logger.debug("registerAction failed: " + gex.getErrorsAsSingleString());
-            throw new ValidationException("An internal server error occurred.  Apologies for the trouble.  Please try again.");
+            throw new ValidationException("An internal server error occurred.  Please try again.");
         }
 
         //Eula version check
@@ -160,39 +159,37 @@ public class Registration implements Serializable {
             usereula.save();
         } catch (GeneralException gex){
             logger.debug("registerAction failed: " + gex.getErrorsAsSingleString());
-            throw new ValidationException("An internal server error occurred.  Apologies for the trouble.  Please try again.");
+            throw new ValidationException("An internal server error occurred.  Please try again.");
         }
         user.getUsereulas().add(usereula);
 
 
-        //Send the activation email
-        EmailActivationSend.sendActivationEmail(user);
+
 
         //Notify customer care group
-        SendXMPPMessage xmpp = new SendXMPPMessage(SendXMPPMessage.GROUP_CUSTOMERSUPPORT, "New dNeero User: "+ user.getFirstname() + " " + user.getLastname() + "("+user.getEmail()+")");
+        SendXMPPMessage xmpp = new SendXMPPMessage(SendXMPPMessage.GROUP_CUSTOMERSUPPORT, "New PingFit User: "+ user.getFirstname() + " " + user.getLastname() + "("+user.getEmail()+")");
         xmpp.send();
 
-        //Log user in
-        UserSession userSession = new UserSession();
-        userSession.setUser(user);
-        userSession.setIsloggedin(true);
-        userSession.setIsLoggedInToBeta(Pagez.getUserSession().getIsLoggedInToBeta());
-        userSession.setIseulaok(true);
-        userSession.setIsfacebookui(Pagez.getUserSession().getIsfacebookui());
-        userSession.setFacebookSessionKey(Pagez.getUserSession().getFacebookSessionKey());
-        userSession.setExerciser(Pagez.getUserSession().getExerciser());
-        //Set in the Pagez Exerciser
-        Pagez.getUserSession().getExerciser().setUserid(user.getUserid());
-        //Record any already-completed exercises
-        SaveCompletedExercisesFromMemory.saveAll(Pagez.getUserSession().getExerciser());
-        //Set persistent login cookie
-        Cookie[] cookies = PersistentLogin.getPersistentCookies(user.getUserid(), Pagez.getRequest());
-        //Add a cookies to the response
-        for (int j = 0; j < cookies.length; j++) {
-            Pagez.getResponse().addCookie(cookies[j]);
+        if (!isflashsignup){
+            //Send the activation email
+            EmailActivationSend.sendActivationEmail(user);
+            //Log user in
+            UserSession userSession = new UserSession();
+            userSession.setUser(user);
+            userSession.setIsloggedin(true);
+            userSession.setIsLoggedInToBeta(Pagez.getUserSession().getIsLoggedInToBeta());
+            userSession.setIseulaok(true);
+            userSession.setIsfacebookui(Pagez.getUserSession().getIsfacebookui());
+            userSession.setFacebookSessionKey(Pagez.getUserSession().getFacebookSessionKey());
+            //Set persistent login cookie
+            Cookie[] cookies = PersistentLogin.getPersistentCookies(user.getUserid(), Pagez.getRequest());
+            //Add a cookies to the response
+            for (int j = 0; j < cookies.length; j++) {
+                Pagez.getResponse().addCookie(cookies[j]);
+            }
+            //Put userSession object into cache
+            Pagez.setUserSessionAndUpdateCache(userSession);
         }
-        //Put userSession object into cache
-        Pagez.setUserSessionAndUpdateCache(userSession);
 
     }
 
@@ -264,5 +261,13 @@ public class Registration implements Serializable {
 
     public void setDisplaytempresponsesavedmessage(boolean displaytempresponsesavedmessage) {
         this.displaytempresponsesavedmessage = displaytempresponsesavedmessage;
+    }
+
+    public boolean getIsflashsignup() {
+        return isflashsignup;
+    }
+
+    public void setIsflashsignup(boolean isflashsignup) {
+        this.isflashsignup=isflashsignup;
     }
 }

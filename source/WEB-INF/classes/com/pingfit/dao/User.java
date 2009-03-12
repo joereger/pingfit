@@ -35,13 +35,12 @@ public class User extends BasePersistentClass implements java.io.Serializable, A
      private boolean isfacebookappremoved;
      private Date facebookappremoveddate;
      private int exerciseeveryxminutes;
-     private Date nextexercisetime;
-     private String upcomingexercises;
      private int exercisechooserid;
      private int exerciselistid;
-     private int currentexercisenum;
+     private Date lastexercisetime;
+     private String lastexerciseplaceinlist;
 
-     //Association
+    //Association
     private Set<Userrole> userroles = new HashSet<Userrole>();
     private Set<Usereula> usereulas = new HashSet<Usereula>();
 
@@ -240,22 +239,6 @@ public class User extends BasePersistentClass implements java.io.Serializable, A
         this.exerciseeveryxminutes = exerciseeveryxminutes;
     }
 
-    public Date getNextexercisetime() {
-        return nextexercisetime;
-    }
-
-    public void setNextexercisetime(Date nextexercisetime) {
-        this.nextexercisetime = nextexercisetime;
-    }
-
-    public String getUpcomingexercises() {
-        return upcomingexercises;
-    }
-
-    public void setUpcomingexercises(String upcomingexercises) {
-        this.upcomingexercises = upcomingexercises;
-    }
-
     public int getExercisechooserid() {
         return exercisechooserid;
     }
@@ -272,11 +255,19 @@ public class User extends BasePersistentClass implements java.io.Serializable, A
         this.exerciselistid = exerciselistid;
     }
 
-    public int getCurrentexercisenum() {
-        return currentexercisenum;
+    public Date getLastexercisetime() {
+        return lastexercisetime;
     }
 
-    public void setCurrentexercisenum(int currentexercisenum) {
-        this.currentexercisenum = currentexercisenum;
+    public void setLastexercisetime(Date lastexercisetime) {
+        this.lastexercisetime=lastexercisetime;
+    }
+
+    public String getLastexerciseplaceinlist() {
+        return lastexerciseplaceinlist;
+    }
+
+    public void setLastexerciseplaceinlist(String lastexerciseplaceinlist) {
+        this.lastexerciseplaceinlist=lastexerciseplaceinlist;
     }
 }

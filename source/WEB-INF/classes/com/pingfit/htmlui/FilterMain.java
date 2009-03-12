@@ -20,8 +20,7 @@ import com.pingfit.systemprops.BaseUrl;
 import com.pingfit.facebook.FacebookAuthorizationJsp;
 import com.pingfit.eula.EulaHelper;
 import com.pingfit.xmpp.SendXMPPMessage;
-import com.pingfit.api.Exerciser;
-import com.pingfit.api.ExerciserCache;
+
 
 /**
  * User: Joe Reger Jr
@@ -201,7 +200,6 @@ public class FilterMain implements Filter {
                     }
                 }
 
-                //Find the Exerciser
                 //Start with the sessionid
                 String exerciserKey = "sessionid:"+httpServletRequest.getSession().getId();
 
@@ -237,17 +235,6 @@ public class FilterMain implements Filter {
                     exerciserKey = "userid:"+Pagez.getUserSession().getUser().getUserid();
                 }
 
-                //Now go to the cache to get the Exerciser
-                Exerciser exerciser = ExerciserCache.get(exerciserKey);
-                if (exerciser!=null){
-                    if (Pagez.getUserSession().getUser()!=null && Pagez.getUserSession().getUser().getUserid()>0){
-                        exerciser.setUserid(Pagez.getUserSession().getUser().getUserid());
-                    }
-                    Pagez.getUserSession().setExerciser(exerciser);
-                    logger.debug("Exerciser added to Pagez.getUserSession()");
-                } else {
-                    logger.debug("No Exerciser created/found.");
-                }
 
 
             } else {

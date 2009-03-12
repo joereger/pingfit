@@ -1,9 +1,13 @@
 package com.pingfit.util;
 
 import org.apache.log4j.Logger;
+import org.jdom.output.XMLOutputter;
+import org.jdom.Document;
+import org.jdom.input.SAXBuilder;
 
 import javax.servlet.http.Cookie;
 import java.util.*;
+import java.io.ByteArrayOutputStream;
 
 import sun.reflect.Reflection;
 
@@ -185,4 +189,33 @@ public class Util {
         }
         return out.toString();
     }
+
+
+    private static Document jdomStringAsDoc(String in){
+        Logger logger = Logger.getLogger(Util.class);
+        Document doc = null;
+        if (in!=null && !in.equals("")){
+            SAXBuilder builder = new SAXBuilder();
+            try{
+                doc = builder.build(new java.io.ByteArrayInputStream(in.getBytes()));
+            } catch (Exception ex){
+                logger.error("",ex);
+            }
+        }
+        return doc;
+    }
+
+    public static String jdomDocAsString(Document doc){
+        Logger logger = Logger.getLogger(Util.class);
+        try {
+            XMLOutputter serializer = new XMLOutputter();
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            serializer.output(doc, out);
+            return out.toString();
+        } catch (Exception ex) {
+            logger.debug("",ex);
+        }
+        return "";
+    }
+
 }

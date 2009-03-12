@@ -17,7 +17,7 @@ if (Pagez.getUserSession().getIsfacebookui()){
 %>
 <%
 if (Pagez.getUserSession().getIstrayui() && Pagez.getUserSession().getIsloggedin()){
-    Pagez.sendRedirect("/account/exercise.jsp");
+    Pagez.sendRedirect("/account/index.jsp");
     return;
 }
 %>
@@ -39,15 +39,15 @@ Login login = (Login) Pagez.getBeanMgr().get("Login");
             if (SystemProperty.getProp(SystemProperty.PROP_ISSSLON).equals("1")) {
                 try {
                     logger.debug("redirecting to https - " + BaseUrl.get(true) + "account/exercise.jsp"+keepmeloggedinStr);
-                    Pagez.sendRedirect(BaseUrl.get(true) + "account/exercise.jsp"+keepmeloggedinStr);
+                    Pagez.sendRedirect(BaseUrl.get(true) + "account/index.jsp"+keepmeloggedinStr);
                     return;
                 } catch (Exception ex) {
                     logger.error("", ex);
-                    Pagez.sendRedirect("/account/exercise.jsp"+keepmeloggedinStr);
+                    Pagez.sendRedirect("/account/index.jsp"+keepmeloggedinStr);
                     return;
                 }
             } else {
-                Pagez.sendRedirect("/account/exercise.jsp"+keepmeloggedinStr);
+                Pagez.sendRedirect("/account/index.jsp"+keepmeloggedinStr);
                 return;
             }
         } catch (ValidationException vex) {

@@ -9,6 +9,6 @@ public class Userinterfaces {
 
     public static int WEB = 1;
     public static int TRAY = 2;
-    
+    public static int FLASH = 3;
 
 }

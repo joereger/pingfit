@@ -36,7 +36,9 @@ String acl = "sysadmin";
            User user = User.get(pingback.getUserid());
            String userinterfaceStr = "Web";
            if (pingback.getUserinterface()==Userinterfaces.TRAY){
-              userinterfaceStr = "MiniTrayApp";
+              userinterfaceStr = "OldCrappyMiniTrayApp";
+           } else if (pingback.getUserinterface()==Userinterfaces.FLASH){
+              userinterfaceStr = "NewAirDesktopApp";
            }
            PingbackListItem pbli = new PingbackListItem();
            pbli.setPingback(pingback);

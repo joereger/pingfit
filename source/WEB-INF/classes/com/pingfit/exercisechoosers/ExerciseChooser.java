@@ -1,7 +1,6 @@
 package com.pingfit.exercisechoosers;
 
-import com.pingfit.dao.Exercise;
-import com.pingfit.api.Exerciser;
+import com.pingfit.dao.User;
 
 import java.util.ArrayList;
 
@@ -14,6 +13,7 @@ public interface ExerciseChooser {
 
     public int getId();
     public String getName();
-    public ArrayList<Integer> getNextExercises(Exerciser exerciser, int numbertoget);
-
+    public ArrayList<ExerciseExtended> getNextExercises(User user, int numbertoget);
+    public int getSecondsUntilNextExercise(User user);
+    
 }
