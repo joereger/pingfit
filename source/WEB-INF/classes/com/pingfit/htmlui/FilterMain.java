@@ -44,12 +44,14 @@ public class FilterMain implements Filter {
         HttpServletResponse httpServletResponse = (HttpServletResponse)response;
 
 
+
+
         //Set up Pagez
         Pagez.setRequest(httpServletRequest);
         Pagez.setResponse(httpServletResponse);
         Pagez.setBeanMgr(new BeanMgr());
         try{
-            if (httpServletRequest.getRequestURL().indexOf("jpg")==-1 && httpServletRequest.getRequestURL().indexOf("css")==-1 && httpServletRequest.getRequestURL().indexOf("gif")==-1 && httpServletRequest.getRequestURL().indexOf("png")==-1 && httpServletRequest.getRequestURL().indexOf("/js/")==-1){
+            if (httpServletRequest.getRequestURL().indexOf("api.xml")==-1 && httpServletRequest.getRequestURL().indexOf("PingFit.air")==-1 && httpServletRequest.getRequestURL().indexOf("pingFitAirAppVersion.xml")==-1 && httpServletRequest.getRequestURL().indexOf("jpg")==-1 && httpServletRequest.getRequestURL().indexOf("css")==-1 && httpServletRequest.getRequestURL().indexOf("gif")==-1 && httpServletRequest.getRequestURL().indexOf("png")==-1 && httpServletRequest.getRequestURL().indexOf("/js/")==-1){
                 logger.debug("Start FilterMain");
 //                logger.debug("");
 //                logger.debug("");

@@ -3,10 +3,7 @@ package com.pingfit.api;
 import com.pingfit.util.GeneralException;
 import com.pingfit.util.Time;
 import com.pingfit.util.Util;
-import com.pingfit.dao.Pingback;
-import com.pingfit.dao.User;
-import com.pingfit.dao.Exercise;
-import com.pingfit.dao.Exerciselist;
+import com.pingfit.dao.*;
 import com.pingfit.dao.hibernate.HibernateUtil;
 import com.pingfit.exercisechoosers.ExerciseChooserFactory;
 import com.pingfit.exercisechoosers.ExerciseChooser;
@@ -41,6 +38,32 @@ public class CoreMethods {
                 return false;
             }
             return true;
+        } catch (Exception ex) {
+            logger.error("", ex);
+            throw new GeneralException("Database error... sorry... please try again.");
+        }
+    }
+
+    public static void joinRoom(User user, int roomid) throws GeneralException {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        try{
+            if (!isUserOk(user)){
+                throw new GeneralException("User invalid.");
+            }
+            //@todo permissions on rooms??
+            boolean userCanJoinRoom = true;
+            //Is the room valid
+            Room room = Room.get(roomid);
+            if (room==null || room.getRoomid()<=0 || !room.getIsenabled()){
+                userCanJoinRoom = false;
+            }
+            //Do the join
+            if (userCanJoinRoom){
+                user.setRoomid(roomid);
+                user.save();
+            } else {
+                throw new GeneralException("Permission to join this room not granted.");
+            }
         } catch (Exception ex) {
             logger.error("", ex);
             throw new GeneralException("Database error... sorry... please try again.");
@@ -98,6 +121,94 @@ public class CoreMethods {
                 for (Iterator<Exerciselist> exerciselistIterator=userlists.iterator(); exerciselistIterator.hasNext();) {
                     Exerciselist exerciselist=exerciselistIterator.next();
                     out.add(exerciselist);
+                }
+            }
+            return out;
+        } catch (Exception ex) {
+            logger.error("", ex);
+            throw new GeneralException("Database error... sorry... please try again.");
+        }
+    }
+
+    public static Exerciselist getDefaultSystemExerciselist(User user) throws GeneralException {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        try{
+            if (!isUserOk(user)){
+                throw new GeneralException("User invalid.");
+            }
+            List<Exerciselist> systemlists = HibernateUtil.getSession().createCriteria(Exerciselist.class)
+                                               .add(Restrictions.eq("issystemdefault", true))
+                                               .setCacheable(true)
+                                               .list();
+            for (Iterator<Exerciselist> exerciselistIterator=systemlists.iterator(); exerciselistIterator.hasNext();) {
+                Exerciselist exerciselist=exerciselistIterator.next();
+                return exerciselist;
+            }
+            return null;
+        } catch (Exception ex) {
+            logger.error("", ex);
+            throw new GeneralException("Database error... sorry... please try again.");
+        }
+    }
+
+    public static Room getDefaultSystemRoom(User user) throws GeneralException {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        try{
+            if (!isUserOk(user)){
+                throw new GeneralException("User invalid.");
+            }
+            Exerciselist exerciselist = getDefaultSystemExerciselist(user);
+            Room room = getRoomForExerciselist(exerciselist);
+            if (room==null){
+                throw new GeneralException("Sorry, no default room found.");
+            }
+            return room;
+        } catch (Exception ex) {
+            logger.error("", ex);
+            throw new GeneralException("Database error... sorry... please try again.");
+        }
+    }
+
+    public static ArrayList<Room> getRooms(User user) throws GeneralException {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        try{
+            if (!isUserOk(user)){
+                throw new GeneralException("User invalid.");
+            }
+            ArrayList<Room> out = new ArrayList<Room>();
+            if (1==1){
+                //Make sure a room exists for every exerciselist
+                List<Exerciselist> systemlists = HibernateUtil.getSession().createCriteria(Exerciselist.class)
+                                                   .add(Restrictions.eq("issystem", true))
+                                                   .setCacheable(true)
+                                                   .list();
+                for (Iterator<Exerciselist> exerciselistIterator=systemlists.iterator(); exerciselistIterator.hasNext();) {
+                    Exerciselist exerciselist=exerciselistIterator.next();
+                    Room room = getRoomForExerciselist(exerciselist);
+                }
+            }
+            if (1==1){
+                //Get the system rooms
+                List<Room> systemrooms = HibernateUtil.getSession().createCriteria(Room.class)
+                                                   .add(Restrictions.eq("issystem", true))
+                                                   .add(Restrictions.eq("isenabled", true))
+                                                   .setCacheable(true)
+                                                   .list();
+                for (Iterator<Room> iterator=systemrooms.iterator(); iterator.hasNext();) {
+                    Room room=iterator.next();
+                    out.add(room);
+                }
+            }
+            if (1==1){
+                //Get the user rooms
+                List<Room> userrooms = HibernateUtil.getSession().createCriteria(Room.class)
+                                                   .add(Restrictions.eq("issystem", false))
+                                                   .add(Restrictions.eq("isenabled", true))
+                                                   .setCacheable(true)
+                                                   .list();
+                for (Iterator<Room> iterator=userrooms.iterator(); iterator.hasNext();) {
+                    Room room=iterator.next();
+                    out.add(room);
                 }
             }
             return out;
@@ -245,6 +356,45 @@ public class CoreMethods {
         } catch (Exception ex){
             throw new GeneralException("Sorry, an unknown error occurred... please try again.");
         } 
+    }
+
+    public static Room getRoomForExerciselist(Exerciselist exerciselist){
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        List<Room> roomsalreadyexisting = HibernateUtil.getSession().createCriteria(Room.class)
+                                                   .add(Restrictions.eq("issystem", exerciselist.getIssystem()))
+                                                   .add(Restrictions.eq("isenabled", true))
+                                                   .add(Restrictions.eq("exerciselistid", exerciselist.getExerciselistid()))
+                                                   .setCacheable(true)
+                                                   .list();
+        if (roomsalreadyexisting!=null && roomsalreadyexisting.size()>0){
+            if (roomsalreadyexisting.size()>1){
+                //For some reason there's more than one room marked as system and enabled for this exerciselist
+                logger.error("ERROR: More than one room marked as system and enabled for this exerciselistid="+exerciselist.getExerciselistid());
+            }
+            //Return the room as it already exists
+            return (Room)roomsalreadyexisting.get(0);
+        } else {
+            //Room doesn't exist, create it
+            try{
+                Room room = new Room();
+                room.setCreatedate(new Date());
+                room.setDescription(exerciselist.getDescription());
+                room.setExerciseeveryxminutes(exerciselist.getExerciseeveryxminutes());
+                room.setExerciselistid(exerciselist.getExerciselistid());
+                room.setIsenabled(true);
+                room.setIssystem(exerciselist.getIssystem());
+                room.setLastexerciseplaceinlist("");
+                room.setLastexercisetime(new Date());
+                room.setName(exerciselist.getTitle());
+                room.setDescription(exerciselist.getDescription());
+                room.setUseridofcreator(0);
+                room.save();
+                return room;
+            } catch (Exception ex){
+                logger.error("", ex);
+            }
+        }
+        return null;
     }
 
 }

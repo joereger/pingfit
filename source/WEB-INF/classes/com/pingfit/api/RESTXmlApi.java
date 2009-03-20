@@ -105,12 +105,20 @@ public class RESTXmlApi extends HttpServlet {
                             element = CoreMethodsReturningXML.getUserSettings(user);
                         } else if (method.equalsIgnoreCase("bigRefresh")){
                             element = CoreMethodsReturningXML.bigRefresh(user);
+                        } else if (method.equalsIgnoreCase("getRooms")){
+                            element = CoreMethodsReturningXML.getRooms(user);
                         } else if (method.equalsIgnoreCase("getExercise")){
                             int exerciseid = 0;
                             if (Num.isinteger(request.getParameter("exerciseid"))){
                                 exerciseid = Integer.parseInt(request.getParameter("exerciseid"));
                             }
                             element = CoreMethodsReturningXML.getExercise(exerciseid);
+                        } else if (method.equalsIgnoreCase("joinRoom")){
+                            int roomid = 0;
+                            if (Num.isinteger(request.getParameter("roomid"))){
+                                roomid = Integer.parseInt(request.getParameter("roomid"));
+                            }
+                            element = CoreMethodsReturningXML.joinRoom(user, roomid);
                         } else if (method.equalsIgnoreCase("getExerciselist")){
                             int exerciselistid = 0;
                             if (Num.isinteger(request.getParameter("exerciselistid"))){

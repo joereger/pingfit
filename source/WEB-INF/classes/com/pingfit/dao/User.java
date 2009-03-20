@@ -39,6 +39,7 @@ public class User extends BasePersistentClass implements java.io.Serializable, A
      private int exerciselistid;
      private Date lastexercisetime;
      private String lastexerciseplaceinlist;
+     private int roomid;
 
     //Association
     private Set<Userrole> userroles = new HashSet<Userrole>();
@@ -269,5 +270,13 @@ public class User extends BasePersistentClass implements java.io.Serializable, A
 
     public void setLastexerciseplaceinlist(String lastexerciseplaceinlist) {
         this.lastexerciseplaceinlist=lastexerciseplaceinlist;
+    }
+
+    public int getRoomid() {
+        return roomid;
+    }
+
+    public void setRoomid(int roomid) {
+        this.roomid=roomid;
     }
 }

@@ -26,6 +26,8 @@ String acl = "sysadmin";
     Exerciselist exerciselist = new Exerciselist();
     exerciselist.setIssystem(true);
     exerciselist.setIspublic(true);
+    exerciselist.setIssystemdefault(false);
+    exerciselist.setExerciseeveryxminutes(20);
     exerciselist.setUseridofcreator(Pagez.getUserSession().getUser().getUserid());
     if (request.getParameter("exerciselistid") != null && !request.getParameter("exerciselistid").equals("0") && Num.isinteger(request.getParameter("exerciselistid"))) {
         exerciselist = Exerciselist.get(Integer.parseInt(request.getParameter("exerciselistid")));
@@ -40,7 +42,21 @@ String acl = "sysadmin";
             }
             exerciselist.setTitle(Textbox.getValueFromRequest("title", "Title", true, DatatypeString.DATATYPEID));
             exerciselist.setDescription(Textarea.getValueFromRequest("description", "Description", true));
+            exerciselist.setExerciseeveryxminutes(Textbox.getIntFromRequest("exerciseeveryxminutes", "Exercise Every X Minutes", true, DatatypeInteger.DATATYPEID));
+            exerciselist.setIssystemdefault(CheckboxBoolean.getValueFromRequest("issystemdefault"));
             exerciselist.save();
+            //If chosen as system default, make sure all others are turned off
+            if (exerciselist.getIssystemdefault()){
+                List<Exerciselist> systemlists = HibernateUtil.getSession().createCriteria(Exerciselist.class)
+                                                   .add(Restrictions.ne("exerciselistid", exerciselist.getExerciselistid()))
+                                                   .setCacheable(true)
+                                                   .list();
+                for (Iterator<Exerciselist> exerciselistIterator=systemlists.iterator(); exerciselistIterator.hasNext();) {
+                    Exerciselist exl=exerciselistIterator.next();
+                    exl.setIssystemdefault(false);
+                    exl.save();
+                }
+            }
             Pagez.getUserSession().setMessage("Exercise list saved.");
             if (redirectToList){
                 Pagez.sendRedirect("/sysadmin/exerciselistlist.jsp");
@@ -121,7 +137,23 @@ String acl = "sysadmin";
                         </td>
                     </tr>
 
+                    <tr>
+                        <td valign="top">
+                            <font class="formfieldnamefont">Exercise Every X Minutes</font>
+                        </td>
+                        <td valign="top">
+                            <%=Textbox.getHtml("exerciseeveryxminutes", String.valueOf(exerciselist.getExerciseeveryxminutes()), 5, 5, "", "")%>
+                        </td>
+                    </tr>
 
+                    <tr>
+                        <td valign="top">
+                        </td>
+                        <td valign="top">
+                            <%=CheckboxBoolean.getHtml("issystemdefault", exerciselist.getIssystemdefault(), "", "")%>
+                            <font class="formfieldnamefont">System Default List? (should rarely change)</font>
+                        </td>
+                    </tr>
 
                     <tr>
                         <td valign="top">

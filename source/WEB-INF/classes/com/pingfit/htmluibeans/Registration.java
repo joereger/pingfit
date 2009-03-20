@@ -141,6 +141,7 @@ public class Registration implements Serializable {
         user.setExerciselistid(0);
         user.setLastexercisetime(Calendar.getInstance().getTime());
         user.setLastexerciseplaceinlist("");
+        user.setRoomid(0);
         try{
             user.save();
             userid = user.getUserid();

@@ -24,6 +24,10 @@ public class SystemExerciseLists {
             Exerciselist ex = new Exerciselist();
             ex.setTitle("Basic Exercises");
             ex.setDescription("This is a good set of starter exercises that you can use to get familiar with the system.");
+            ex.setExerciseeveryxminutes(20);
+            ex.setIssystemdefault(false);
+            ex.setIspublic(true);
+            ex.setIssystem(true);
             ex.save();
 
             if (1==1){

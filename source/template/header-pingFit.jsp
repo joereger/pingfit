@@ -3,14 +3,14 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html;CHARSET=iso-8859-1"/>
-    <title>PingFit</title>
+    <title>pingFit</title>
     <link rel="stylesheet" type="text/css" href="/css/basic.css"/>
     <link rel="stylesheet" type="text/css" href="/css/pingFit.css"/>
     <link rel="stylesheet" type="text/css" href="/js/niftycube/niftyCorners.css"/>
     <link rel="alternate" type="application/rss+xml" title="pingFit"
-          href="http://www.pingFit.com/rss.xml"/>
+          href="http://www.pingfit.com/rss.xml"/>
     <meta name="description"
-          content="PingFit"/>
+          content="pingFit"/>
     <meta name="keywords" content="fitness,workout"/>
     <script type="text/javascript" src="/js/mootools/mootools-release-1.11.js"></script>
     <!--<script type="text/javascript" src="/js/niftycube/niftycube.js"></script>-->
@@ -85,9 +85,15 @@
                 <img src="/images/clear.gif" alt="" width="10" height="1"/>
                 <a href="/account/accountsettings.jsp"><font class="subnavfont" style="color: #ffffff;">Account Settings</font></a>
                 <img src="/images/clear.gif" alt="" width="10" height="1"/>
-                <a href="/account/billing.jsp"><font class="subnavfont" style="color: #ffffff;">Billing Info</font></a>
+                <%--<a href="/account/billing.jsp"><font class="subnavfont" style="color: #ffffff;">Billing Info</font></a>--%>
+                <%--<img src="/images/clear.gif" alt="" width="10" height="1"/>--%>
+                <%--<a href="/account/accountbalance.jsp"><font class="subnavfont" style="color: #ffffff;">Account Balance</font></a>--%>
+                <%--<img src="/images/clear.gif" alt="" width="10" height="1"/>--%>
+                <a href="/account/exerciselist.jsp"><font class="subnavfont" style="color: #ffffff;">Your Exercises</font></a>
                 <img src="/images/clear.gif" alt="" width="10" height="1"/>
-                <a href="/account/accountbalance.jsp"><font class="subnavfont" style="color: #ffffff;">Account Balance</font></a>
+                <a href="/account/exerciselistlist.jsp"><font class="subnavfont" style="color: #ffffff;">Your Exercise Lists</font></a>
+                <img src="/images/clear.gif" alt="" width="10" height="1"/>
+                <a href="/account/reports.jsp"><font class="subnavfont" style="color: #ffffff;">Reports</font></a>
             <%}%>
         <%}%>
 

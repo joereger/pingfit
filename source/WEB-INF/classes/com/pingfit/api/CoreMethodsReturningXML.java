@@ -1,9 +1,6 @@
 package com.pingfit.api;
 
-import com.pingfit.dao.User;
-import com.pingfit.dao.Exercise;
-import com.pingfit.dao.Exerciselist;
-import com.pingfit.dao.Exerciselistitem;
+import com.pingfit.dao.*;
 import com.pingfit.util.GeneralException;
 import com.pingfit.util.Time;
 import com.pingfit.exercisechoosers.ExerciseExtended;
@@ -51,6 +48,19 @@ public class CoreMethodsReturningXML {
         }
     }
 
+    public static Element joinRoom(User user, int roomid) {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        try{
+            CoreMethods.joinRoom(user, roomid);
+            return resultXml(true, "");
+        } catch (GeneralException gex) {
+            return resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return resultXml(false, "Sorry, an unknown error occurred.");
+        }
+    }
+
     public static Element getCurrentExercise(User user) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
@@ -82,6 +92,24 @@ public class CoreMethodsReturningXML {
         }
     }
 
+    public static Element getRooms(User user) throws GeneralException {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        try{
+            Element element = new Element("rooms");
+            ArrayList<Room> rooms = CoreMethods.getRooms(user);
+            for (Iterator it = rooms.iterator(); it.hasNext(); ) {
+                Room room = (Room)it.next();
+                element.addContent(roomAsXML(room));
+            }
+            return element;
+        } catch (GeneralException gex) {
+            return resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return resultXml(false, "Sorry, an unknown error occurred.");
+        }
+    }
+
     public static Element bigRefresh(User user) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
@@ -89,6 +117,7 @@ public class CoreMethodsReturningXML {
             element.addContent(getCurrentExercise(user));
             element.addContent(getUserSettings(user));
             element.addContent(getExerciseLists(user));
+            element.addContent(getRooms(user));
             return element;
         } catch (GeneralException gex) {
             return resultXml(false, gex.getErrorsAsSingleStringNoHtml());
@@ -256,6 +285,7 @@ public class CoreMethodsReturningXML {
         element.addContent(nameValueElement("exercisechooserid", String.valueOf(user.getExercisechooserid())));
         element.addContent(nameValueElement("exerciseeveryxminutes", String.valueOf(user.getExerciseeveryxminutes())));
         element.addContent(nameValueElement("createdate", String.valueOf(Time.dateformatUtc(Time.getCalFromDate(user.getCreatedate())))));
+        element.addContent(nameValueElement("roomid", String.valueOf(user.getRoomid())));
         return element;
     }
 
@@ -276,6 +306,19 @@ public class CoreMethodsReturningXML {
         return element;
     }
 
+    public static Element roomAsXML(Room room) {
+        Element element = new Element("room");
+        element.addContent(nameValueElement("roomid", String.valueOf(room.getRoomid())));
+        element.addContent(nameValueElement("isenabled", String.valueOf(room.getIsenabled())));
+        element.addContent(nameValueElement("issystem", String.valueOf(room.getIssystem())));
+        element.addContent(nameValueElement("useridofcreator", String.valueOf(room.getUseridofcreator())));
+        element.addContent(nameValueElement("name", String.valueOf(room.getName())));
+        element.addContent(nameValueElement("description", String.valueOf(room.getDescription())));
+        element.addContent(nameValueElement("exerciseeveryxminutes", String.valueOf(room.getExerciseeveryxminutes())));
+        element.addContent(nameValueElement("exerciselistid", String.valueOf(room.getExerciselistid())));
+        return element;
+    }
+
     public static Element exerciseListAsXML(Exerciselist exerciselist) {
         return exerciseListAsXML(exerciselist, false, false);
     }
@@ -291,6 +334,7 @@ public class CoreMethodsReturningXML {
         element.addContent(nameValueElement("description", String.valueOf(exerciselist.getDescription())));
         element.addContent(nameValueElement("ispublic", String.valueOf(exerciselist.getIspublic())));
         element.addContent(nameValueElement("issystem", String.valueOf(exerciselist.getIssystem())));
+        element.addContent(nameValueElement("issystemdefault", String.valueOf(exerciselist.getIssystemdefault())));
         element.addContent(nameValueElement("useridofcreator", String.valueOf(exerciselist.getUseridofcreator())));
         if (includeExerciselistitems){
             for (Iterator<Exerciselistitem> iterator=exerciselist.getExerciselistitems().iterator(); iterator.hasNext();) {

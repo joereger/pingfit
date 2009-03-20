@@ -26,6 +26,8 @@ String acl = "sysadmin";
     Exerciselist exerciselist = new Exerciselist();
     exerciselist.setIssystem(true);
     exerciselist.setIspublic(true);
+    exerciselist.setIssystemdefault(false);
+    exerciselist.setExerciseeveryxminutes(20);
     exerciselist.setUseridofcreator(Pagez.getUserSession().getUser().getUserid());
     if (request.getParameter("exerciselistid") != null && !request.getParameter("exerciselistid").equals("0") && Num.isinteger(request.getParameter("exerciselistid"))) {
         exerciselist = Exerciselist.get(Integer.parseInt(request.getParameter("exerciselistid")));

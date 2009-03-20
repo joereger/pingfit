@@ -2,6 +2,7 @@ package com.pingfit.util;
 
 import org.apache.log4j.Logger;
 import org.jdom.output.XMLOutputter;
+import org.jdom.output.DOMOutputter;
 import org.jdom.Document;
 import org.jdom.input.SAXBuilder;
 
@@ -216,6 +217,18 @@ public class Util {
             logger.debug("",ex);
         }
         return "";
+    }
+
+    public static org.w3c.dom.Document jdomDocAtW3CDoc(Document doc){
+        Logger logger = Logger.getLogger(Util.class);
+        try{
+            DOMOutputter outputter = new DOMOutputter();
+            org.w3c.dom.Document document = outputter.output(doc);
+            return document;
+        } catch (Exception ex){
+            logger.error("", ex);
+        }
+        return null;
     }
 
 }
