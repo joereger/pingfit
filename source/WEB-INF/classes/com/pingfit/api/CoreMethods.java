@@ -11,6 +11,7 @@ import com.pingfit.exercisechoosers.ExerciseExtended;
 import com.pingfit.htmluibeans.Registration;
 import com.pingfit.eula.EulaHelper;
 import com.pingfit.htmlui.ValidationException;
+import com.pingfit.htmlui.Pagez;
 
 import java.util.*;
 
@@ -38,6 +39,60 @@ public class CoreMethods {
                 return false;
             }
             return true;
+        } catch (Exception ex) {
+            logger.error("", ex);
+            throw new GeneralException("Database error... sorry... please try again.");
+        }
+    }
+
+    public static Eula getCurrentEula() throws GeneralException {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        try{
+            return EulaHelper.getMostRecentEula();
+        } catch (Exception ex) {
+            logger.error("", ex);
+            throw new GeneralException("Database error... sorry... please try again.");
+        }
+    }
+
+    public static boolean isUserEulaUpToDate(User user) throws GeneralException {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        try{
+            if (!isUserOk(user)){
+                return false;
+            }
+            if (!EulaHelper.isUserUsingMostRecentEula(user)){
+                return false;
+            } else {
+                return true;
+            }
+        } catch (Exception ex) {
+            logger.error("", ex);
+            throw new GeneralException("Database error... sorry... please try again.");
+        }
+    }
+
+    public static void agreeToEula(User user, int eulaid, String ip) throws GeneralException {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        try{
+            if (!isUserOk(user)){
+                return;
+            }
+            if (ip==null || ip.equals("")){
+                ip = "0.0.0.0";
+            }
+            Usereula usereula = new Usereula();
+            usereula.setDate(new Date());
+            usereula.setEulaid(eulaid);
+            usereula.setUserid(user.getUserid());
+            usereula.setIp(ip);
+            try{
+                usereula.save();
+            } catch (GeneralException gex){
+                logger.error(gex);
+                logger.debug("agree failed: " + gex.getErrorsAsSingleString());
+                throw new GeneralException("Sorry, there was an error with the agreeToEula() method.");
+            }
         } catch (Exception ex) {
             logger.error("", ex);
             throw new GeneralException("Database error... sorry... please try again.");

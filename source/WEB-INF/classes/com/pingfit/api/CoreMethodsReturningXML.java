@@ -48,6 +48,44 @@ public class CoreMethodsReturningXML {
         }
     }
 
+    public static Element getCurrentEula() {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        try{
+            Eula eula = CoreMethods.getCurrentEula();
+            return eulaAsXML(eula);
+        } catch (GeneralException gex) {
+            return resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return resultXml(false, "Sorry, an unknown error occurred.");
+        }
+    }
+
+    public static Element isUserEulaUpToDate(User user) {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        try{
+            return booleanAsElement(CoreMethods.isUserEulaUpToDate(user), "isusereulauptodate");
+        } catch (GeneralException gex) {
+            return resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return resultXml(false, "Sorry, an unknown error occurred.");
+        }
+    }
+
+    public static Element agreeToEula(User user, int eulaid, String ip) {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        try{
+            CoreMethods.agreeToEula(user, eulaid, ip);
+            return resultXml(true, "");
+        } catch (GeneralException gex) {
+            return resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return resultXml(false, "Sorry, an unknown error occurred.");
+        }
+    }
+
     public static Element joinRoom(User user, int roomid) {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
@@ -118,6 +156,7 @@ public class CoreMethodsReturningXML {
             element.addContent(getUserSettings(user));
             element.addContent(getExerciseLists(user));
             element.addContent(getRooms(user));
+            element.addContent(getCurrentEula());
             return element;
         } catch (GeneralException gex) {
             return resultXml(false, gex.getErrorsAsSingleStringNoHtml());
@@ -261,6 +300,14 @@ public class CoreMethodsReturningXML {
         return element;
     }
 
+    public static Element eulaAsXML(Eula eula) {
+        Element element = new Element("eula");
+        element.addContent(nameValueElement("eulaid", String.valueOf(eula.getEulaid())));
+        element.addContent(nameValueElement("eula", String.valueOf(eula.getEula())));
+        element.addContent(nameValueElement("date", Time.dateformatcompactwithtime(Time.getCalFromDate(eula.getDate()))));
+        return element;
+    }
+
     public static Element exerciseAsXML(Exercise exercise) {
         Element element = new Element("exercise");
         element.addContent(nameValueElement("exerciseid", String.valueOf(exercise.getExerciseid())));
@@ -276,6 +323,7 @@ public class CoreMethodsReturningXML {
     }
 
     private static Element userSettingsAsXML(User user) {
+        Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
         Element element = new Element("usersettings");
         element.addContent(nameValueElement("userid", String.valueOf(user.getUserid())));
         element.addContent(nameValueElement("email", String.valueOf(user.getEmail())));
@@ -286,6 +334,7 @@ public class CoreMethodsReturningXML {
         element.addContent(nameValueElement("exerciseeveryxminutes", String.valueOf(user.getExerciseeveryxminutes())));
         element.addContent(nameValueElement("createdate", String.valueOf(Time.dateformatUtc(Time.getCalFromDate(user.getCreatedate())))));
         element.addContent(nameValueElement("roomid", String.valueOf(user.getRoomid())));
+        element.addContent(isUserEulaUpToDate(user));
         return element;
     }
 
@@ -371,6 +420,14 @@ public class CoreMethodsReturningXML {
         Element element = new Element(name);
         element.setContent(new Text(value));
         return element;
+    }
+
+    private static Element booleanAsElement(boolean bool, String elementname){
+        if (bool){
+            return nameValueElement(elementname, "true");
+        } else {
+            return nameValueElement(elementname, "false");
+        }
     }
 
 

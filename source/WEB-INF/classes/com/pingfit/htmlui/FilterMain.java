@@ -51,7 +51,7 @@ public class FilterMain implements Filter {
         Pagez.setResponse(httpServletResponse);
         Pagez.setBeanMgr(new BeanMgr());
         try{
-            if (httpServletRequest.getRequestURL().indexOf("api.xml")==-1 && httpServletRequest.getRequestURL().indexOf("PingFit.air")==-1 && httpServletRequest.getRequestURL().indexOf("pingFitAirAppVersion.xml")==-1 && httpServletRequest.getRequestURL().indexOf("jpg")==-1 && httpServletRequest.getRequestURL().indexOf("css")==-1 && httpServletRequest.getRequestURL().indexOf("gif")==-1 && httpServletRequest.getRequestURL().indexOf("png")==-1 && httpServletRequest.getRequestURL().indexOf("/js/")==-1){
+            if (httpServletRequest.getRequestURL().indexOf("api.xml")==-1 && httpServletRequest.getRequestURL().indexOf("PingFit.air")==-1 && httpServletRequest.getRequestURL().indexOf("PingFitAirAppVersion.xml")==-1 && httpServletRequest.getRequestURL().indexOf("jpg")==-1 && httpServletRequest.getRequestURL().indexOf("css")==-1 && httpServletRequest.getRequestURL().indexOf("gif")==-1 && httpServletRequest.getRequestURL().indexOf("png")==-1 && httpServletRequest.getRequestURL().indexOf("/js/")==-1){
                 logger.debug("Start FilterMain");
 //                logger.debug("");
 //                logger.debug("");
@@ -187,8 +187,9 @@ public class FilterMain implements Filter {
                     Calendar startOfGracePeriod = Time.xDaysAgoStart(Calendar.getInstance(), daysInGracePeriod);
                     if (Pagez.getUserSession().getUser().getCreatedate().before(startOfGracePeriod.getTime())){
                         if (urlSplitter.getRequestUrl().indexOf("emailactivation")==-1 && urlSplitter.getRequestUrl().indexOf("lpc.jsp")==-1 && urlSplitter.getRequestUrl().indexOf("login")==-1 && urlSplitter.getRequestUrl().indexOf("jcaptcha")==-1 && urlSplitter.getRequestUrl().indexOf("eas")==-1){
-                            httpServletResponse.sendRedirect("/emailactivationwaiting.jsp");
-                            return;
+                            //logger.debug("redirecting userid="+Pagez.getUserSession().getUser().getUserid()+" "+Pagez.getUserSession().getUser().getFirstname()+" "+Pagez.getUserSession().getUser().getLastname()+" to awaitingactivation page");
+                            //httpServletResponse.sendRedirect("/emailactivationwaiting.jsp");
+                            //return;
                         }
                     }
                 }

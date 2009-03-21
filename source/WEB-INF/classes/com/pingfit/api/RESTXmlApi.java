@@ -101,6 +101,17 @@ public class RESTXmlApi extends HttpServlet {
                             element = CoreMethodsReturningXML.signUp(signupemail, signuppassword, signuppasswordverify, firstname, lastname);
                         } else if (method.equalsIgnoreCase("testApi")){
                             element = CoreMethodsReturningXML.testApi(user);
+                        } else if (method.equalsIgnoreCase("getCurrentEula")){
+                            element = CoreMethodsReturningXML.getCurrentEula();
+                        } else if (method.equalsIgnoreCase("isUserEulaUpToDate")){
+                            element = CoreMethodsReturningXML.isUserEulaUpToDate(user);
+                        } else if (method.equalsIgnoreCase("agreeToEula")){
+                            int eulaid = 0;
+                            if (Num.isinteger(request.getParameter("eulaid"))){
+                                eulaid = Integer.parseInt(request.getParameter("eulaid"));
+                            }
+                            String ip = request.getRemoteAddr();
+                            element = CoreMethodsReturningXML.agreeToEula(user, eulaid, ip);
                         } else if (method.equalsIgnoreCase("getUserSettings")){
                             element = CoreMethodsReturningXML.getUserSettings(user);
                         } else if (method.equalsIgnoreCase("bigRefresh")){
