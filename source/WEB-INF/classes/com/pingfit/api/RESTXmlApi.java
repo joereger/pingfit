@@ -103,6 +103,8 @@ public class RESTXmlApi extends HttpServlet {
                             element = CoreMethodsReturningXML.testApi(user);
                         } else if (method.equalsIgnoreCase("getCurrentEula")){
                             element = CoreMethodsReturningXML.getCurrentEula();
+                        } else if (method.equalsIgnoreCase("getCurrentRoom")){
+                            element = CoreMethodsReturningXML.getCurrentRoom(user);
                         } else if (method.equalsIgnoreCase("isUserEulaUpToDate")){
                             element = CoreMethodsReturningXML.isUserEulaUpToDate(user);
                         } else if (method.equalsIgnoreCase("agreeToEula")){

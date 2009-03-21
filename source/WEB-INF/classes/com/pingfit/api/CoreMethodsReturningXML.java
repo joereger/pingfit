@@ -148,6 +148,19 @@ public class CoreMethodsReturningXML {
         }
     }
 
+    public static Element getCurrentRoom(User user) throws GeneralException {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        try{
+            return roomAsXML(CoreMethods.getCurrentRoom(user));
+        } catch (GeneralException gex) {
+            return resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return resultXml(false, "Sorry, an unknown error occurred.");
+        }
+    }
+    
+
     public static Element bigRefresh(User user) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
@@ -335,6 +348,12 @@ public class CoreMethodsReturningXML {
         element.addContent(nameValueElement("createdate", String.valueOf(Time.dateformatUtc(Time.getCalFromDate(user.getCreatedate())))));
         element.addContent(nameValueElement("roomid", String.valueOf(user.getRoomid())));
         element.addContent(isUserEulaUpToDate(user));
+        try{
+            Room currentRoom = CoreMethods.getCurrentRoom(user);
+            element.addContent(roomAsXML(currentRoom));
+        } catch (Exception ex){
+            logger.error("", ex);
+        }
         return element;
     }
 

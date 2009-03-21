@@ -224,6 +224,28 @@ public class CoreMethods {
         }
     }
 
+    public static Room getCurrentRoom(User user) throws GeneralException {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        try{
+            if (!isUserOk(user)){
+                throw new GeneralException("User invalid.");
+            }
+            Room room = null;
+            if (user.getRoomid()>0){
+                room = Room.get(user.getRoomid());
+            } else {
+                room = getDefaultSystemRoom(user);
+            }
+            if (room==null){
+                throw new GeneralException("Sorry, no current room found.");
+            }
+            return room;
+        } catch (Exception ex) {
+            logger.error("", ex);
+            throw new GeneralException("Database error... sorry... please try again.");
+        }
+    }
+
     public static ArrayList<Room> getRooms(User user) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
