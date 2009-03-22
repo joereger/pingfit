@@ -43,9 +43,6 @@ public class FilterMain implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest)request;
         HttpServletResponse httpServletResponse = (HttpServletResponse)response;
 
-
-
-
         //Set up Pagez
         Pagez.setRequest(httpServletRequest);
         Pagez.setResponse(httpServletResponse);

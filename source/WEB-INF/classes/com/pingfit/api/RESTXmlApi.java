@@ -21,6 +21,7 @@ import com.pingfit.pageperformance.PagePerformanceUtil;
 import com.pingfit.systemprops.InstanceProperties;
 import com.pingfit.dao.hibernate.HibernateUtil;
 import com.pingfit.dao.User;
+import com.pingfit.session.UrlSplitter;
 
 
 /**
@@ -40,11 +41,12 @@ public class RESTXmlApi extends HttpServlet {
         Logger logger = Logger.getLogger(this.getClass().getName());
         long timestart = new java.util.Date().getTime();
         Document outDoc = new Document();
-        logger.debug("Looking for flash survey via servlet");
+        UrlSplitter urlSplitter = new UrlSplitter(request);
+        logger.debug("RESTXmlAPI: "+urlSplitter.getParametersAsQueryStringNoQuestionMark());
         logger.debug("request.getParameter(\"email\")="+request.getParameter("email"));
         logger.debug("request.getParameter(\"password\")="+request.getParameter("password"));
         logger.debug("request.getParameter(\"method\")="+request.getParameter("method"));
-        logger.debug("request.getParameter(\"cache\")="+request.getParameter("cache"));
+
         //Put incoming stuff into variables
         String email = request.getParameter("email");
         String password = request.getParameter("password");
