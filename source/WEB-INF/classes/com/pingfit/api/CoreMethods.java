@@ -3,6 +3,7 @@ package com.pingfit.api;
 import com.pingfit.util.GeneralException;
 import com.pingfit.util.Time;
 import com.pingfit.util.Util;
+import com.pingfit.util.Str;
 import com.pingfit.dao.*;
 import com.pingfit.dao.hibernate.HibernateUtil;
 import com.pingfit.exercisechoosers.ExerciseChooserFactory;
@@ -413,6 +414,43 @@ public class CoreMethods {
         }
     }
 
+    public static void setNickname(User user, String nickname) throws GeneralException {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        try{
+            if (!isUserOk(user)){
+                return;
+            }
+            if (nickname!=null){
+                nickname = nickname.trim();
+            }
+            GeneralException gex = new GeneralException();
+            boolean haveErrors = false;
+            if (nickname==null || nickname.equals("")){
+                gex.addValidationError("Nickname can't be blank.");
+                haveErrors = true;
+            }
+            if (nickname!=null && nickname.length()>15){
+                gex.addValidationError("Nickname must be 15 characters or less.");
+                haveErrors = true;
+            }
+            List<User> usersByNickname = HibernateUtil.getSession().createQuery("from User where nickname='"+ Str.cleanForSQL(nickname)+"' and userid<>'"+user.getUserid()+"'").list();
+            if (usersByNickname.size()>0){
+                gex.addValidationError("That Nickname is already in use.");
+                haveErrors = true;
+            }
+            if (haveErrors){
+                logger.debug("throwing gex: "+gex.getErrorsAsSingleStringNoHtml());
+                throw gex;    
+            } else {
+                user.setNickname(nickname);
+                user.save();
+            }
+        } catch (Exception ex) {
+            logger.error("", ex);
+            throw new GeneralException("Error... sorry... please try again.");
+        }
+    }
+
     public static void signUp(String email, String password, String passwordverify, String firstname, String lastname, String nickname) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
@@ -423,7 +461,7 @@ public class CoreMethods {
             registration.setPasswordverify(passwordverify);
             registration.setFirstname(firstname);
             registration.setLastname(lastname);
-            registration.setLastname(nickname);
+            registration.setNickname(nickname);
             registration.setEula(EulaHelper.getMostRecentEula().getEula().trim());
             registration.setDisplaytempresponsesavedmessage(false);
             registration.registerAction();

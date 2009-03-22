@@ -82,7 +82,7 @@ public class Registration implements Serializable {
         }
         
 
-        if (nickname==null || nickname.length()>15){
+        if (nickname!=null && nickname.length()>15){
             vex.addValidationError("Nickname must be 15 characters or less.");
             haveErrors = true;
         }

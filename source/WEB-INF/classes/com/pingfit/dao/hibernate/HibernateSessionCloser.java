@@ -29,7 +29,7 @@ public class HibernateSessionCloser implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest)request;
         try{
-            if (httpServletRequest.getRequestURL().indexOf("jpg")==-1 && httpServletRequest.getRequestURL().indexOf("css")==-1 && httpServletRequest.getRequestURL().indexOf("gif")==-1 && httpServletRequest.getRequestURL().indexOf("png")==-1){
+            if (httpServletRequest.getRequestURL().indexOf("jpg")==-1 && httpServletRequest.getRequestURL().indexOf("css")==-1 && httpServletRequest.getRequestURL().indexOf("gif")==-1 && httpServletRequest.getRequestURL().indexOf("png")==-1 && httpServletRequest.getRequestURL().indexOf("swf")==-1){
                 Pagez.setStartTime(new Date().getTime());
                 logger.debug("");
                 logger.debug("");
@@ -54,7 +54,7 @@ public class HibernateSessionCloser implements Filter {
         }
 
         try{
-            if (httpServletRequest.getRequestURL().indexOf("jpg")==-1 && httpServletRequest.getRequestURL().indexOf("css")==-1 && httpServletRequest.getRequestURL().indexOf("gif")==-1 && httpServletRequest.getRequestURL().indexOf("png")==-1){
+            if (httpServletRequest.getRequestURL().indexOf("jpg")==-1 && httpServletRequest.getRequestURL().indexOf("css")==-1 && httpServletRequest.getRequestURL().indexOf("gif")==-1 && httpServletRequest.getRequestURL().indexOf("png")==-1 && httpServletRequest.getRequestURL().indexOf("swf")==-1){
                 logger.debug("---------------------------END REQUEST: "+httpServletRequest.getRequestURL());
                 logger.debug("-------------: "+Pagez.getElapsedTime()+" millis");
                 logger.debug("------");

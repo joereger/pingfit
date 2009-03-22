@@ -259,6 +259,19 @@ public class CoreMethodsReturningXML {
         }
     }
 
+    public static Element setNickname(User user, String nickname) throws GeneralException {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        try{
+            CoreMethods.setNickname(user, nickname);
+            return bigRefresh(user);
+        } catch (GeneralException gex) {
+            return resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return resultXml(false, "Sorry, an unknown error occurred.");
+        }
+    }
+
     public static Element setExerciselist(User user, int exerciselistid) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
@@ -342,6 +355,7 @@ public class CoreMethodsReturningXML {
         element.addContent(nameValueElement("email", String.valueOf(user.getEmail())));
         element.addContent(nameValueElement("firstname", String.valueOf(user.getFirstname())));
         element.addContent(nameValueElement("lastname", String.valueOf(user.getLastname())));
+        element.addContent(nameValueElement("nickname", String.valueOf(user.getNickname())));
         element.addContent(nameValueElement("exerciselistid", String.valueOf(user.getExerciselistid())));
         element.addContent(nameValueElement("exercisechooserid", String.valueOf(user.getExercisechooserid())));
         element.addContent(nameValueElement("exerciseeveryxminutes", String.valueOf(user.getExerciseeveryxminutes())));

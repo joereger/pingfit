@@ -159,6 +159,9 @@ public class RESTXmlApi extends HttpServlet {
                                 exercisechooserid = Integer.parseInt(request.getParameter("exercisechooserid"));
                             }
                             element = CoreMethodsReturningXML.setExerciseChooser(user, exercisechooserid);    
+                        } else if (method.equalsIgnoreCase("setNickname")){
+                            String nickname = request.getParameter("nickname");
+                            element = CoreMethodsReturningXML.setNickname(user, nickname);
                         } else if (method.equalsIgnoreCase("setExerciseList")){
                             int exerciselistid = 0;
                             if (Num.isinteger(request.getParameter("exerciselistid"))){
