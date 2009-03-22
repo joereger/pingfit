@@ -285,10 +285,10 @@ public class CoreMethodsReturningXML {
         }
     }
 
-    public static Element signUp(String email, String password, String passwordverify, String firstname, String lastname) throws GeneralException {
+    public static Element signUp(String email, String password, String passwordverify, String firstname, String lastname, String nickname) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
-            CoreMethods.signUp(email, password, passwordverify, firstname, lastname);
+            CoreMethods.signUp(email, password, passwordverify, firstname, lastname, nickname);
             return resultXml(true, "");
         } catch (GeneralException gex) {
             return resultXml(false, gex.getErrorsAsSingleStringNoHtml());

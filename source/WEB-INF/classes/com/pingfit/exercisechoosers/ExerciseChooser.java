@@ -14,6 +14,7 @@ public interface ExerciseChooser {
     public int getId();
     public String getName();
     public ArrayList<ExerciseExtended> getNextExercises(User user, int numbertoget);
+    public ArrayList<ExerciseExtended> getNextExercises(int exerciselistid, String lastexerciseplaceinlist, int numbertoget);
     public int getSecondsUntilNextExercise(User user);
     
 }

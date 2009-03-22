@@ -28,6 +28,28 @@
         </trigger>
     </job>
 
+    <job>
+        <job-detail>
+          <name>roomExerciseProgress</name>
+          <group>surveyJobs</group>
+          <job-class>com.pingfit.scheduledjobs.RoomExerciseProgress</job-class>
+          <volatility>false</volatility>
+          <durability>false</durability>
+          <recover>false</recover>
+        </job-detail>
+        <trigger>
+          <!-- Sample cron triggers: http://www.opensymphony.com/quartz/wikidocs/TutorialLesson6.html -->
+          <cron>
+            <name>roomExerciseProgressTrigger</name>
+            <group>surveyTriggers</group>
+            <job-name>roomExerciseProgress</job-name>
+            <job-group>surveyJobs</job-group>
+            <!-- every x minutes -->
+            <cron-expression>0 0/1 * * * ?</cron-expression>
+          </cron>
+        </trigger>
+    </job>
+
 
 
     <job>

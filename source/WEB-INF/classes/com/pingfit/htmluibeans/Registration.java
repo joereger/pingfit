@@ -14,6 +14,8 @@ import com.pingfit.money.PaymentMethod;
 import com.pingfit.xmpp.SendXMPPMessage;
 import com.pingfit.eula.EulaHelper;
 import com.pingfit.exercisechoosers.ExerciseChooserList;
+import com.pingfit.exercisechoosers.ExerciseChooserGroup;
+import com.pingfit.api.CoreMethods;
 
 
 import javax.servlet.http.Cookie;
@@ -33,6 +35,7 @@ public class Registration implements Serializable {
     private String passwordverify;
     private String firstname;
     private String lastname;
+    private String nickname;
     private String eula;
     private boolean displaytempresponsesavedmessage;
     private boolean isflashsignup = true;
@@ -73,6 +76,17 @@ public class Registration implements Serializable {
             haveErrors = true;
         }
 
+        if (nickname==null || nickname.equals("")){
+            vex.addValidationError("Nickname can't be blank.");
+            haveErrors = true;
+        }
+        
+
+        if (nickname==null || nickname.length()>15){
+            vex.addValidationError("Nickname must be 15 characters or less.");
+            haveErrors = true;
+        }
+
         EmailValidator ev = EmailValidator.getInstance();
         if (!ev.isValid(email)){
             vex.addValidationError("Not a valid email address.");
@@ -85,8 +99,14 @@ public class Registration implements Serializable {
             haveErrors = true;
         }
 
-        if (password==null || password.equals("") || password.length()<6){
-            vex.addValidationError("Password must be at least six characters long.");
+        List<User> usersByNickname = HibernateUtil.getSession().createQuery("from User where nickname='"+ Str.cleanForSQL(nickname)+"'").list();
+        if (usersByNickname.size()>0){
+            vex.addValidationError("That Nickname is already in use.");
+            haveErrors = true;
+        }
+
+        if (password==null || password.equals("") || password.length()<5){
+            vex.addValidationError("Password must be at least five characters long.");
             haveErrors = true;
         }
 
@@ -97,7 +117,6 @@ public class Registration implements Serializable {
 
         //@todo need to check for lcase(firstname), lcase(lastname), email in the database... people are changing caps on name and creating another account.
 
-
         if (eula==null || !eula.trim().equals(EulaHelper.getMostRecentEula().getEula().trim())){
             //@todo Registration EULA validation
             //logger.debug("eula="+eula);
@@ -106,10 +125,6 @@ public class Registration implements Serializable {
             //eula = EulaHelper.getMostRecentEula().getEula();
             //haveErrors = true;
         }
-
-
-
-
 
         if (haveErrors){
             throw vex;
@@ -122,27 +137,30 @@ public class Registration implements Serializable {
         user.setPassword(password);
         user.setFirstname(firstname);
         user.setLastname(lastname);
+        user.setNickname(nickname);
         if (isflashsignup){
             user.setIsactivatedbyemail(true);
         } else {
             user.setIsactivatedbyemail(false);
         }
-        user.setEmailactivationkey(RandomString.randomAlphanumeric(5));
-        user.setEmailactivationlastsent(new Date());
-        user.setCreatedate(new Date());
-        user.setChargemethod(PaymentMethod.PAYMENTMETHODCREDITCARD);
-        user.setChargemethodcreditcardid(0);
-        user.setIsenabled(true);
-        user.setFacebookappremoveddate(new Date());
-        user.setIsfacebookappremoved(false);
-        user.setExerciseeveryxminutes(20);
-        ExerciseChooserList lst = new ExerciseChooserList();
-        user.setExercisechooserid(lst.getId());
-        user.setExerciselistid(0);
-        user.setLastexercisetime(Calendar.getInstance().getTime());
-        user.setLastexerciseplaceinlist("");
-        user.setRoomid(0);
         try{
+            user.setEmailactivationkey(RandomString.randomAlphanumeric(5));
+            user.setEmailactivationlastsent(new Date());
+            user.setCreatedate(new Date());
+            user.setChargemethod(PaymentMethod.PAYMENTMETHODCREDITCARD);
+            user.setChargemethodcreditcardid(0);
+            user.setIsenabled(true);
+            user.setFacebookappremoveddate(new Date());
+            user.setIsfacebookappremoved(false);
+            user.setExerciseeveryxminutes(20);
+            ExerciseChooserGroup lst = new ExerciseChooserGroup();
+            user.setExercisechooserid(lst.getId());
+            int exerciselistid = CoreMethods.getDefaultSystemExerciselist().getExerciselistid();
+            user.setExerciselistid(exerciselistid);
+            user.setLastexercisetime(Calendar.getInstance().getTime());
+            user.setLastexerciseplaceinlist("");
+            int roomid = CoreMethods.getDefaultSystemRoom().getRoomid();
+            user.setRoomid(roomid);
             user.save();
             userid = user.getUserid();
         } catch (GeneralException gex){
@@ -153,7 +171,11 @@ public class Registration implements Serializable {
         //Eula version check
         Usereula usereula = new Usereula();
         usereula.setDate(new Date());
-        usereula.setEulaid(EulaHelper.getMostRecentEula().getEulaid());
+        if (isflashsignup){
+            usereula.setEulaid(0);
+        } else {
+            usereula.setEulaid(EulaHelper.getMostRecentEula().getEulaid());
+        }
         usereula.setUserid(user.getUserid());
         usereula.setIp(Pagez.getRequest().getRemoteAddr());
         try{
@@ -164,11 +186,8 @@ public class Registration implements Serializable {
         }
         user.getUsereulas().add(usereula);
 
-
-
-
         //Notify customer care group
-        SendXMPPMessage xmpp = new SendXMPPMessage(SendXMPPMessage.GROUP_CUSTOMERSUPPORT, "New PingFit User: "+ user.getFirstname() + " " + user.getLastname() + "("+user.getEmail()+")");
+        SendXMPPMessage xmpp = new SendXMPPMessage(SendXMPPMessage.GROUP_CUSTOMERSUPPORT, "New pingFit User: "+ user.getFirstname() + " " + user.getLastname() + "("+user.getEmail()+")");
         xmpp.send();
 
         if (!isflashsignup){
@@ -270,5 +289,13 @@ public class Registration implements Serializable {
 
     public void setIsflashsignup(boolean isflashsignup) {
         this.isflashsignup=isflashsignup;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname=nickname;
     }
 }

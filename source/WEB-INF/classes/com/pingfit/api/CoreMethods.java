@@ -114,7 +114,8 @@ public class CoreMethods {
             }
             //Do the join
             if (userCanJoinRoom){
-                user.setRoomid(roomid);
+                user.setRoomid(room.getRoomid());
+                user.setExerciselistid(room.getExerciselistid());
                 user.save();
             } else {
                 throw new GeneralException("Permission to join this room not granted.");
@@ -185,12 +186,9 @@ public class CoreMethods {
         }
     }
 
-    public static Exerciselist getDefaultSystemExerciselist(User user) throws GeneralException {
+    public static Exerciselist getDefaultSystemExerciselist() throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
-            if (!isUserOk(user)){
-                throw new GeneralException("User invalid.");
-            }
             List<Exerciselist> systemlists = HibernateUtil.getSession().createCriteria(Exerciselist.class)
                                                .add(Restrictions.eq("issystemdefault", true))
                                                .setCacheable(true)
@@ -206,13 +204,10 @@ public class CoreMethods {
         }
     }
 
-    public static Room getDefaultSystemRoom(User user) throws GeneralException {
+    public static Room getDefaultSystemRoom() throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
-            if (!isUserOk(user)){
-                throw new GeneralException("User invalid.");
-            }
-            Exerciselist exerciselist = getDefaultSystemExerciselist(user);
+            Exerciselist exerciselist = getDefaultSystemExerciselist();
             Room room = getRoomForExerciselist(exerciselist);
             if (room==null){
                 throw new GeneralException("Sorry, no default room found.");
@@ -234,7 +229,10 @@ public class CoreMethods {
             if (user.getRoomid()>0){
                 room = Room.get(user.getRoomid());
             } else {
-                room = getDefaultSystemRoom(user);
+                room = getDefaultSystemRoom();
+            }
+            if (room!=null && !room.getIsenabled() || room.getRoomid()<=0){
+                room = getDefaultSystemRoom();
             }
             if (room==null){
                 throw new GeneralException("Sorry, no current room found.");
@@ -415,7 +413,7 @@ public class CoreMethods {
         }
     }
 
-    public static void signUp(String email, String password, String passwordverify, String firstname, String lastname) throws GeneralException {
+    public static void signUp(String email, String password, String passwordverify, String firstname, String lastname, String nickname) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
             Registration registration = new Registration();
@@ -425,6 +423,7 @@ public class CoreMethods {
             registration.setPasswordverify(passwordverify);
             registration.setFirstname(firstname);
             registration.setLastname(lastname);
+            registration.setLastname(nickname);
             registration.setEula(EulaHelper.getMostRecentEula().getEula().trim());
             registration.setDisplaytempresponsesavedmessage(false);
             registration.registerAction();

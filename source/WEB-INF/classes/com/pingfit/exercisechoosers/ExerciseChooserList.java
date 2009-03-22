@@ -47,7 +47,7 @@ public class ExerciseChooserList implements ExerciseChooser {
         return out;
     }
 
-    protected ArrayList<ExerciseExtended> getNextExercises(int exerciselistid, String lastexerciseplaceinlist, int numbertoget){
+    public ArrayList<ExerciseExtended> getNextExercises(int exerciselistid, String lastexerciseplaceinlist, int numbertoget){
         Logger logger = Logger.getLogger(this.getClass().getName());
         ArrayList<ExerciseExtended> out = new ArrayList<ExerciseExtended>();
         logger.debug("getNextExercise()");

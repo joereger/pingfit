@@ -100,7 +100,8 @@ public class RESTXmlApi extends HttpServlet {
                             String signuppasswordverify = request.getParameter("signuppasswordverify");
                             String firstname = request.getParameter("firstname");
                             String lastname = request.getParameter("lastname");
-                            element = CoreMethodsReturningXML.signUp(signupemail, signuppassword, signuppasswordverify, firstname, lastname);
+                            String nickname = request.getParameter("nickname");
+                            element = CoreMethodsReturningXML.signUp(signupemail, signuppassword, signuppasswordverify, firstname, lastname, nickname);
                         } else if (method.equalsIgnoreCase("testApi")){
                             element = CoreMethodsReturningXML.testApi(user);
                         } else if (method.equalsIgnoreCase("getCurrentEula")){
