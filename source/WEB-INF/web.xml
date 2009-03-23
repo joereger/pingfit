@@ -17,6 +17,11 @@
 
 
 
+
+
+
+
+
     <servlet>
       <servlet-name>jcaptcha</servlet-name>
       <servlet-class>com.pingfit.util.jcaptcha.ImageCaptchaServlet</servlet-class>
@@ -56,6 +61,27 @@
         <filter-name>Encode4FacebookFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+
+
+
+    
+    <servlet>
+        <servlet-name>BadgeInstallJs</servlet-name>
+        <servlet-class>com.pingfit.air.BadgeInstallJs</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BadgeInstallJs</servlet-name>
+        <url-pattern>/badgefiles/badgeInstall.js</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>PingFitAirAppVersionXml</servlet-name>
+        <servlet-class>com.pingfit.air.PingFitAirAppVersionXml</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PingFitAirAppVersionXml</servlet-name>
+        <url-pattern>/PingFitAirAppVersion.xml</url-pattern>
+    </servlet-mapping>
 
 
     <servlet>

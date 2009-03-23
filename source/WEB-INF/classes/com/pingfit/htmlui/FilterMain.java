@@ -42,7 +42,7 @@ public class FilterMain implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest)request;
         HttpServletResponse httpServletResponse = (HttpServletResponse)response;
-
+        //logger.debug("++++++ httpServletRequest.getRequestURL()="+httpServletRequest.getRequestURL());
         //Set up Pagez
         Pagez.setRequest(httpServletRequest);
         Pagez.setResponse(httpServletResponse);
