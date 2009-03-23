@@ -67,6 +67,7 @@ public class RESTXmlApi extends HttpServlet {
         //Build the response
         if (!method.equals("signUp") && (user==null || user.getUserid()<=0 || !user.getIsenabled())){
             Element root = new Element("result");
+            root.setAttribute("success", "false");
             root.addContent(CoreMethodsReturningXML.resultXml(false, "Sorry, username/password incorrect or this account is disabled."));
             outDoc = new Document(root);
         } else {
