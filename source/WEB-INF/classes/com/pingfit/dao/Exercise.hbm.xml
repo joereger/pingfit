@@ -9,6 +9,24 @@
             <column name="exerciseid" />
             <generator class="native" />
         </id>
+
+
+        <set name="musclegroups" table="exercisemusclegroupjoin">
+            <key column="exerciseid"/>
+            <many-to-many column="musclegroupid" unique="true" class="com.pingfit.dao.Musclegroup"/>
+        </set>
+
+        <set name="equipments" table="exerciseequipmentjoin">
+            <key column="exerciseid"/>
+            <many-to-many column="equipmentid" unique="true" class="com.pingfit.dao.Equipment"/>
+        </set>
+
+        <set name="genres" table="exercisegenrejoin">
+            <key column="exerciseid"/>
+            <many-to-many column="genreid" unique="true" class="com.pingfit.dao.Genre"/>
+        </set>
+
+
         <property name="title" type="string">
             <column name="title" not-null="true" />
         </property>

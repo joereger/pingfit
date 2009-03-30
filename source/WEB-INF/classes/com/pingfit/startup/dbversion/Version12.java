@@ -4,7 +4,6 @@ import com.pingfit.startup.UpgradeDatabaseOneVersion;
 import com.pingfit.systemexercises.SystemExercises;
 import com.pingfit.systemexercises.SystemExerciseLists;
 import com.pingfit.db.Db;
-import com.pingfit.exercisechoosers.ExerciseChooserGroup;
 import org.apache.log4j.Logger;
 
 /**
@@ -12,7 +11,7 @@ import org.apache.log4j.Logger;
  * Date: Nov 26, 2006
  * Time: 11:57:46 AM
  */
-public class Version9 implements UpgradeDatabaseOneVersion {
+public class Version12 implements UpgradeDatabaseOneVersion {
 
     Logger logger = Logger.getLogger(this.getClass().getName());
 
@@ -26,26 +25,7 @@ public class Version9 implements UpgradeDatabaseOneVersion {
         logger.debug("doPostHibernateUpgrade() start");
 
 
-        //-----------------------------------
-        //-----------------------------------
-        int count3 = Db.RunSQLUpdate("UPDATE exerciselist SET exerciseeveryxminutes='20'");
-        //-----------------------------------
-        //-----------------------------------
-
-        //-----------------------------------
-        //-----------------------------------
-        int count3d = Db.RunSQLUpdate("UPDATE user SET roomid='0'");
-        //-----------------------------------
-        //-----------------------------------
-
-        
-
-        ExerciseChooserGroup ecg = new ExerciseChooserGroup();
-        //-----------------------------------
-        //-----------------------------------
-        int count3dd = Db.RunSQLUpdate("UPDATE user SET exercisechooserid='"+ecg.getId()+"'");
-        //-----------------------------------
-        //-----------------------------------
+        //Do nothing... woot
 
 
         logger.debug("doPostHibernateUpgrade() finish");

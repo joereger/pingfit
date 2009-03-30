@@ -5,6 +5,8 @@ import com.pingfit.dao.hibernate.HibernateUtil;
 import com.pingfit.session.AuthControlled;
 
 import java.util.Date;
+import java.util.Set;
+import java.util.HashSet;
 
 import org.apache.log4j.Logger;
 
@@ -21,6 +23,9 @@ public class Exercise extends BasePersistentClass implements java.io.Serializabl
      private int useridofcreator;
      private boolean ispublic;
      private String imagecredit;
+     private Set<Musclegroup> musclegroups = new HashSet<Musclegroup>();
+     private Set<Equipment> equipments = new HashSet<Equipment>();
+     private Set<Genre> genres = new HashSet<Genre>();
 
 
     public static Exercise get(int id) {
@@ -129,5 +134,29 @@ public class Exercise extends BasePersistentClass implements java.io.Serializabl
 
     public void setImagecredit(String imagecredit) {
         this.imagecredit=imagecredit;
+    }
+
+    public Set<Musclegroup> getMusclegroups() {
+        return musclegroups;
+    }
+
+    public void setMusclegroups(Set<Musclegroup> musclegroups) {
+        this.musclegroups=musclegroups;
+    }
+
+    public Set<Equipment> getEquipments() {
+        return equipments;
+    }
+
+    public void setEquipments(Set<Equipment> equipments) {
+        this.equipments=equipments;
+    }
+
+    public Set<Genre> getGenres() {
+        return genres;
+    }
+
+    public void setGenres(Set<Genre> genres) {
+        this.genres=genres;
     }
 }

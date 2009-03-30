@@ -51,7 +51,7 @@ public class RESTXmlApi extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String method = request.getParameter("method");
-        //@todo turn on cache by default after initial testing
+        //Cache off for now
         boolean cache = false;
         if (request.getParameter("cache")!=null && request.getParameter("cache").equals("true")){
             cache = true;

@@ -4,16 +4,15 @@
 <%@ page import="com.pingfit.dbgrid.Grid" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="com.pingfit.htmlui.*" %>
-<%@ page import="com.pingfit.dao.Exercise" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.pingfit.dao.hibernate.HibernateUtil" %>
 <%@ page import="org.hibernate.criterion.Restrictions" %>
 <%@ page import="org.hibernate.criterion.Order" %>
 <%@ page import="com.pingfit.util.Num" %>
-<%@ page import="com.pingfit.dao.Exerciselist" %>
 <%@ page import="java.util.Iterator" %>
-<%@ page import="com.pingfit.dao.Exerciselistitem" %>
 <%@ page import="com.pingfit.dao.hibernate.NumFromUniqueResult" %>
+<%@ page import="com.pingfit.helpers.ExercisePropertyValues" %>
+<%@ page import="com.pingfit.dao.*" %>
 
 <%
 Logger logger = Logger.getLogger(this.getClass().getName());
@@ -32,6 +31,14 @@ String acl = "sysadmin";
     if (request.getParameter("exerciselistid") != null && !request.getParameter("exerciselistid").equals("0") && Num.isinteger(request.getParameter("exerciselistid"))) {
         exerciselist = Exerciselist.get(Integer.parseInt(request.getParameter("exerciselistid")));
     }
+%>
+<%
+    ArrayList<String> musclegroups = ExercisePropertyValues.getMusclegroupsAsStrings();
+    List<Musclegroup> musclegroupObjs = ExercisePropertyValues.getMusclegroups();
+    ArrayList<String> equipments = ExercisePropertyValues.getEquipmentsAsStrings();
+    List<Equipment> equipmentObjs= ExercisePropertyValues.getEquipments();
+    ArrayList<String> genres = ExercisePropertyValues.getGenresAsStrings();
+    List<Genre> genreObjs = ExercisePropertyValues.getGenres();
 %>
 <%
     if (request.getParameter("action") != null && request.getParameter("action").equals("save")) {
@@ -183,6 +190,41 @@ String acl = "sysadmin";
         </td>
         <td valign="top">
             <%if (exerciselist.getExerciselistid()>0){%>
+                <div class="rounded" style="padding: 15px; margin: 8px; background: #e6e6e6;">
+                    <form action="/sysadmin/exerciselistdetail.jsp" method="post">
+                        <input type="hidden" name="dpage" value="/sysadmin/exerciselistdetail.jsp">
+                        <input type="hidden" name="action" value="searchexercises">
+                        <input type="hidden" name="exerciselistid" value="<%=exerciselist.getExerciselistid()%>">
+                        <select name="genreid">
+                            <option value="0">All Genres</option>
+                        <%
+                            for (Iterator<Genre> iterator = genreObjs.iterator(); iterator.hasNext();) {
+                                Genre genre = iterator.next();
+                                %><option value="<%=genre.getGenreid()%>"><%=genre.getName()%></option><%
+                            }
+                        %>
+                        </select><br/>
+                        <select name="musclegroupid">
+                            <option value="0">All Muscle Groups</option>
+                        <%
+                            for (Iterator<Musclegroup> iterator = musclegroupObjs.iterator(); iterator.hasNext();) {
+                                Musclegroup musclegroup = iterator.next();
+                                %><option value="<%=musclegroup.getMusclegroupid()%>"><%=musclegroup.getName()%></option><%
+                            }
+                        %>
+                        </select><br/>
+                        <select name="equipmentid">
+                            <option value="0">All Equipment</option>
+                        <%
+                            for (Iterator<Equipment> iterator = equipmentObjs.iterator(); iterator.hasNext();) {
+                                Equipment equipment = iterator.next();
+                                %><option value="<%=equipment.getEquipmentid()%>"><%=equipment.getName()%></option><%
+                            }
+                        %>
+                        </select><br/>
+                        <input type="submit" class="formsubmitbutton" value="Find Exercises to Add">
+                    </form>
+                </div>
                 <div class="rounded" style="padding: 15px; margin: 8px; background: #e6e6e6;">
                     <form action="/sysadmin/exerciselistdetail.jsp" method="post">
                         <input type="hidden" name="dpage" value="/sysadmin/exerciselistdetail.jsp">

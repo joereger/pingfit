@@ -11,13 +11,16 @@
         <mapping resource="com/pingfit/dao/Blogpost.hbm.xml" />
         <mapping resource="com/pingfit/dao/Blogpostcomment.hbm.xml" />
         <mapping resource="com/pingfit/dao/Creditcard.hbm.xml" />
+        <mapping resource="com/pingfit/dao/Equipment.hbm.xml" />
         <mapping resource="com/pingfit/dao/Error.hbm.xml" />
         <mapping resource="com/pingfit/dao/Eula.hbm.xml" />
         <mapping resource="com/pingfit/dao/Exercise.hbm.xml" />
         <mapping resource="com/pingfit/dao/Exerciselist.hbm.xml" />
         <mapping resource="com/pingfit/dao/Exerciselistitem.hbm.xml" />
         <mapping resource="com/pingfit/dao/Facebookpendingreferredby.hbm.xml" />
+        <mapping resource="com/pingfit/dao/Genre.hbm.xml" />
         <mapping resource="com/pingfit/dao/Massemail.hbm.xml" />
+        <mapping resource="com/pingfit/dao/Musclegroup.hbm.xml" />
         <mapping resource="com/pingfit/dao/Pageperformance.hbm.xml" />
         <mapping resource="com/pingfit/dao/Pingback.hbm.xml" />
         <mapping resource="com/pingfit/dao/Room.hbm.xml" />
