@@ -22,19 +22,22 @@ public class FindExercises {
         Criteria criteria = HibernateUtil.getSession().createCriteria(Exercise.class);
 
         if (onlyreturnsystemexercises){
-            criteria = criteria.add(Restrictions.eq("issystem", true));
+            criteria.add(Restrictions.eq("issystem", true));
         }
         if (onlyReturnCreatedByUserid>0){
-            criteria = criteria.add(Restrictions.eq("useridofcreator", onlyReturnCreatedByUserid));
+            criteria.add(Restrictions.eq("useridofcreator", onlyReturnCreatedByUserid));
         }
         if (genre!=null && genre.length()>0){
-            criteria = criteria.createCriteria("genres").add(Restrictions.eq("name", genre));
+            criteria.createAlias("genres", "gen");
+            criteria.add(Restrictions.eq("gen.name", genre));
         }
         if (musclegroup!=null && musclegroup.length()>0){
-            criteria = criteria.createCriteria("musclegroups").add(Restrictions.eq("name", musclegroup));
+            criteria.createAlias("musclegroups", "mgp");
+            criteria.add(Restrictions.eq("mgp.name", musclegroup));
         }
         if (equipment!=null && equipment.length()>0){
-            criteria = criteria.createCriteria("equipments").add(Restrictions.eq("name", equipment));
+            criteria.createAlias("equipments", "eqp");
+            criteria.add(Restrictions.eq("eqp.name", equipment));
         }
 
         List<Exercise> exercises = criteria.setCacheable(true).list();
@@ -50,10 +53,10 @@ public class FindExercises {
         Criteria criteria = HibernateUtil.getSession().createCriteria(Exercise.class);
 
         if (onlyreturnsystemexercises){
-            criteria = criteria.add(Restrictions.eq("issystem", true));
+            criteria.add(Restrictions.eq("issystem", true));
         }
         if (onlyReturnCreatedByUserid>0){
-            criteria = criteria.add(Restrictions.eq("useridofcreator", onlyReturnCreatedByUserid));
+            criteria.add(Restrictions.eq("useridofcreator", onlyReturnCreatedByUserid));
         }
         if (genreid>0){
             criteria.createAlias("genres", "gen");
