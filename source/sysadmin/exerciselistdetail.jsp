@@ -13,6 +13,7 @@
 <%@ page import="com.pingfit.dao.hibernate.NumFromUniqueResult" %>
 <%@ page import="com.pingfit.helpers.ExercisePropertyValues" %>
 <%@ page import="com.pingfit.dao.*" %>
+<%@ page import="com.pingfit.finders.FindExercises" %>
 
 <%
 Logger logger = Logger.getLogger(this.getClass().getName());
@@ -120,6 +121,29 @@ String acl = "sysadmin";
         }
     }
 %>
+<%
+    ArrayList<Exercise> exercisesToAdd = new ArrayList<Exercise>();
+    if (request.getParameter("action")!=null && (request.getParameter("action").equals("findexercisestoadd") || request.getParameter("action").equals("addexercisetolist"))) {
+        try {
+            int genreid = 0;
+            if (Num.isinteger(request.getParameter("genreid"))){
+                genreid = Integer.parseInt(request.getParameter("genreid"));
+            }
+            int musclegroupid = 0;
+            if (Num.isinteger(request.getParameter("musclegroupid"))){
+                musclegroupid = Integer.parseInt(request.getParameter("musclegroupid"));
+            }
+            int equipmentid = 0;
+            if (Num.isinteger(request.getParameter("equipmentid"))){
+                equipmentid = Integer.parseInt(request.getParameter("equipmentid"));
+            }
+            exercisesToAdd = FindExercises.find(genreid, musclegroupid, equipmentid, true, 0);
+        } catch (Exception ex) {
+            logger.error("", ex);
+            Pagez.getUserSession().setMessage("There has been an error... stuff may be smoking!");
+        }
+    }
+%>
 <%@ include file="/template/header.jsp" %>
 
 
@@ -158,7 +182,8 @@ String acl = "sysadmin";
                         </td>
                         <td valign="top">
                             <%=CheckboxBoolean.getHtml("issystemdefault", exerciselist.getIssystemdefault(), "", "")%>
-                            <font class="formfieldnamefont">System Default List? (should rarely change)</font>
+                            <font class="formfieldnamefont">System Default List?</font><br>
+                            <font class="tinyfont">(only one allowed in system)</font>
                         </td>
                     </tr>
 
@@ -187,72 +212,8 @@ String acl = "sysadmin";
                 </table>
 
             </form>
-        </td>
-        <td valign="top">
             <%if (exerciselist.getExerciselistid()>0){%>
                 <div class="rounded" style="padding: 15px; margin: 8px; background: #e6e6e6;">
-                    <form action="/sysadmin/exerciselistdetail.jsp" method="post">
-                        <input type="hidden" name="dpage" value="/sysadmin/exerciselistdetail.jsp">
-                        <input type="hidden" name="action" value="searchexercises">
-                        <input type="hidden" name="exerciselistid" value="<%=exerciselist.getExerciselistid()%>">
-                        <select name="genreid">
-                            <option value="0">All Genres</option>
-                        <%
-                            for (Iterator<Genre> iterator = genreObjs.iterator(); iterator.hasNext();) {
-                                Genre genre = iterator.next();
-                                %><option value="<%=genre.getGenreid()%>"><%=genre.getName()%></option><%
-                            }
-                        %>
-                        </select><br/>
-                        <select name="musclegroupid">
-                            <option value="0">All Muscle Groups</option>
-                        <%
-                            for (Iterator<Musclegroup> iterator = musclegroupObjs.iterator(); iterator.hasNext();) {
-                                Musclegroup musclegroup = iterator.next();
-                                %><option value="<%=musclegroup.getMusclegroupid()%>"><%=musclegroup.getName()%></option><%
-                            }
-                        %>
-                        </select><br/>
-                        <select name="equipmentid">
-                            <option value="0">All Equipment</option>
-                        <%
-                            for (Iterator<Equipment> iterator = equipmentObjs.iterator(); iterator.hasNext();) {
-                                Equipment equipment = iterator.next();
-                                %><option value="<%=equipment.getEquipmentid()%>"><%=equipment.getName()%></option><%
-                            }
-                        %>
-                        </select><br/>
-                        <input type="submit" class="formsubmitbutton" value="Find Exercises to Add">
-                    </form>
-                </div>
-                <div class="rounded" style="padding: 15px; margin: 8px; background: #e6e6e6;">
-                    <form action="/sysadmin/exerciselistdetail.jsp" method="post">
-                        <input type="hidden" name="dpage" value="/sysadmin/exerciselistdetail.jsp">
-                        <input type="hidden" name="action" value="addexercisetolist">
-                        <input type="hidden" name="exerciselistid" value="<%=exerciselist.getExerciselistid()%>">
-                        <select name="exerciseid">
-                        <%
-
-                            List<Exercise> exercises = HibernateUtil.getSession().createCriteria(Exercise.class)
-                                    .addOrder(Order.desc("exerciseid"))
-                                    .add(Restrictions.eq("issystem", true))
-                                    .setCacheable(true)
-                                    .list();
-                            if (exercises != null || exercises.size() > 0) {
-                                for (Iterator<Exercise> iterator = exercises.iterator(); iterator.hasNext();) {
-                                    Exercise exercise = iterator.next();
-                                    %><option value="<%=exercise.getExerciseid()%>"><%=exercise.getTitle()%></option><%
-                                }
-                            }
-                        %>
-                        </select>
-                        X
-                        <%=Textbox.getHtml("reps", "10", 255, 2, "", "")%> Reps
-                        <input type="submit" class="formsubmitbutton" value="Add">
-                    </form>
-                <%}%>
-            </div>
-            <div class="rounded" style="padding: 15px; margin: 8px; background: #e6e6e6;">
                 <font class="smallfont" style="font-weight: bold;">Exercises in this list:</font>
                 <br/><br/>
                 <%
@@ -271,6 +232,92 @@ String acl = "sysadmin";
                 }
                 %>
             </div>
+            <%}%>
+        </td>
+        <td valign="top">
+            <%if (exerciselist.getExerciselistid()>0){%>
+                <div class="rounded" style="padding: 15px; margin: 8px; background: #e6e6e6;">
+                    <form action="/sysadmin/exerciselistdetail.jsp" method="post">
+                        <input type="hidden" name="dpage" value="/sysadmin/exerciselistdetail.jsp">
+                        <input type="hidden" name="action" value="findexercisestoadd">
+                        <input type="hidden" name="exerciselistid" value="<%=exerciselist.getExerciselistid()%>">
+                        <select name="genreid">
+                            <option value="0">All Genres</option>
+                        <%
+                            for (Iterator<Genre> iterator = genreObjs.iterator(); iterator.hasNext();) {
+                                Genre genre = iterator.next();
+                                String sel = "";
+                                if (request.getParameter("genreid")!=null && request.getParameter("genreid").equals(String.valueOf(genre.getGenreid()))){
+                                    sel = " selected ";
+                                }
+                                %><option value="<%=genre.getGenreid()%>" <%=sel%>><%=genre.getName()%></option><%
+                            }
+                        %>
+                        </select><br/>
+                        <select name="musclegroupid">
+                            <option value="0">All Muscle Groups</option>
+                        <%
+                            for (Iterator<Musclegroup> iterator = musclegroupObjs.iterator(); iterator.hasNext();) {
+                                Musclegroup musclegroup = iterator.next();
+                                String sel = "";
+                                if (request.getParameter("musclegroupid")!=null && request.getParameter("musclegroupid").equals(String.valueOf(musclegroup.getMusclegroupid()))){
+                                    sel = " selected ";
+                                }
+                                %><option value="<%=musclegroup.getMusclegroupid()%>" <%=sel%>><%=musclegroup.getName()%></option><%
+                            }
+                        %>
+                        </select><br/>
+                        <select name="equipmentid">
+                            <option value="0">All Equipment</option>
+                        <%
+                            for (Iterator<Equipment> iterator = equipmentObjs.iterator(); iterator.hasNext();) {
+                                Equipment equipment = iterator.next();
+                                String sel = "";
+                                if (request.getParameter("equipmentid")!=null && request.getParameter("equipmentid").equals(String.valueOf(equipment.getEquipmentid()))){
+                                    sel = " selected ";
+                                }
+                                %><option value="<%=equipment.getEquipmentid()%>" <%=sel%>><%=equipment.getName()%></option><%
+                            }
+                        %>
+                        </select><br/>
+                        <input type="submit" class="formsubmitbutton" value="Find Exercises to Add">
+                    </form>
+                </div>
+                <%if (exercisesToAdd!=null && exercisesToAdd.size()>0){%>
+                <div class="rounded" style="padding: 15px; margin: 8px; background: #e6e6e6;">
+                    <table cellpadding="2" cellspacing="0" border="0">
+                    <%
+                        for (Iterator<Exercise> exerciseIterator=exercisesToAdd.iterator(); exerciseIterator.hasNext();) {
+                            Exercise exercise=exerciseIterator.next();
+                    %>
+                        <tr>
+                            <form action="/sysadmin/exerciselistdetail.jsp" method="post">
+                            <input type="hidden" name="dpage" value="/sysadmin/exerciselistdetail.jsp">
+                            <input type="hidden" name="action" value="addexercisetolist">
+                            <input type="hidden" name="genreid" value="<%=request.getParameter("genreid")%>">
+                            <input type="hidden" name="musclegroupid" value="<%=request.getParameter("musclegroupid")%>">
+                            <input type="hidden" name="equipmentid" value="<%=request.getParameter("equipmentid")%>">
+                            <input type="hidden" name="exerciselistid" value="<%=exerciselist.getExerciselistid()%>">
+                            <input type="hidden" name="exerciseid" value="<%=exercise.getExerciseid()%>">
+                            <td valign="top">
+                                <font class="normalfont" style="font-weight: bold;"><%=exercise.getTitle()%></font>
+                            </td>
+                            <td valign="top">
+                                <%=Textbox.getHtml("reps", "10", 255, 2, "", "")%>
+                            </td>
+                            <td valign="top">
+                                Reps
+                            </td>
+                            <td valign="top">
+                                <input type="submit" class="formsubmitbutton" value="Add">
+                            </td>
+                            </form>
+                        </tr>
+                    <%}%>
+                    </table>
+                <%}%>
+            </div>
+            <%}%>
         </td>
 
     </tr>

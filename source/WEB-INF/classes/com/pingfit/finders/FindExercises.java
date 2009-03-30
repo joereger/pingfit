@@ -19,7 +19,7 @@ public class FindExercises {
 
     public static ArrayList<Exercise> find(String genre, String musclegroup, String equipment, boolean onlyreturnsystemexercises, int onlyReturnCreatedByUserid){
         ArrayList<Exercise> out = new ArrayList<Exercise>();
-        Criteria criteria = HibernateUtil.getSession().createCriteria(Object.class);
+        Criteria criteria = HibernateUtil.getSession().createCriteria(Exercise.class);
 
         if (onlyreturnsystemexercises){
             criteria = criteria.add(Restrictions.eq("issystem", true));
@@ -47,7 +47,7 @@ public class FindExercises {
 
     public static ArrayList<Exercise> find(int genreid, int musclegroupid, int equipmentid, boolean onlyreturnsystemexercises, int onlyReturnCreatedByUserid){
         ArrayList<Exercise> out = new ArrayList<Exercise>();
-        Criteria criteria = HibernateUtil.getSession().createCriteria(Object.class);
+        Criteria criteria = HibernateUtil.getSession().createCriteria(Exercise.class);
 
         if (onlyreturnsystemexercises){
             criteria = criteria.add(Restrictions.eq("issystem", true));
@@ -56,13 +56,16 @@ public class FindExercises {
             criteria = criteria.add(Restrictions.eq("useridofcreator", onlyReturnCreatedByUserid));
         }
         if (genreid>0){
-            criteria = criteria.createCriteria("genres").add(Restrictions.eq("genreid", genreid));
+            criteria.createAlias("genres", "gen");
+            criteria.add(Restrictions.eq("gen.genreid", genreid));
         }
         if (musclegroupid>0){
-            criteria = criteria.createCriteria("musclegroups").add(Restrictions.eq("musclegroupid", musclegroupid));
+            criteria.createAlias("musclegroups", "mgp");
+            criteria.add(Restrictions.eq("mgp.musclegroupid", musclegroupid));
         }
         if (equipmentid>0){
-            criteria = criteria.createCriteria("equipments").add(Restrictions.eq("equipmentid", equipmentid));
+            criteria.createAlias("equipments", "eqp");
+            criteria.add(Restrictions.eq("eqp.equipmentid", equipmentid));
         }
 
         List<Exercise> exercises = criteria.setCacheable(true).list();

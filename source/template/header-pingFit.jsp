@@ -33,7 +33,7 @@
 <body background="/images/bg-v2.gif" LEFTMARGIN="0" TOPMARGIN="0" MARGINWIDTH="0" MARGINHEIGHT="0"><center>
 <table width="786" cellspacing="0" border="0" cellpadding="0">
 <tr>
-    <td width="200"><a href="/"><img src="/images/pingfit-logo.gif" border="0" width="200" height="48" align="left"/></a></td>
+    <td width="200"><a href="/"><img src="/images/logo-v3.png" border="0" height="48" align="left"/></a></td>
     <td style="text-align: right; vertical-align: bottom;">
         <img src="/images/clear.gif" width="1" height="6" alt=""/><br/>
 		<%if (navtab.equals("home")){%><font class="navtabfontlevel1"><a href="/index.jsp"><b>Home</b></a></font><%}%>
@@ -114,15 +114,15 @@
                 <a href="/sysadmin/userlist.jsp"><font class="subnavfont" style=" color: #ffffff;">Users</font></a>
                 <a href="/sysadmin/editeula.jsp"><font class="subnavfont" style=" color: #ffffff;">Eula</font></a>
                 <a href="/sysadmin/sysadminsupportissueslist.jsp"><font class="subnavfont" style=" color: #ffffff;">Support</font></a>
-                <a href="/sysadmin/manuallyrunscheduledtask.jsp"><font class="subnavfont" style=" color: #ffffff;">Scheds</font></a>
-                <a href="/sysadmin/systemprops.jsp"><font class="subnavfont" style=" color: #ffffff;">SysProps</font></a>
-                <a href="/sysadmin/instanceprops.jsp"><font class="subnavfont" style=" color: #ffffff;">InsProps</font></a>
+                <a href="/sysadmin/manuallyrunscheduledtask.jsp"><font class="subnavfont" style=" color: #ffffff;">Schds</font></a>
+                <a href="/sysadmin/systemprops.jsp"><font class="subnavfont" style=" color: #ffffff;">SysP</font></a>
+                <a href="/sysadmin/instanceprops.jsp"><font class="subnavfont" style=" color: #ffffff;">InsP</font></a>
                 <a href="/sysadmin/hibernatecache.jsp"><font class="subnavfont" style=" color: #ffffff;">Cache</font></a>
                 <a href="/sysadmin/massemaillist.jsp"><font class="subnavfont" style=" color: #ffffff;">Email</font></a>
                 <a href="/sysadmin/pageperformance.jsp"><font class="subnavfont" style=" color: #ffffff;">Perf</font></a>
                 <a href="/sysadmin/exerciselist.jsp"><font class="subnavfont" style=" color: #ffffff;">Exercises</font></a>
+                <a href="/sysadmin/exerciselistlist.jsp"><font class="subnavfont" style=" color: #ffffff;">ExLists</font></a>
                 <a href="/sysadmin/simpleexercisereport.jsp"><font class="subnavfont" style=" color: #ffffff;">Reports</font></a>
-                <a href="/sysadmin/exerciselistlist.jsp"><font class="subnavfont" style=" color: #ffffff;">Exercise Lists</font></a>
                 <a href="/sysadmin/blogpost.jsp"><font class="subnavfont" style=" color: #ffffff;">Blog</font></a>
             <%}%>
         <%}%>

@@ -145,16 +145,7 @@ String acl = "sysadmin";
                         <font class="formfieldnamefont">Name</font>
                     </td>
                     <td valign="top">
-                        <%=Textbox.getHtml("title", exercise.getTitle(), 100, 50, "", "")%>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td valign="top">
-                        <font class="formfieldnamefont">Recommended Reps</font>
-                    </td>
-                    <td valign="top">
-                        <%=Textbox.getHtml("reps", String.valueOf(exercise.getReps()), 255, 5, "", "")%>
+                        <%=Textbox.getHtml("title", exercise.getTitle(), 50, 35, "", "")%> x <%=Textbox.getHtml("reps", String.valueOf(exercise.getReps()), 255, 5, "", "")%> reps
                     </td>
                 </tr>
 
