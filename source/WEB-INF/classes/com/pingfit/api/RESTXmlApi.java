@@ -68,7 +68,7 @@ public class RESTXmlApi extends HttpServlet {
         if (!method.equals("signUp") && (user==null || user.getUserid()<=0 || !user.getIsenabled())){
             Element root = new Element("result");
             root.setAttribute("success", "false");
-            root.addContent(CoreMethodsReturningXML.resultXml(false, "Sorry, username/password incorrect or this account is disabled."));
+            root.addContent(XMLConverters.resultXml(false, "Sorry, username/password incorrect or this account is disabled."));
             outDoc = new Document(root);
         } else {
             String nameInCache = "xmlapi";
@@ -169,10 +169,178 @@ public class RESTXmlApi extends HttpServlet {
                                 exerciselistid = Integer.parseInt(request.getParameter("exerciselistid"));
                             }
                             element = CoreMethodsReturningXML.setExerciselist(user, exerciselistid);
+                        } else if (method.equalsIgnoreCase("getFriends")){
+                            element = CoreMethodsReturningXML.getFriends(user);
+                        } else if (method.equalsIgnoreCase("getFriendRequests")){
+                            element = CoreMethodsReturningXML.getFriendRequests(user);
+                        } else if (method.equalsIgnoreCase("approveFriendRequest")){
+                            int useridoffriend = 0;
+                            if (Num.isinteger(request.getParameter("useridoffriend"))){
+                                useridoffriend = Integer.parseInt(request.getParameter("useridoffriend"));
+                            }
+                            element = CoreMethodsReturningXML.approveFriendRequest(user, useridoffriend);
+                        } else if (method.equalsIgnoreCase("rejectFriendRequest")){
+                            int useridoffriend = 0;
+                            if (Num.isinteger(request.getParameter("useridoffriend"))){
+                                useridoffriend = Integer.parseInt(request.getParameter("useridoffriend"));
+                            }
+                            element = CoreMethodsReturningXML.rejectFriendRequest(user, useridoffriend);
+                        } else if (method.equalsIgnoreCase("friendRequestByUserid")){
+                            int useridoffriend = 0;
+                            if (Num.isinteger(request.getParameter("useridoffriend"))){
+                                useridoffriend = Integer.parseInt(request.getParameter("useridoffriend"));
+                            }
+                            element = CoreMethodsReturningXML.friendRequestByUserid(user, useridoffriend);
+                        } else if (method.equalsIgnoreCase("breakFriendship")){
+                            int useridoffriend = 0;
+                            if (Num.isinteger(request.getParameter("useridoffriend"))){
+                                useridoffriend = Integer.parseInt(request.getParameter("useridoffriend"));
+                            }
+                            element = CoreMethodsReturningXML.breakFriendship(user, useridoffriend);
+                        } else if (method.equalsIgnoreCase("createRoom")){
+                            String name = request.getParameter("name");
+                            String description = request.getParameter("description");
+                            int exerciseeveryxminutes = 0;
+                            if (Num.isinteger(request.getParameter("exerciseeveryxminutes"))){
+                                exerciseeveryxminutes = Integer.parseInt(request.getParameter("exerciseeveryxminutes"));
+                            }
+                            int exerciselistid = 0;
+                            if (Num.isinteger(request.getParameter("exerciselistid"))){
+                                exerciselistid = Integer.parseInt(request.getParameter("exerciselistid"));
+                            }
+                            boolean isprivate = false;
+                            if (request.getParameter("isprivate")!=null && (request.getParameter("isprivate").equals("true") || request.getParameter("isprivate").equals("1"))){
+                                isprivate = true;
+                            }
+                            boolean isfriendautopermit = false;
+                            if (request.getParameter("isfriendautopermit")!=null && (request.getParameter("isfriendautopermit").equals("true") || request.getParameter("isfriendautopermit").equals("1"))){
+                                isfriendautopermit = true;
+                            }
+                            element = CoreMethodsReturningXML.createRoom(user, name, description, exerciseeveryxminutes, exerciselistid, isprivate, isfriendautopermit);
+                        } else if (method.equalsIgnoreCase("editRoom")){
+                            int roomid = 0;
+                            if (Num.isinteger(request.getParameter("roomid"))){
+                                roomid = Integer.parseInt(request.getParameter("roomid"));
+                            }
+                            String name = request.getParameter("name");
+                            String description = request.getParameter("description");
+                            int exerciseeveryxminutes = 0;
+                            if (Num.isinteger(request.getParameter("exerciseeveryxminutes"))){
+                                exerciseeveryxminutes = Integer.parseInt(request.getParameter("exerciseeveryxminutes"));
+                            }
+                            int exerciselistid = 0;
+                            if (Num.isinteger(request.getParameter("exerciselistid"))){
+                                exerciselistid = Integer.parseInt(request.getParameter("exerciselistid"));
+                            }
+                            boolean isprivate = false;
+                            if (request.getParameter("isprivate")!=null && (request.getParameter("isprivate").equals("true") || request.getParameter("isprivate").equals("1"))){
+                                isprivate = true;
+                            }
+                            boolean isfriendautopermit = false;
+                            if (request.getParameter("isfriendautopermit")!=null && (request.getParameter("isfriendautopermit").equals("true") || request.getParameter("isfriendautopermit").equals("1"))){
+                                isfriendautopermit = true;
+                            }
+                            element = CoreMethodsReturningXML.editRoom(user, roomid, name, description, exerciseeveryxminutes, exerciselistid, isprivate, isfriendautopermit);
+                        } else if (method.equalsIgnoreCase("deleteRoom")){
+                            int roomid = 0;
+                            if (Num.isinteger(request.getParameter("roomid"))){
+                                roomid = Integer.parseInt(request.getParameter("roomid"));
+                            }
+                            element = CoreMethodsReturningXML.deleteRoom(user, roomid);
+                        } else if (method.equalsIgnoreCase("getRoomsIModerate")){
+                            element = CoreMethodsReturningXML.getRoomsIModerate(user);
+                        } else if (method.equalsIgnoreCase("getMyRooms")){
+                            element = CoreMethodsReturningXML.getMyRooms(user);
+                        } else if (method.equalsIgnoreCase("addToMyRooms")){
+                            int roomid = 0;
+                            if (Num.isinteger(request.getParameter("roomid"))){
+                                roomid = Integer.parseInt(request.getParameter("roomid"));
+                            }
+                            element = CoreMethodsReturningXML.addToMyRooms(user, roomid);
+                        } else if (method.equalsIgnoreCase("removeFromMyRooms")){
+                            int roomid = 0;
+                            if (Num.isinteger(request.getParameter("roomid"))){
+                                roomid = Integer.parseInt(request.getParameter("roomid"));
+                            }
+                            element = CoreMethodsReturningXML.removeFromMyRooms(user, roomid);
+                        } else if (method.equalsIgnoreCase("getRoomsMyFriendsAreIn")){
+                            element = CoreMethodsReturningXML.getRoomsMyFriendsAreIn(user);
+                        } else if (method.equalsIgnoreCase("getRoomsMyFriendsModerate")){
+                            element = CoreMethodsReturningXML.getRoomsMyFriendsModerate(user);
+                        } else if (method.equalsIgnoreCase("requestRoomPermission")){
+                            int roomid = 0;
+                            if (Num.isinteger(request.getParameter("roomid"))){
+                                roomid = Integer.parseInt(request.getParameter("roomid"));
+                            }
+                            element = CoreMethodsReturningXML.requestRoomPermission(user, roomid);
+                        } else if (method.equalsIgnoreCase("isFriend")){
+                            int useridofotheruser = 0;
+                            if (Num.isinteger(request.getParameter("useridofotheruser"))){
+                                useridofotheruser = Integer.parseInt(request.getParameter("useridofotheruser"));
+                            }
+                            element = CoreMethodsReturningXML.isFriend(user, useridofotheruser);
+                        } else if (method.equalsIgnoreCase("isAllowedInRoom")){
+                            int roomid = 0;
+                            if (Num.isinteger(request.getParameter("roomid"))){
+                                roomid = Integer.parseInt(request.getParameter("roomid"));
+                            }
+                            element = CoreMethodsReturningXML.isAllowedInRoom(user, roomid);
+                        } else if (method.equalsIgnoreCase("isModeratorOfRoom")){
+                            int userid = 0;
+                            if (Num.isinteger(request.getParameter("userid"))){
+                                userid = Integer.parseInt(request.getParameter("userid"));
+                            }
+                            int roomid = 0;
+                            if (Num.isinteger(request.getParameter("roomid"))){
+                                roomid = Integer.parseInt(request.getParameter("roomid"));
+                            }
+                            element = CoreMethodsReturningXML.isModeratorOfRoom(userid, roomid);
+                        } else if (method.equalsIgnoreCase("grantRoomPermission")){
+                            int useridtogivepermissionto = 0;
+                            if (Num.isinteger(request.getParameter("useridtogivepermissionto"))){
+                                useridtogivepermissionto = Integer.parseInt(request.getParameter("useridtogivepermissionto"));
+                            }
+                            int roomid = 0;
+                            if (Num.isinteger(request.getParameter("roomid"))){
+                                roomid = Integer.parseInt(request.getParameter("roomid"));
+                            }
+                            element = CoreMethodsReturningXML.grantRoomPermission(user, useridtogivepermissionto, roomid);
+                        } else if (method.equalsIgnoreCase("grantRoomMod")){
+                            int useridtogivepermissionto = 0;
+                            if (Num.isinteger(request.getParameter("useridtogivepermissionto"))){
+                                useridtogivepermissionto = Integer.parseInt(request.getParameter("useridtogivepermissionto"));
+                            }
+                            int roomid = 0;
+                            if (Num.isinteger(request.getParameter("roomid"))){
+                                roomid = Integer.parseInt(request.getParameter("roomid"));
+                            }
+                            element = CoreMethodsReturningXML.grantRoomMod(user, useridtogivepermissionto, roomid);
+                        } else if (method.equalsIgnoreCase("revokeRoomPermission")){
+                            int useridtorevokefrom = 0;
+                            if (Num.isinteger(request.getParameter("useridtorevokefrom"))){
+                                useridtorevokefrom = Integer.parseInt(request.getParameter("useridtorevokefrom"));
+                            }
+                            int roomid = 0;
+                            if (Num.isinteger(request.getParameter("roomid"))){
+                                roomid = Integer.parseInt(request.getParameter("roomid"));
+                            }
+                            element = CoreMethodsReturningXML.revokeRoomPermission(user, useridtorevokefrom, roomid);
+                        } else if (method.equalsIgnoreCase("revokeRoomMod")){
+                            int useridtorevokefrom = 0;
+                            if (Num.isinteger(request.getParameter("useridtorevokefrom"))){
+                                useridtorevokefrom = Integer.parseInt(request.getParameter("useridtorevokefrom"));
+                            }
+                            int roomid = 0;
+                            if (Num.isinteger(request.getParameter("roomid"))){
+                                roomid = Integer.parseInt(request.getParameter("roomid"));
+                            }
+                            element = CoreMethodsReturningXML.revokeRoomMod(user, useridtorevokefrom, roomid);
+                        } else if (method.equalsIgnoreCase("getRoomPermissionRequests")){
+                            element = CoreMethodsReturningXML.getRoomPermissionRequests(user);
                         }
                         //Add to doc and cache
                         if (element==null){
-                            outDoc.addContent(CoreMethodsReturningXML.resultXml(false, "There was some sort of error building the response."));
+                            outDoc.addContent(XMLConverters.resultXml(false, "There was some sort of error building the response."));
                         } else {
                             //Add to the outDoc
                             Element root = new Element("result");

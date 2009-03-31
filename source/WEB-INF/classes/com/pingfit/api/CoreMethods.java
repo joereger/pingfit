@@ -471,7 +471,7 @@ public class CoreMethods {
         } 
     }
 
-    public static Room getRoomForExerciselist(Exerciselist exerciselist){
+    public static Room getRoomForExerciselist(Exerciselist exerciselist) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         List<Room> roomsalreadyexisting = HibernateUtil.getSession().createCriteria(Room.class)
                                                    .add(Restrictions.eq("issystem", exerciselist.getIssystem()))
@@ -512,7 +512,7 @@ public class CoreMethods {
         return null;
     }
 
-    public static ArrayList<Friend> getFriends(User user){
+    public static ArrayList<Friend> getFriends(User user) throws GeneralException {
         ArrayList<Friend> out = new ArrayList<Friend>();
         List<Userfriend> userfriends = HibernateUtil.getSession().createCriteria(Userfriend.class)
                                            .add(Restrictions.eq("userid", user.getUserid()))
@@ -530,7 +530,7 @@ public class CoreMethods {
         return out;
     }
 
-    public static ArrayList<Friend> getFriendRequests(User user){
+    public static ArrayList<Friend> getFriendRequests(User user) throws GeneralException {
         ArrayList<Friend> out = new ArrayList<Friend>();
         List<Userfriend> userfriends = HibernateUtil.getSession().createCriteria(Userfriend.class)
                                            .add(Restrictions.eq("useridoffriend", user.getUserid()))
@@ -548,7 +548,7 @@ public class CoreMethods {
         return out;
     }
 
-    public static void approveFriendRequest(User user, int useridoffriend){
+    public static void approveFriendRequest(User user, int useridoffriend) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         List<Userfriend> userfriends = HibernateUtil.getSession().createCriteria(Userfriend.class)
                                             .add(Restrictions.eq("userid", useridoffriend))
@@ -567,7 +567,7 @@ public class CoreMethods {
         }
     }
 
-    public static void rejectFriendRequest(User user, int useridoffriend){
+    public static void rejectFriendRequest(User user, int useridoffriend) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         List<Userfriend> userfriends = HibernateUtil.getSession().createCriteria(Userfriend.class)
                                             .add(Restrictions.eq("userid", useridoffriend))
@@ -585,7 +585,7 @@ public class CoreMethods {
         }
     }
 
-    public static void friendRequestByUserid(User user, int useridoffriend){
+    public static void friendRequestByUserid(User user, int useridoffriend) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         List<Userfriend> userfriends = HibernateUtil.getSession().createCriteria(Userfriend.class)
                                             .add(Restrictions.eq("userid", user.getUserid()))
@@ -605,7 +605,7 @@ public class CoreMethods {
         }
     }
 
-    public static void breakFriendship(User user, int useridoffriend){
+    public static void breakFriendship(User user, int useridoffriend) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         if (1==1){
             //Delete user's tie to friend
@@ -680,7 +680,7 @@ public class CoreMethods {
         }
     }
 
-    public static void editRoom(User user, int roomid, String name, String description, int exerciseeveryxminutes, int exerciselistid) throws GeneralException{
+    public static void editRoom(User user, int roomid, String name, String description, int exerciseeveryxminutes, int exerciselistid, boolean isprivate, boolean isfriendautopermit) throws GeneralException{
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
             Room room = Room.get(roomid);
@@ -691,6 +691,8 @@ public class CoreMethods {
             room.setDescription(description);
             room.setExerciseeveryxminutes(exerciseeveryxminutes);
             room.setExerciselistid(exerciselistid);
+            room.setIsprivate(isprivate);
+            room.setIsfriendautopermit(isfriendautopermit);
             room.save();
         } catch (Exception ex){
             logger.error("", ex);
@@ -713,7 +715,7 @@ public class CoreMethods {
         }
     }
 
-    public static ArrayList<Room> getRoomsIModerate(User user){
+    public static ArrayList<Room> getRoomsIModerate(User user) throws GeneralException {
         ArrayList<Room> out = new ArrayList<Room>();
         //Get roomids of rooms this user mods
         ArrayList<Integer> roomidsUserMods = new ArrayList<Integer>();
@@ -740,7 +742,7 @@ public class CoreMethods {
         return out;
     }
 
-    public static ArrayList<Room> getMyRooms(User user){
+    public static ArrayList<Room> getMyRooms(User user) throws GeneralException {
         ArrayList<Room> out = new ArrayList<Room>();
         //Get roomids of rooms this user has permission to be in
         ArrayList<Integer> roomidsUserMods = new ArrayList<Integer>();
@@ -862,42 +864,46 @@ public class CoreMethods {
         }
     }
 
-    public static ArrayList<Room> getRoomsMyFriendsAreIn(User user){
+    public static ArrayList<Room> getRoomsMyFriendsAreIn(User user) throws GeneralException {
         ArrayList<Room> out = new ArrayList<Room>();
-        //Get a list of friends' userids
-        ArrayList<Friend> friends = getFriends(user);
-        ArrayList<Integer> friendUserids = new ArrayList<Integer>();
-        for (Iterator<Friend> iterator=friends.iterator(); iterator.hasNext();) {
-            Friend friend=iterator.next();
-            friendUserids.add(friend.getUserid());
-        }
-        //Find roomids that friends are in
-        ArrayList<Integer> roomsFriendsInRoomids = new ArrayList<Integer>();
-        List<User> friendUsers = HibernateUtil.getSession().createCriteria(User.class)
-                                           .add(Restrictions.in("userid", friendUserids))
-                                           .add(Restrictions.eq("isenabled", true))
-                                           .setCacheable(true)
-                                           .list();
-        for (Iterator<User> usrIt=friendUsers.iterator(); usrIt.hasNext();) {
-            User u=usrIt.next();
-            if (u.getRoomid()>0){
-                roomsFriendsInRoomids.add(u.getRoomid());
+        try{
+            //Get a list of friends' userids
+            ArrayList<Friend> friends = getFriends(user);
+            ArrayList<Integer> friendUserids = new ArrayList<Integer>();
+            for (Iterator<Friend> iterator=friends.iterator(); iterator.hasNext();) {
+                Friend friend=iterator.next();
+                friendUserids.add(friend.getUserid());
             }
-        }
-        //Go get the room objects themselves
-        List<Room> rooms = HibernateUtil.getSession().createCriteria(Room.class)
-                                            .add(Restrictions.in("roomid", roomsFriendsInRoomids))
-                                           .add(Restrictions.eq("isenabled", true))
-                                           .setCacheable(true)
-                                           .list();
-        for (Iterator<Room> roomIterator=rooms.iterator(); roomIterator.hasNext();) {
-            Room room=roomIterator.next();
-            out.add(room);
+            //Find roomids that friends are in
+            ArrayList<Integer> roomsFriendsInRoomids = new ArrayList<Integer>();
+            List<User> friendUsers = HibernateUtil.getSession().createCriteria(User.class)
+                                               .add(Restrictions.in("userid", friendUserids))
+                                               .add(Restrictions.eq("isenabled", true))
+                                               .setCacheable(true)
+                                               .list();
+            for (Iterator<User> usrIt=friendUsers.iterator(); usrIt.hasNext();) {
+                User u=usrIt.next();
+                if (u.getRoomid()>0){
+                    roomsFriendsInRoomids.add(u.getRoomid());
+                }
+            }
+            //Go get the room objects themselves
+            List<Room> rooms = HibernateUtil.getSession().createCriteria(Room.class)
+                                                .add(Restrictions.in("roomid", roomsFriendsInRoomids))
+                                               .add(Restrictions.eq("isenabled", true))
+                                               .setCacheable(true)
+                                               .list();
+            for (Iterator<Room> roomIterator=rooms.iterator(); roomIterator.hasNext();) {
+                Room room=roomIterator.next();
+                out.add(room);
+            }
+        } catch (GeneralException gex){
+            throw gex;
         }
         return out;
     }
 
-    public static ArrayList<Room> getRoomsMyFriendsModerate(User user){
+    public static ArrayList<Room> getRoomsMyFriendsModerate(User user) throws GeneralException {
         ArrayList<Room> out = new ArrayList<Room>();
         //Get a list of friends' userids
         ArrayList<Friend> friends = getFriends(user);
@@ -931,7 +937,7 @@ public class CoreMethods {
         return out;
     }
 
-    public static void requestRoomPermission(User user, int roomid){
+    public static void requestRoomPermission(User user, int roomid) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         List<Roompermission> roompermissions = HibernateUtil.getSession().createCriteria(Userfriend.class)
                                             .add(Restrictions.eq("userid", user.getUserid()))
@@ -953,7 +959,7 @@ public class CoreMethods {
         }
     }
 
-    public static boolean isFriend(User user, int useridofotheruser){
+    public static boolean isFriend(User user, int useridofotheruser) throws GeneralException {
         ArrayList<Friend> friends = getFriends(user);
         for (Iterator<Friend> iterator=friends.iterator(); iterator.hasNext();) {
             Friend friend=iterator.next();
@@ -964,7 +970,7 @@ public class CoreMethods {
         return false;
     }
 
-    public static boolean isAllowedInRoom(User user, int roomid) {
+    public static boolean isAllowedInRoom(User user, int roomid) throws GeneralException {
         Room room = Room.get(roomid);
         if (room!=null && room.getRoomid()>0){
             //If it's not enabled, sod off
@@ -995,7 +1001,7 @@ public class CoreMethods {
         return false;
     }
 
-    public static boolean isModeratorOfRoom(int userid, int roomid) {
+    public static boolean isModeratorOfRoom(int userid, int roomid) throws GeneralException {
         Room room = Room.get(roomid);
         if (room!=null && room.getRoomid()>0){
             //If it's not enabled, sod off
@@ -1098,7 +1104,7 @@ public class CoreMethods {
         }
     }
 
-    public static void revokeRoomPermission(User user, int useridtogivepermissionto, int roomid) throws GeneralException {
+    public static void revokeRoomPermission(User user, int useridtorevokefrom, int roomid) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         //See if this user has permission to mod this room
         if (!isModeratorOfRoom(user.getUserid(), roomid)){
@@ -1106,7 +1112,7 @@ public class CoreMethods {
         }
         //See if there's already a permission for this user and this roomid
         List<Roompermission> roompermissions = HibernateUtil.getSession().createCriteria(Roompermission.class)
-                                            .add(Restrictions.eq("userid", useridtogivepermissionto))
+                                            .add(Restrictions.eq("userid", useridtorevokefrom))
                                             .add(Restrictions.eq("roomid", roomid))
                                             .setCacheable(true)
                                             .list();
@@ -1123,7 +1129,7 @@ public class CoreMethods {
         }
     }
 
-    public static void revokeRoomMod(User user, int useridtogivepermissionto, int roomid) throws GeneralException {
+    public static void revokeRoomMod(User user, int useridtorevokefrom, int roomid) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         //See if this user has permission to mod this room
         if (!isModeratorOfRoom(user.getUserid(), roomid)){
@@ -1131,7 +1137,7 @@ public class CoreMethods {
         }
         //See if there's already a permission for this user and this roomid
         List<Roompermission> roompermissions = HibernateUtil.getSession().createCriteria(Roompermission.class)
-                                            .add(Restrictions.eq("userid", useridtogivepermissionto))
+                                            .add(Restrictions.eq("userid", useridtorevokefrom))
                                             .add(Restrictions.eq("roomid", roomid))
                                             .setCacheable(true)
                                             .list();
@@ -1149,7 +1155,7 @@ public class CoreMethods {
         }
     }
 
-    public static ArrayList<RoomPermissionRequest> getRoomPermissionRequests(User user){
+    public static ArrayList<RoomPermissionRequest> getRoomPermissionRequests(User user) throws GeneralException {
         ArrayList<RoomPermissionRequest> out = new ArrayList<RoomPermissionRequest>();
         ArrayList<Room> roomsUserModerates = getRoomsIModerate(user);
         //Iterate rooms this user moderates

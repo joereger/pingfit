@@ -1,16 +1,20 @@
 package com.pingfit.api;
 
 import com.pingfit.dao.*;
+import com.pingfit.dao.hibernate.HibernateUtil;
 import com.pingfit.util.GeneralException;
-import com.pingfit.util.Time;
 import com.pingfit.exercisechoosers.ExerciseExtended;
-import com.pingfit.systemprops.SystemProperty;
+import com.pingfit.friends.Friend;
+import com.pingfit.friends.RoomPermissionRequest;
 import org.apache.log4j.Logger;
 import org.jdom.Element;
 import org.jdom.Text;
+import org.hibernate.criterion.Restrictions;
 
 import java.util.Iterator;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Date;
 
 /**
  * User: Joe Reger Jr
@@ -25,10 +29,10 @@ public class CoreMethodsReturningXML {
             CoreMethods.doExercise(user, exerciseid, reps, exerciseplaceinlist);
             return getCurrentExercise(user);
         } catch (GeneralException gex) {
-            return resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
         } catch (Exception ex) {
             logger.error("", ex);
-            return resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
         }
     }
 
@@ -36,15 +40,15 @@ public class CoreMethodsReturningXML {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
             if (CoreMethods.testApi(user)){
-                return resultXml(true, "");    
+                return XMLConverters.resultXml(true, "");
             } else {
-                return resultXml(false, "Sorry, an error occurred and this test has failed.");
+                return XMLConverters.resultXml(false, "Sorry, an error occurred and this test has failed.");
             }
         } catch (GeneralException gex) {
-            return resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
         } catch (Exception ex) {
             logger.error("", ex);
-            return resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
         }
     }
 
@@ -52,24 +56,24 @@ public class CoreMethodsReturningXML {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
             Eula eula = CoreMethods.getCurrentEula();
-            return eulaAsXML(eula);
+            return XMLConverters.eulaAsXML(eula);
         } catch (GeneralException gex) {
-            return resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
         } catch (Exception ex) {
             logger.error("", ex);
-            return resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
         }
     }
 
     public static Element isUserEulaUpToDate(User user) {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
-            return booleanAsElement(CoreMethods.isUserEulaUpToDate(user), "isusereulauptodate");
+            return XMLConverters.booleanAsElement(CoreMethods.isUserEulaUpToDate(user), "isusereulauptodate");
         } catch (GeneralException gex) {
-            return resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
         } catch (Exception ex) {
             logger.error("", ex);
-            return resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
         }
     }
 
@@ -77,12 +81,12 @@ public class CoreMethodsReturningXML {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
             CoreMethods.agreeToEula(user, eulaid, ip);
-            return resultXml(true, "");
+            return XMLConverters.resultXml(true, "");
         } catch (GeneralException gex) {
-            return resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
         } catch (Exception ex) {
             logger.error("", ex);
-            return resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
         }
     }
 
@@ -90,12 +94,12 @@ public class CoreMethodsReturningXML {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
             CoreMethods.joinRoom(user, roomid);
-            return resultXml(true, "");
+            return XMLConverters.resultXml(true, "");
         } catch (GeneralException gex) {
-            return resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
         } catch (Exception ex) {
             logger.error("", ex);
-            return resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
         }
     }
 
@@ -103,12 +107,12 @@ public class CoreMethodsReturningXML {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
             ExerciseExtended exExt = CoreMethods.getCurrentExercise(user);
-            return exerciseAsXML(exExt);
+            return XMLConverters.exerciseAsXML(exExt);
         } catch (GeneralException gex) {
-            return resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
         } catch (Exception ex) {
             logger.error("", ex);
-            return resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
         }
     }
 
@@ -119,14 +123,14 @@ public class CoreMethodsReturningXML {
             ArrayList<Exerciselist> exerciselists = CoreMethods.getExerciseLists(user);
             for (Iterator it = exerciselists.iterator(); it.hasNext(); ) {
                 Exerciselist exerciselist = (Exerciselist)it.next();
-                element.addContent(exerciseListAsXML(exerciselist, false, false));
+                element.addContent(XMLConverters.exerciseListAsXML(exerciselist, false, false));
             }
             return element;
         } catch (GeneralException gex) {
-            return resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
         } catch (Exception ex) {
             logger.error("", ex);
-            return resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
         }
     }
 
@@ -137,26 +141,26 @@ public class CoreMethodsReturningXML {
             ArrayList<Room> rooms = CoreMethods.getRooms(user);
             for (Iterator it = rooms.iterator(); it.hasNext(); ) {
                 Room room = (Room)it.next();
-                element.addContent(roomAsXML(room));
+                element.addContent(XMLConverters.roomAsXML(room));
             }
             return element;
         } catch (GeneralException gex) {
-            return resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
         } catch (Exception ex) {
             logger.error("", ex);
-            return resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
         }
     }
 
     public static Element getCurrentRoom(User user) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
-            return roomAsXML(CoreMethods.getCurrentRoom(user));
+            return XMLConverters.roomAsXML(CoreMethods.getCurrentRoom(user));
         } catch (GeneralException gex) {
-            return resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
         } catch (Exception ex) {
             logger.error("", ex);
-            return resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
         }
     }
     
@@ -172,10 +176,10 @@ public class CoreMethodsReturningXML {
             element.addContent(getCurrentEula());
             return element;
         } catch (GeneralException gex) {
-            return resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
         } catch (Exception ex) {
             logger.error("", ex);
-            return resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
         }
     }
 
@@ -183,12 +187,12 @@ public class CoreMethodsReturningXML {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
             Exercise exExt = CoreMethods.getExercise(exerciseid);
-            return exerciseAsXML(exExt);
+            return XMLConverters.exerciseAsXML(exExt);
         } catch (GeneralException gex) {
-            return resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
         } catch (Exception ex) {
             logger.error("", ex);
-            return resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
         }
     }
 
@@ -196,12 +200,12 @@ public class CoreMethodsReturningXML {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
             Exerciselist exerciselist = CoreMethods.getExerciselist(exerciselistid);
-            return exerciseListAsXML(exerciselist, true, true);
+            return XMLConverters.exerciseListAsXML(exerciselist, true, true);
         } catch (GeneralException gex) {
-            return resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
         } catch (Exception ex) {
             logger.error("", ex);
-            return resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
         }
     }
 
@@ -214,10 +218,10 @@ public class CoreMethodsReturningXML {
             element.setContent(new Text(String.valueOf(secondsuntilnextexercise)));
             return element;
         } catch (GeneralException gex) {
-            return resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
         } catch (Exception ex) {
             logger.error("", ex);
-            return resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
         }
     }
 
@@ -229,20 +233,20 @@ public class CoreMethodsReturningXML {
             CoreMethods.skipExercise(user);
             return getCurrentExercise(user);
         } catch (GeneralException gex) {
-            return resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
         } catch (Exception ex) {
             logger.error("", ex);
-            return resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
         }
     }
 
     public static Element getUserSettings(User user) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
-            return userSettingsAsXML(user);
+            return XMLConverters.userSettingsAsXML(user);
         } catch (Exception ex) {
             logger.error("", ex);
-            return resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
         }
     }
 
@@ -252,10 +256,10 @@ public class CoreMethodsReturningXML {
             CoreMethods.setExerciseEveryXMinutes(user, minutes);
             return bigRefresh(user);
         } catch (GeneralException gex) {
-            return resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
         } catch (Exception ex) {
             logger.error("", ex);
-            return resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
         }
     }
 
@@ -265,10 +269,10 @@ public class CoreMethodsReturningXML {
             CoreMethods.setNickname(user, nickname);
             return bigRefresh(user);
         } catch (GeneralException gex) {
-            return resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
         } catch (Exception ex) {
             logger.error("", ex);
-            return resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
         }
     }
 
@@ -291,10 +295,10 @@ public class CoreMethodsReturningXML {
             CoreMethods.setExerciseChooser(user, exercisechooserid);
             return bigRefresh(user);
         } catch (GeneralException gex) {
-            return resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
         } catch (Exception ex) {
             logger.error("", ex);
-            return resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
         }
     }
 
@@ -302,172 +306,371 @@ public class CoreMethodsReturningXML {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
             CoreMethods.signUp(email, password, passwordverify, firstname, lastname, nickname);
-            return resultXml(true, "");
+            return XMLConverters.resultXml(true, "");
         } catch (GeneralException gex) {
-            return resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
         } catch (Exception ex) {
             logger.error("", ex);
-            return resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
         }
     }
 
-    protected static Element resultXml(boolean issuccessful, String message) {
-        Element element = new Element("result");
-        if (issuccessful){
-            element.setAttribute("success", "true");
-        } else {
-            element.setAttribute("success", "false");
-        }
-        if (message!=null && !message.equals("")){
-            Element msg = new Element("apimessage");
-            msg.setContent(new Text(message));
-            element.addContent(msg);
-        }
-        return element;
-    }
 
-    public static Element eulaAsXML(Eula eula) {
-        Element element = new Element("eula");
-        element.addContent(nameValueElement("eulaid", String.valueOf(eula.getEulaid())));
-        element.addContent(nameValueElement("eula", String.valueOf(eula.getEula())));
-        element.addContent(nameValueElement("date", Time.dateformatcompactwithtime(Time.getCalFromDate(eula.getDate()))));
-        return element;
-    }
 
-    public static Element exerciseAsXML(Exercise exercise) {
-        Element element = new Element("exercise");
-        element.addContent(nameValueElement("exerciseid", String.valueOf(exercise.getExerciseid())));
-        element.addContent(nameValueElement("title", String.valueOf(exercise.getTitle())));
-        element.addContent(nameValueElement("description", String.valueOf(exercise.getDescription())));
-        String imageUrl = "http://"+ SystemProperty.getProp(SystemProperty.PROP_BASEURL) + "/images/exercises/" + exercise.getImage();  
-        element.addContent(nameValueElement("image", imageUrl));
-        element.addContent(nameValueElement("imagecredit", String.valueOf(exercise.getImagecredit())));
-        element.addContent(nameValueElement("reps", String.valueOf(exercise.getReps())));
-        element.addContent(nameValueElement("ispublic", String.valueOf(exercise.getIspublic())));
-        element.addContent(nameValueElement("issystem", String.valueOf(exercise.getIssystem())));
-        return element;
-    }
 
-    private static Element userSettingsAsXML(User user) {
+
+
+
+
+
+
+
+
+
+
+    public static Element getFriends(User user){
         Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
-        Element element = new Element("usersettings");
-        element.addContent(nameValueElement("userid", String.valueOf(user.getUserid())));
-        element.addContent(nameValueElement("email", String.valueOf(user.getEmail())));
-        element.addContent(nameValueElement("firstname", String.valueOf(user.getFirstname())));
-        element.addContent(nameValueElement("lastname", String.valueOf(user.getLastname())));
-        element.addContent(nameValueElement("nickname", String.valueOf(user.getNickname())));
-        element.addContent(nameValueElement("exerciselistid", String.valueOf(user.getExerciselistid())));
-        element.addContent(nameValueElement("exercisechooserid", String.valueOf(user.getExercisechooserid())));
-        element.addContent(nameValueElement("exerciseeveryxminutes", String.valueOf(user.getExerciseeveryxminutes())));
-        element.addContent(nameValueElement("createdate", String.valueOf(Time.dateformatUtc(Time.getCalFromDate(user.getCreatedate())))));
-        element.addContent(nameValueElement("roomid", String.valueOf(user.getRoomid())));
-        element.addContent(isUserEulaUpToDate(user));
         try{
-            Room currentRoom = CoreMethods.getCurrentRoom(user);
-            element.addContent(roomAsXML(currentRoom));
-        } catch (Exception ex){
+            Element element = new Element("friends");
+            ArrayList<Friend> friends = CoreMethods.getFriends(user);
+            for (Iterator it = friends.iterator(); it.hasNext(); ) {
+                Friend friend = (Friend)it.next();
+                element.addContent(XMLConverters.friendAsXML(friend));
+            }
+            return element;
+        } catch (GeneralException gex) {
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+        } catch (Exception ex) {
             logger.error("", ex);
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
         }
-        return element;
     }
 
-    public static Element exerciseAsXML(ExerciseExtended exExt) {
-        Element element = new Element("exercise");
-        element.addContent(nameValueElement("exerciseid", String.valueOf(exExt.getExercise().getExerciseid())));
-        element.addContent(nameValueElement("title", String.valueOf(exExt.getExercise().getTitle())));
-        element.addContent(nameValueElement("description", String.valueOf(exExt.getExercise().getDescription())));
-        String imageUrl = "http://"+ SystemProperty.getProp(SystemProperty.PROP_BASEURL) + "/images/exercises/" + exExt.getExercise().getImage();
-        element.addContent(nameValueElement("image", imageUrl));
-        element.addContent(nameValueElement("imagecredit", String.valueOf(exExt.getExercise().getImagecredit())));
-        element.addContent(nameValueElement("reps", String.valueOf(exExt.getExercise().getReps())));
-        element.addContent(nameValueElement("repsfromlist", String.valueOf(exExt.getRepsfromlist())));
-        element.addContent(nameValueElement("ispublic", String.valueOf(exExt.getExercise().getIspublic())));
-        element.addContent(nameValueElement("issystem", String.valueOf(exExt.getExercise().getIssystem())));
-        element.addContent(nameValueElement("exerciseplaceinlist", exExt.getExerciseplaceinlist()));
-        element.addContent(nameValueElement("secondsuntilnextexercise", String.valueOf(exExt.getSecondsuntilnextexercise())));
-        return element;
-    }
-
-    public static Element roomAsXML(Room room) {
-        Element element = new Element("room");
-        element.addContent(nameValueElement("roomid", String.valueOf(room.getRoomid())));
-        element.addContent(nameValueElement("isenabled", String.valueOf(room.getIsenabled())));
-        element.addContent(nameValueElement("issystem", String.valueOf(room.getIssystem())));
-        element.addContent(nameValueElement("isprivate", String.valueOf(room.getIsprivate())));
-        element.addContent(nameValueElement("isfriendautopermit", String.valueOf(room.getIsfriendautopermit())));
-        element.addContent(nameValueElement("useridofcreator", String.valueOf(room.getUseridofcreator())));
-        element.addContent(nameValueElement("name", String.valueOf(room.getName())));
-        element.addContent(nameValueElement("description", String.valueOf(room.getDescription())));
-        element.addContent(nameValueElement("exerciseeveryxminutes", String.valueOf(room.getExerciseeveryxminutes())));
-        element.addContent(nameValueElement("exerciselistid", String.valueOf(room.getExerciselistid())));
-        return element;
-    }
-
-    public static Element exerciseListAsXML(Exerciselist exerciselist) {
-        return exerciseListAsXML(exerciselist, false, false);
-    }
-
-    public static Element exerciseListAsXML(Exerciselist exerciselist, boolean includeExerciselistitems) {
-        return exerciseListAsXML(exerciselist, includeExerciselistitems);
-    }
-
-    public static Element exerciseListAsXML(Exerciselist exerciselist, boolean includeExerciselistitems, boolean includeExercise) {
-        Element element = new Element("exerciselist");
-        element.addContent(nameValueElement("exerciselistid", String.valueOf(exerciselist.getExerciselistid())));
-        element.addContent(nameValueElement("title", String.valueOf(exerciselist.getTitle())));
-        element.addContent(nameValueElement("description", String.valueOf(exerciselist.getDescription())));
-        element.addContent(nameValueElement("ispublic", String.valueOf(exerciselist.getIspublic())));
-        element.addContent(nameValueElement("issystem", String.valueOf(exerciselist.getIssystem())));
-        element.addContent(nameValueElement("issystemdefault", String.valueOf(exerciselist.getIssystemdefault())));
-        element.addContent(nameValueElement("useridofcreator", String.valueOf(exerciselist.getUseridofcreator())));
-        if (includeExerciselistitems){
-            for (Iterator<Exerciselistitem> iterator=exerciselist.getExerciselistitems().iterator(); iterator.hasNext();) {
-                Exerciselistitem exerciselistitem=iterator.next();
-                element.addContent(exerciseListItemAsXML(exerciselistitem, includeExercise));
+    public static Element getFriendRequests(User user){
+        Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
+        try{
+            Element element = new Element("friendrequests");
+            ArrayList<Friend> friendrequests = CoreMethods.getFriendRequests(user);
+            for (Iterator it = friendrequests.iterator(); it.hasNext(); ) {
+                Friend friend = (Friend)it.next();
+                element.addContent(XMLConverters.friendAsXML(friend));
             }
+            return element;
+        } catch (GeneralException gex) {
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
         }
-        return element;
     }
 
-    public static Element exerciseListItemAsXML(Exerciselistitem exerciselistitem) {
-        return exerciseListItemAsXML(exerciselistitem, false);
+    public static Element approveFriendRequest(User user, int useridoffriend){
+        Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
+        try{
+            CoreMethods.approveFriendRequest(user, useridoffriend);
+            return XMLConverters.resultXml(true, "");
+        } catch (GeneralException gex) {
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+        }
     }
 
-    public static Element exerciseListItemAsXML(Exerciselistitem exerciselistitem, boolean includeExercise) {
-        Element element = new Element("exerciselistitem");
-        element.addContent(nameValueElement("exerciselistitemid", String.valueOf(exerciselistitem.getExerciselistitemid())));
-        if (includeExercise){
-            try{
-                element.addContent(getExercise(exerciselistitem.getExerciseid()));
-            } catch (Exception ex){
-                element.addContent(nameValueElement("exerciseid", String.valueOf(exerciselistitem.getExerciseid())));
+    public static Element rejectFriendRequest(User user, int useridoffriend){
+        Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
+        try{
+            CoreMethods.rejectFriendRequest(user, useridoffriend);
+            return XMLConverters.resultXml(true, "");
+        } catch (GeneralException gex) {
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+        }
+    }
+
+    public static Element friendRequestByUserid(User user, int useridoffriend){
+        Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
+        try{
+            CoreMethods.friendRequestByUserid(user, useridoffriend);
+            return XMLConverters.resultXml(true, "");
+        } catch (GeneralException gex) {
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+        }
+    }
+
+    public static Element breakFriendship(User user, int useridoffriend){
+        Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
+        try{
+            CoreMethods.breakFriendship(user, useridoffriend);
+            return XMLConverters.resultXml(true, "");
+        } catch (GeneralException gex) {
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+        }
+    }
+
+    public static Element createRoom(User user, String name, String description, int exerciseeveryxminutes, int exerciselistid, boolean isprivate, boolean isfriendautopermit) throws GeneralException{
+        Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
+        try{
+            CoreMethods.createRoom(user, name, description, exerciseeveryxminutes, exerciselistid, isprivate, isfriendautopermit);
+            return XMLConverters.resultXml(true, "");
+        } catch (GeneralException gex) {
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+        }
+    }
+
+    public static Element editRoom(User user, int roomid, String name, String description, int exerciseeveryxminutes, int exerciselistid, boolean isprivate, boolean isfriendautopermit) throws GeneralException{
+        Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
+        try{
+            CoreMethods.editRoom(user, roomid, name, description, exerciseeveryxminutes, exerciselistid, isprivate, isfriendautopermit);
+            return XMLConverters.resultXml(true, "");
+        } catch (GeneralException gex) {
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+        }
+    }
+
+    public static Element deleteRoom(User user, int roomid) throws GeneralException{
+        Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
+        try{
+            CoreMethods.deleteRoom(user, roomid);
+            return XMLConverters.resultXml(true, "");
+        } catch (GeneralException gex) {
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+        }
+    }
+
+    public static Element getRoomsIModerate(User user){
+        Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
+        try{
+            Element element = new Element("roomsimoderate");
+            ArrayList<Room> rooms = CoreMethods.getRoomsIModerate(user);
+            for (Iterator it = rooms.iterator(); it.hasNext(); ) {
+                Room room = (Room)it.next();
+                element.addContent(XMLConverters.roomAsXML(room));
             }
-        } else {
-            element.addContent(nameValueElement("exerciseid", String.valueOf(exerciselistitem.getExerciseid())));
-        }
-        element.addContent(nameValueElement("exerciselistid", String.valueOf(exerciselistitem.getExerciselistid())));
-        element.addContent(nameValueElement("num", String.valueOf(exerciselistitem.getNum())));
-        element.addContent(nameValueElement("reps", String.valueOf(exerciselistitem.getReps())));
-        return element;
-    }
-
-    private static Element nameValueElement(String name, String value){
-        Element element = new Element(name);
-        element.setContent(new Text(value));
-        return element;
-    }
-
-    private static Element booleanAsElement(boolean bool, String elementname){
-        if (bool){
-            return nameValueElement(elementname, "true");
-        } else {
-            return nameValueElement(elementname, "false");
+            return element;
+        } catch (GeneralException gex) {
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
         }
     }
 
+    public static Element getMyRooms(User user){
+        Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
+        try{
+            Element element = new Element("myrooms");
+            ArrayList<Room> rooms = CoreMethods.getMyRooms(user);
+            for (Iterator it = rooms.iterator(); it.hasNext(); ) {
+                Room room = (Room)it.next();
+                element.addContent(XMLConverters.roomAsXML(room));
+            }
+            return element;
+        } catch (GeneralException gex) {
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+        }
+    }
 
+    public static Element addToMyRooms(User user, int roomid) throws GeneralException {
+        Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
+        try{
+            CoreMethods.addToMyRooms(user, roomid);
+            return XMLConverters.resultXml(true, "");
+        } catch (GeneralException gex) {
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+        }
+    }
 
-    
+    public static Element removeFromMyRooms(User user, int roomid) throws GeneralException {
+        Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
+        try{
+            CoreMethods.removeFromMyRooms(user, roomid);
+            return XMLConverters.resultXml(true, "");
+        } catch (GeneralException gex) {
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+        }
+    }
+
+    public static Element getRoomsMyFriendsAreIn(User user){
+        Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
+        try{
+            Element element = new Element("roomsmyfriendsarein");
+            ArrayList<Room> rooms = CoreMethods.getRoomsMyFriendsAreIn(user);
+            for (Iterator it = rooms.iterator(); it.hasNext(); ) {
+                Room room = (Room)it.next();
+                element.addContent(XMLConverters.roomAsXML(room));
+            }
+            return element;
+        } catch (GeneralException gex) {
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+        }
+    }
+
+    public static Element getRoomsMyFriendsModerate(User user){
+        Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
+        try{
+            Element element = new Element("roomsmyfriendsmoderate");
+            ArrayList<Room> rooms = CoreMethods.getRoomsMyFriendsModerate(user);
+            for (Iterator it = rooms.iterator(); it.hasNext(); ) {
+                Room room = (Room)it.next();
+                element.addContent(XMLConverters.roomAsXML(room));
+            }
+            return element;
+        } catch (GeneralException gex) {
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+        }
+    }
+
+    public static Element requestRoomPermission(User user, int roomid){
+        Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
+        try{
+            CoreMethods.requestRoomPermission(user, roomid);
+            return XMLConverters.resultXml(true, "");
+        } catch (GeneralException gex) {
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+        }
+    }
+
+    public static Element isFriend(User user, int useridofotheruser){
+        Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
+        try{
+            return XMLConverters.booleanAsElement(CoreMethods.isFriend(user, useridofotheruser), "isfriend");
+        } catch (GeneralException gex) {
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+        }
+    }
+
+    public static Element isAllowedInRoom(User user, int roomid) {
+        Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
+        try{
+            return XMLConverters.booleanAsElement(CoreMethods.isAllowedInRoom(user, roomid), "isallowedinroom");
+        } catch (GeneralException gex) {
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+        }
+    }
+
+    public static Element isModeratorOfRoom(int userid, int roomid) {
+        Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
+        try{
+            return XMLConverters.booleanAsElement(CoreMethods.isModeratorOfRoom(userid, roomid), "ismoderatorofroom");
+        } catch (GeneralException gex) {
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+        }
+    }
+
+    public static Element grantRoomPermission(User user, int useridtogivepermissionto, int roomid) throws GeneralException {
+        Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
+        try{
+            CoreMethods.grantRoomPermission(user, useridtogivepermissionto, roomid);
+            return XMLConverters.resultXml(true, "");
+        } catch (GeneralException gex) {
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+        }
+    }
+
+    public static Element grantRoomMod(User user, int useridtogivepermissionto, int roomid) throws GeneralException {
+        Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
+        try{
+            CoreMethods.grantRoomMod(user, useridtogivepermissionto, roomid);
+            return XMLConverters.resultXml(true, "");
+        } catch (GeneralException gex) {
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+        }
+    }
+
+    public static Element revokeRoomPermission(User user, int useridtorevokefrom, int roomid) throws GeneralException {
+        Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
+        try{
+            CoreMethods.revokeRoomPermission(user, useridtorevokefrom, roomid);
+            return XMLConverters.resultXml(true, "");
+        } catch (GeneralException gex) {
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+        }
+    }
+
+    public static Element revokeRoomMod(User user, int useridtorevokefrom, int roomid) throws GeneralException {
+        Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
+        try{
+            CoreMethods.revokeRoomMod(user, useridtorevokefrom, roomid);
+            return XMLConverters.resultXml(true, "");
+        } catch (GeneralException gex) {
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+        }
+    }
+
+    public static Element getRoomPermissionRequests(User user){
+        Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
+        try{
+            Element element = new Element("roompermissionrequests");
+            ArrayList<RoomPermissionRequest> roompermissionrequests = CoreMethods.getRoomPermissionRequests(user);
+            for (Iterator it = roompermissionrequests.iterator(); it.hasNext(); ) {
+                RoomPermissionRequest roompermissionrequest = (RoomPermissionRequest)it.next();
+                element.addContent(XMLConverters.roompermissionrequestAsXML(roompermissionrequest));
+            }
+            return element;
+        } catch (GeneralException gex) {
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+        }
+    }
 
 
 }
