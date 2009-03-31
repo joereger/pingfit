@@ -393,6 +393,8 @@ public class CoreMethodsReturningXML {
         element.addContent(nameValueElement("roomid", String.valueOf(room.getRoomid())));
         element.addContent(nameValueElement("isenabled", String.valueOf(room.getIsenabled())));
         element.addContent(nameValueElement("issystem", String.valueOf(room.getIssystem())));
+        element.addContent(nameValueElement("isprivate", String.valueOf(room.getIsprivate())));
+        element.addContent(nameValueElement("isfriendautopermit", String.valueOf(room.getIsfriendautopermit())));
         element.addContent(nameValueElement("useridofcreator", String.valueOf(room.getUseridofcreator())));
         element.addContent(nameValueElement("name", String.valueOf(room.getName())));
         element.addContent(nameValueElement("description", String.valueOf(room.getDescription())));

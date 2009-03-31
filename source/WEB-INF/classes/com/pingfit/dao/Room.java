@@ -20,6 +20,8 @@ public class Room extends BasePersistentClass implements java.io.Serializable, A
      private int roomid;
      private boolean isenabled;
      private boolean issystem;
+     private boolean isprivate;
+     private boolean isfriendautopermit;
      private int useridofcreator;
      private String name;
      private String description;
@@ -151,5 +153,21 @@ public class Room extends BasePersistentClass implements java.io.Serializable, A
 
     public void setLastexerciseplaceinlist(String lastexerciseplaceinlist) {
         this.lastexerciseplaceinlist=lastexerciseplaceinlist;
+    }
+
+    public boolean getIsprivate() {
+        return isprivate;
+    }
+
+    public void setIsprivate(boolean isprivate) {
+        this.isprivate=isprivate;
+    }
+
+    public boolean getIsfriendautopermit() {
+        return isfriendautopermit;
+    }
+
+    public void setIsfriendautopermit(boolean isfriendautopermit) {
+        this.isfriendautopermit=isfriendautopermit;
     }
 }

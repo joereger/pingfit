@@ -24,11 +24,13 @@
         <mapping resource="com/pingfit/dao/Pageperformance.hbm.xml" />
         <mapping resource="com/pingfit/dao/Pingback.hbm.xml" />
         <mapping resource="com/pingfit/dao/Room.hbm.xml" />
+        <mapping resource="com/pingfit/dao/Roompermission.hbm.xml" />
         <mapping resource="com/pingfit/dao/Supportissue.hbm.xml" />
         <mapping resource="com/pingfit/dao/Supportissuecomm.hbm.xml" />
         <mapping resource="com/pingfit/dao/Systemprop.hbm.xml" />
         <mapping resource="com/pingfit/dao/User.hbm.xml" />
         <mapping resource="com/pingfit/dao/Usereula.hbm.xml" />
+        <mapping resource="com/pingfit/dao/Userfriend.hbm.xml" />
         <mapping resource="com/pingfit/dao/Userpersistentlogin.hbm.xml" />
         <mapping resource="com/pingfit/dao/Userrole.hbm.xml" />
 

@@ -19,6 +19,14 @@
             <column name="issystem" />
         </property>
 
+        <property name="isprivate" type="boolean">
+            <column name="isprivate" />
+        </property>
+
+        <property name="isfriendautopermit" type="boolean">
+            <column name="isfriendautopermit" />
+        </property>
+
         <property name="useridofcreator" type="int">
             <column name="useridofcreator" not-null="true" />
         </property>
