@@ -130,12 +130,6 @@ public class RESTXmlApi extends HttpServlet {
                                 exerciseid = Integer.parseInt(request.getParameter("exerciseid"));
                             }
                             element = CoreMethodsReturningXML.getExercise(exerciseid);
-                        } else if (method.equalsIgnoreCase("joinRoom")){
-                            int roomid = 0;
-                            if (Num.isinteger(request.getParameter("roomid"))){
-                                roomid = Integer.parseInt(request.getParameter("roomid"));
-                            }
-                            element = CoreMethodsReturningXML.joinRoom(user, roomid);
                         } else if (method.equalsIgnoreCase("getExerciselist")){
                             int exerciselistid = 0;
                             if (Num.isinteger(request.getParameter("exerciselistid"))){
@@ -173,24 +167,12 @@ public class RESTXmlApi extends HttpServlet {
                             element = CoreMethodsReturningXML.getFriends(user);
                         } else if (method.equalsIgnoreCase("getFriendRequests")){
                             element = CoreMethodsReturningXML.getFriendRequests(user);
-                        } else if (method.equalsIgnoreCase("approveFriendRequest")){
+                        } else if (method.equalsIgnoreCase("addFriend")){
                             int useridoffriend = 0;
                             if (Num.isinteger(request.getParameter("useridoffriend"))){
                                 useridoffriend = Integer.parseInt(request.getParameter("useridoffriend"));
                             }
-                            element = CoreMethodsReturningXML.approveFriendRequest(user, useridoffriend);
-                        } else if (method.equalsIgnoreCase("rejectFriendRequest")){
-                            int useridoffriend = 0;
-                            if (Num.isinteger(request.getParameter("useridoffriend"))){
-                                useridoffriend = Integer.parseInt(request.getParameter("useridoffriend"));
-                            }
-                            element = CoreMethodsReturningXML.rejectFriendRequest(user, useridoffriend);
-                        } else if (method.equalsIgnoreCase("friendRequestByUserid")){
-                            int useridoffriend = 0;
-                            if (Num.isinteger(request.getParameter("useridoffriend"))){
-                                useridoffriend = Integer.parseInt(request.getParameter("useridoffriend"));
-                            }
-                            element = CoreMethodsReturningXML.friendRequestByUserid(user, useridoffriend);
+                            element = CoreMethodsReturningXML.addFriend(user, useridoffriend);
                         } else if (method.equalsIgnoreCase("breakFriendship")){
                             int useridoffriend = 0;
                             if (Num.isinteger(request.getParameter("useridoffriend"))){
@@ -251,12 +233,12 @@ public class RESTXmlApi extends HttpServlet {
                             element = CoreMethodsReturningXML.getRoomsIModerate(user);
                         } else if (method.equalsIgnoreCase("getMyRooms")){
                             element = CoreMethodsReturningXML.getMyRooms(user);
-                        } else if (method.equalsIgnoreCase("addToMyRooms")){
+                        } else if (method.equalsIgnoreCase("joinRoom")){
                             int roomid = 0;
                             if (Num.isinteger(request.getParameter("roomid"))){
                                 roomid = Integer.parseInt(request.getParameter("roomid"));
                             }
-                            element = CoreMethodsReturningXML.addToMyRooms(user, roomid);
+                            element = CoreMethodsReturningXML.joinRoom(user, roomid);
                         } else if (method.equalsIgnoreCase("removeFromMyRooms")){
                             int roomid = 0;
                             if (Num.isinteger(request.getParameter("roomid"))){
@@ -267,24 +249,26 @@ public class RESTXmlApi extends HttpServlet {
                             element = CoreMethodsReturningXML.getRoomsMyFriendsAreIn(user);
                         } else if (method.equalsIgnoreCase("getRoomsMyFriendsModerate")){
                             element = CoreMethodsReturningXML.getRoomsMyFriendsModerate(user);
-                        } else if (method.equalsIgnoreCase("requestRoomPermission")){
-                            int roomid = 0;
-                            if (Num.isinteger(request.getParameter("roomid"))){
-                                roomid = Integer.parseInt(request.getParameter("roomid"));
+                        } else if (method.equalsIgnoreCase("areFriends")){
+                            int userid1 = 0;
+                            if (Num.isinteger(request.getParameter("userid1"))){
+                                userid1 = Integer.parseInt(request.getParameter("userid1"));
                             }
-                            element = CoreMethodsReturningXML.requestRoomPermission(user, roomid);
-                        } else if (method.equalsIgnoreCase("isFriend")){
-                            int useridofotheruser = 0;
-                            if (Num.isinteger(request.getParameter("useridofotheruser"))){
-                                useridofotheruser = Integer.parseInt(request.getParameter("useridofotheruser"));
+                            int userid2 = 0;
+                            if (Num.isinteger(request.getParameter("userid2"))){
+                                userid2 = Integer.parseInt(request.getParameter("userid2"));
                             }
-                            element = CoreMethodsReturningXML.isFriend(user, useridofotheruser);
+                            element = CoreMethodsReturningXML.areFriends(userid1, userid2);
                         } else if (method.equalsIgnoreCase("isAllowedInRoom")){
+                            int userid = 0;
+                            if (Num.isinteger(request.getParameter("userid"))){
+                                userid = Integer.parseInt(request.getParameter("userid"));
+                            }
                             int roomid = 0;
                             if (Num.isinteger(request.getParameter("roomid"))){
                                 roomid = Integer.parseInt(request.getParameter("roomid"));
                             }
-                            element = CoreMethodsReturningXML.isAllowedInRoom(user, roomid);
+                            element = CoreMethodsReturningXML.isAllowedInRoom(userid, roomid);
                         } else if (method.equalsIgnoreCase("isModeratorOfRoom")){
                             int userid = 0;
                             if (Num.isinteger(request.getParameter("userid"))){

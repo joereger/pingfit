@@ -90,18 +90,6 @@ public class CoreMethodsReturningXML {
         }
     }
 
-    public static Element joinRoom(User user, int roomid) {
-        Logger logger = Logger.getLogger(CoreMethods.class);
-        try{
-            CoreMethods.joinRoom(user, roomid);
-            return XMLConverters.resultXml(true, "");
-        } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
-        } catch (Exception ex) {
-            logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
-        }
-    }
 
     public static Element getCurrentExercise(User user) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
@@ -174,6 +162,9 @@ public class CoreMethodsReturningXML {
             element.addContent(getExerciseLists(user));
             element.addContent(getRooms(user));
             element.addContent(getCurrentEula());
+            element.addContent(getFriends(user));
+            element.addContent(getFriendRequests(user));
+            element.addContent(getRoomPermissionRequests(user));
             return element;
         } catch (GeneralException gex) {
             return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
@@ -364,36 +355,10 @@ public class CoreMethodsReturningXML {
         }
     }
 
-    public static Element approveFriendRequest(User user, int useridoffriend){
+    public static Element addFriend(User user, int useridoffriend){
         Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
         try{
-            CoreMethods.approveFriendRequest(user, useridoffriend);
-            return XMLConverters.resultXml(true, "");
-        } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
-        } catch (Exception ex) {
-            logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
-        }
-    }
-
-    public static Element rejectFriendRequest(User user, int useridoffriend){
-        Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
-        try{
-            CoreMethods.rejectFriendRequest(user, useridoffriend);
-            return XMLConverters.resultXml(true, "");
-        } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
-        } catch (Exception ex) {
-            logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
-        }
-    }
-
-    public static Element friendRequestByUserid(User user, int useridoffriend){
-        Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
-        try{
-            CoreMethods.friendRequestByUserid(user, useridoffriend);
+            CoreMethods.addFriend(user, useridoffriend);
             return XMLConverters.resultXml(true, "");
         } catch (GeneralException gex) {
             return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
@@ -491,10 +456,10 @@ public class CoreMethodsReturningXML {
         }
     }
 
-    public static Element addToMyRooms(User user, int roomid) throws GeneralException {
+    public static Element joinRoom(User user, int roomid) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
         try{
-            CoreMethods.addToMyRooms(user, roomid);
+            CoreMethods.joinRoom(user, roomid);
             return XMLConverters.resultXml(true, "");
         } catch (GeneralException gex) {
             return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
@@ -553,11 +518,11 @@ public class CoreMethodsReturningXML {
         }
     }
 
-    public static Element requestRoomPermission(User user, int roomid){
+
+    public static Element areFriends(int userid1, int userid2){
         Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
         try{
-            CoreMethods.requestRoomPermission(user, roomid);
-            return XMLConverters.resultXml(true, "");
+            return XMLConverters.booleanAsElement(CoreMethods.areFriends(userid1, userid2), "arefriends");
         } catch (GeneralException gex) {
             return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
         } catch (Exception ex) {
@@ -566,22 +531,10 @@ public class CoreMethodsReturningXML {
         }
     }
 
-    public static Element isFriend(User user, int useridofotheruser){
+    public static Element isAllowedInRoom(int userid, int roomid) {
         Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
         try{
-            return XMLConverters.booleanAsElement(CoreMethods.isFriend(user, useridofotheruser), "isfriend");
-        } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
-        } catch (Exception ex) {
-            logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
-        }
-    }
-
-    public static Element isAllowedInRoom(User user, int roomid) {
-        Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
-        try{
-            return XMLConverters.booleanAsElement(CoreMethods.isAllowedInRoom(user, roomid), "isallowedinroom");
+            return XMLConverters.booleanAsElement(CoreMethods.isAllowedInRoom(userid, roomid), "isallowedinroom");
         } catch (GeneralException gex) {
             return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
         } catch (Exception ex) {
