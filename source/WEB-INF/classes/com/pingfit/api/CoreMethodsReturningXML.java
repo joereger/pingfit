@@ -1,20 +1,15 @@
 package com.pingfit.api;
 
 import com.pingfit.dao.*;
-import com.pingfit.dao.hibernate.HibernateUtil;
 import com.pingfit.util.GeneralException;
 import com.pingfit.exercisechoosers.ExerciseExtended;
-import com.pingfit.friends.Friend;
 import com.pingfit.friends.RoomPermissionRequest;
 import org.apache.log4j.Logger;
 import org.jdom.Element;
 import org.jdom.Text;
-import org.hibernate.criterion.Restrictions;
 
 import java.util.Iterator;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Date;
 
 /**
  * User: Joe Reger Jr
@@ -90,7 +85,6 @@ public class CoreMethodsReturningXML {
         }
     }
 
-
     public static Element getCurrentExercise(User user) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
@@ -151,14 +145,13 @@ public class CoreMethodsReturningXML {
             return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
         }
     }
-    
 
     public static Element bigRefresh(User user) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
             Element element = new Element("bigrefresh");
             element.addContent(getCurrentExercise(user));
-            element.addContent(getUserSettings(user));
+            element.addContent(getLoggedInUser(user));
             element.addContent(getExerciseLists(user));
             element.addContent(getRooms(user));
             element.addContent(getCurrentEula());
@@ -200,7 +193,6 @@ public class CoreMethodsReturningXML {
         }
     }
 
-
     public static Element getSecondsUntilNextExercise(User user) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
@@ -216,8 +208,6 @@ public class CoreMethodsReturningXML {
         }
     }
 
-
-
     public static Element skipExercise(User user) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
@@ -231,10 +221,22 @@ public class CoreMethodsReturningXML {
         }
     }
 
-    public static Element getUserSettings(User user) throws GeneralException {
+    public static Element getUser(int userid) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
-            return XMLConverters.userSettingsAsXML(user);
+            return XMLConverters.userAsXML(User.get(userid));
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+        }
+    }
+
+    public static Element getLoggedInUser(User user) throws GeneralException {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        try{
+            Element element = new Element("loggedinuser");
+            element.addContent(XMLConverters.userAsXML(user));
+            return element;
         } catch (Exception ex) {
             logger.error("", ex);
             return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
@@ -306,27 +308,14 @@ public class CoreMethodsReturningXML {
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     public static Element getFriends(User user){
         Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
         try{
             Element element = new Element("friends");
-            ArrayList<Friend> friends = CoreMethods.getFriends(user);
+            ArrayList<User> friends = CoreMethods.getFriends(user);
             for (Iterator it = friends.iterator(); it.hasNext(); ) {
-                Friend friend = (Friend)it.next();
-                element.addContent(XMLConverters.friendAsXML(friend));
+                User friend = (User)it.next();
+                element.addContent(XMLConverters.userAsXML(friend));
             }
             return element;
         } catch (GeneralException gex) {
@@ -341,10 +330,10 @@ public class CoreMethodsReturningXML {
         Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
         try{
             Element element = new Element("friendrequests");
-            ArrayList<Friend> friendrequests = CoreMethods.getFriendRequests(user);
+            ArrayList<User> friendrequests = CoreMethods.getFriendRequests(user);
             for (Iterator it = friendrequests.iterator(); it.hasNext(); ) {
-                Friend friend = (Friend)it.next();
-                element.addContent(XMLConverters.friendAsXML(friend));
+                User friend = (User)it.next();
+                element.addContent(XMLConverters.userAsXML(friend));
             }
             return element;
         } catch (GeneralException gex) {
@@ -517,7 +506,6 @@ public class CoreMethodsReturningXML {
             return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
         }
     }
-
 
     public static Element areFriends(int userid1, int userid2){
         Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);

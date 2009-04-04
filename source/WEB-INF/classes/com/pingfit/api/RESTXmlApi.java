@@ -118,8 +118,14 @@ public class RESTXmlApi extends HttpServlet {
                             }
                             String ip = request.getRemoteAddr();
                             element = CoreMethodsReturningXML.agreeToEula(user, eulaid, ip);
-                        } else if (method.equalsIgnoreCase("getUserSettings")){
-                            element = CoreMethodsReturningXML.getUserSettings(user);
+                        } else if (method.equalsIgnoreCase("getUser")){
+                            int userid = 0;
+                            if (Num.isinteger(request.getParameter("userid"))){
+                                userid = Integer.parseInt(request.getParameter("userid"));
+                            }
+                            element = CoreMethodsReturningXML.getUser(userid);
+                        } else if (method.equalsIgnoreCase("getLoggedInUser")){
+                            element = CoreMethodsReturningXML.getLoggedInUser(user);
                         } else if (method.equalsIgnoreCase("bigRefresh")){
                             element = CoreMethodsReturningXML.bigRefresh(user);
                         } else if (method.equalsIgnoreCase("getRooms")){

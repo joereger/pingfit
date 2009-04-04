@@ -94,7 +94,7 @@ public class ExerciseChooserList implements ExerciseChooser {
             //logger.debug("attempts="+attempts);
             //logger.debug("out.size()="+out.size());
             try{
-                if (exerciselistitems.get(i)!=null){
+                if (exerciselistitems.size()>=(i+1) && exerciselistitems.get(i)!=null){
                     logger.debug("exerciseid="+exerciselistitems.get(i).getExerciseid());
                     if (addNow){
                         logger.debug("addNow=true");

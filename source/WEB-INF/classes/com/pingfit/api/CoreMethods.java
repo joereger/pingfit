@@ -12,8 +12,6 @@ import com.pingfit.exercisechoosers.ExerciseExtended;
 import com.pingfit.htmluibeans.Registration;
 import com.pingfit.eula.EulaHelper;
 import com.pingfit.htmlui.ValidationException;
-import com.pingfit.htmlui.Pagez;
-import com.pingfit.friends.Friend;
 import com.pingfit.friends.RoomPermissionRequest;
 
 import java.util.*;
@@ -485,11 +483,11 @@ public class CoreMethods {
         return null;
     }
 
-    public static ArrayList<Friend> getFriends(User user) throws GeneralException {
+    public static ArrayList<User> getFriends(User user) throws GeneralException {
         if (!isUserOk(user)){
             throw new GeneralException("User invalid.");
         }
-        ArrayList<Friend> out = new ArrayList<Friend>();
+        ArrayList<User> out = new ArrayList<User>();
         List<Userfriend> userfriends = HibernateUtil.getSession().createCriteria(Userfriend.class)
                                            .add(Restrictions.eq("userid", user.getUserid()))
                                            .add(Restrictions.eq("ispendingapproval", false))
@@ -498,19 +496,16 @@ public class CoreMethods {
         for (Iterator<Userfriend> userfriendIterator=userfriends.iterator(); userfriendIterator.hasNext();) {
             Userfriend userfriend=userfriendIterator.next();
             User u = User.get(userfriend.getUseridoffriend());
-            Friend friend = new Friend();
-            friend.setUserid(u.getUserid());
-            friend.setNickname(u.getNickname());
-            out.add(friend);
+            out.add(u);
         }
         return out;
     }
 
-    public static ArrayList<Friend> getFriendRequests(User user) throws GeneralException {
+    public static ArrayList<User> getFriendRequests(User user) throws GeneralException {
         if (!isUserOk(user)){
             throw new GeneralException("User invalid.");
         }
-        ArrayList<Friend> out = new ArrayList<Friend>();
+        ArrayList<User> out = new ArrayList<User>();
         List<Userfriend> userfriends = HibernateUtil.getSession().createCriteria(Userfriend.class)
                                            .add(Restrictions.eq("useridoffriend", user.getUserid()))
                                            .add(Restrictions.eq("ispendingapproval", true))
@@ -519,10 +514,7 @@ public class CoreMethods {
         for (Iterator<Userfriend> userfriendIterator=userfriends.iterator(); userfriendIterator.hasNext();) {
             Userfriend userfriend=userfriendIterator.next();
             User u = User.get(userfriend.getUserid());
-            Friend friend = new Friend();
-            friend.setUserid(u.getUserid());
-            friend.setNickname(u.getNickname());
-            out.add(friend);
+            out.add(u);
         }
         return out;
     }
@@ -897,10 +889,10 @@ public class CoreMethods {
         ArrayList<Room> out = new ArrayList<Room>();
         try{
             //Get a list of friends' userids
-            ArrayList<Friend> friends = getFriends(user);
+            ArrayList<User> friends = getFriends(user);
             ArrayList<Integer> friendUserids = new ArrayList<Integer>();
-            for (Iterator<Friend> iterator=friends.iterator(); iterator.hasNext();) {
-                Friend friend=iterator.next();
+            for (Iterator<User> iterator=friends.iterator(); iterator.hasNext();) {
+                User friend=iterator.next();
                 friendUserids.add(friend.getUserid());
             }
             //Find roomids that friends are in
@@ -942,10 +934,10 @@ public class CoreMethods {
         }
         ArrayList<Room> out = new ArrayList<Room>();
         //Get a list of friends' userids
-        ArrayList<Friend> friends = getFriends(user);
+        ArrayList<User> friends = getFriends(user);
         ArrayList<Integer> friendUserids = new ArrayList<Integer>();
-        for (Iterator<Friend> iterator=friends.iterator(); iterator.hasNext();) {
-            Friend friend=iterator.next();
+        for (Iterator<User> iterator=friends.iterator(); iterator.hasNext();) {
+            User friend=iterator.next();
             friendUserids.add(friend.getUserid());
         }
         //Find roomids that friends are moderating
@@ -984,9 +976,9 @@ public class CoreMethods {
         if (userid1==0 || userid2==0){
             return false;
         }
-        ArrayList<Friend> friends = getFriends(User.get(userid1));
-        for (Iterator<Friend> iterator=friends.iterator(); iterator.hasNext();) {
-            Friend friend=iterator.next();
+        ArrayList<User> friends = getFriends(User.get(userid1));
+        for (Iterator<User> iterator=friends.iterator(); iterator.hasNext();) {
+            User friend=iterator.next();
             if (friend.getUserid()==userid2){
                 return true;
             }

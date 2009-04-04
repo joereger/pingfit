@@ -8,7 +8,6 @@ import com.pingfit.util.Time;
 import com.pingfit.systemprops.SystemProperty;
 import com.pingfit.exercisechoosers.ExerciseExtended;
 import com.pingfit.friends.RoomPermissionRequest;
-import com.pingfit.friends.Friend;
 
 import java.util.Iterator;
 
@@ -44,12 +43,6 @@ public class XMLConverters {
         return element;
     }
 
-    public static Element friendAsXML(Friend friend) {
-        Element element = new Element("friend");
-        element.addContent(nameValueElement("userid", String.valueOf(friend.getUserid())));
-        element.addContent(nameValueElement("nickname", friend.getNickname()));
-        return element;
-    }
 
     public static Element eulaAsXML(Eula eula) {
         Element element = new Element("eula");
@@ -73,9 +66,9 @@ public class XMLConverters {
         return element;
     }
 
-    public static Element userSettingsAsXML(User user) {
-        Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
-        Element element = new Element("usersettings");
+    public static Element userAsXML(User user) {
+        Logger logger = Logger.getLogger(XMLConverters.class);
+        Element element = new Element("user");
         element.addContent(nameValueElement("userid", String.valueOf(user.getUserid())));
         element.addContent(nameValueElement("email", String.valueOf(user.getEmail())));
         element.addContent(nameValueElement("firstname", String.valueOf(user.getFirstname())));
@@ -96,20 +89,24 @@ public class XMLConverters {
         return element;
     }
 
+   
+
     public static Element exerciseAsXML(ExerciseExtended exExt) {
         Element element = new Element("exercise");
-        element.addContent(nameValueElement("exerciseid", String.valueOf(exExt.getExercise().getExerciseid())));
-        element.addContent(nameValueElement("title", String.valueOf(exExt.getExercise().getTitle())));
-        element.addContent(nameValueElement("description", String.valueOf(exExt.getExercise().getDescription())));
-        String imageUrl = "http://"+ SystemProperty.getProp(SystemProperty.PROP_BASEURL) + "/images/exercises/" + exExt.getExercise().getImage();
-        element.addContent(nameValueElement("image", imageUrl));
-        element.addContent(nameValueElement("imagecredit", String.valueOf(exExt.getExercise().getImagecredit())));
-        element.addContent(nameValueElement("reps", String.valueOf(exExt.getExercise().getReps())));
-        element.addContent(nameValueElement("repsfromlist", String.valueOf(exExt.getRepsfromlist())));
-        element.addContent(nameValueElement("ispublic", String.valueOf(exExt.getExercise().getIspublic())));
-        element.addContent(nameValueElement("issystem", String.valueOf(exExt.getExercise().getIssystem())));
-        element.addContent(nameValueElement("exerciseplaceinlist", exExt.getExerciseplaceinlist()));
-        element.addContent(nameValueElement("secondsuntilnextexercise", String.valueOf(exExt.getSecondsuntilnextexercise())));
+        if (exExt!=null && exExt.getExercise()!=null){
+            element.addContent(nameValueElement("exerciseid", String.valueOf(exExt.getExercise().getExerciseid())));
+            element.addContent(nameValueElement("title", String.valueOf(exExt.getExercise().getTitle())));
+            element.addContent(nameValueElement("description", String.valueOf(exExt.getExercise().getDescription())));
+            String imageUrl = "http://"+ SystemProperty.getProp(SystemProperty.PROP_BASEURL) + "/images/exercises/" + exExt.getExercise().getImage();
+            element.addContent(nameValueElement("image", imageUrl));
+            element.addContent(nameValueElement("imagecredit", String.valueOf(exExt.getExercise().getImagecredit())));
+            element.addContent(nameValueElement("reps", String.valueOf(exExt.getExercise().getReps())));
+            element.addContent(nameValueElement("repsfromlist", String.valueOf(exExt.getRepsfromlist())));
+            element.addContent(nameValueElement("ispublic", String.valueOf(exExt.getExercise().getIspublic())));
+            element.addContent(nameValueElement("issystem", String.valueOf(exExt.getExercise().getIssystem())));
+            element.addContent(nameValueElement("exerciseplaceinlist", exExt.getExerciseplaceinlist()));
+            element.addContent(nameValueElement("secondsuntilnextexercise", String.valueOf(exExt.getSecondsuntilnextexercise())));
+        }
         return element;
     }
 
