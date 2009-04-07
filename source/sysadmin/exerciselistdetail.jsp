@@ -309,27 +309,25 @@ String acl = "sysadmin";
                             <td valign="top">
                                 <%=Textbox.getHtml("reps", "10", 255, 2, "", "")%>
                             </td>
-                            <td valign="top">
+                            <td valign="middle">
                                 Reps
                             </td>
                             <td valign="top">
                                 <%
                                     TreeMap<String, String> options = new TreeMap<String, String>();
-                                    options.put(".25", "15");
-                                    options.put(".5", "30");
-                                    options.put("1", "60");
-                                    options.put("2", "120");
-                                    options.put("3", "180");
-                                    options.put("4", "240");
-                                    options.put("5", "300");
-                                    options.put("10", "600");
-                                    options.put("15", "900");
-                                    options.put("20", "1200");
-                                    options.put("40", "2400");
+                                    options.put("60", "1");
+                                    options.put("120", "2");
+                                    options.put("180", "3");
+                                    options.put("240", "4");
+                                    options.put("300", "5");
+                                    options.put("600", "10");
+                                    options.put("900", "15");
+                                    options.put("1200", "20");
+                                    options.put("2400", "40");
                                 %>
                                 <%=Dropdown.getHtml("timeinseconds", "1200", options, "", "")%>
                             </td>
-                            <td valign="top">
+                            <td valign="middle">
                                 Mins
                             </td>
                             <td valign="top">

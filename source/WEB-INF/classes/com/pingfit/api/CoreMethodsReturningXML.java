@@ -22,7 +22,20 @@ public class CoreMethodsReturningXML {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
             CoreMethods.doExercise(user, exerciseid, reps, exerciseplaceinlist);
-            return getCurrentExercise(user);
+            return XMLConverters.resultXml(true, "");
+        } catch (GeneralException gex) {
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+        }
+    }
+
+    public static Element skipExercise(User user) throws GeneralException {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        try{
+            CoreMethods.skipExercise(user);
+            return XMLConverters.resultXml(true, "");
         } catch (GeneralException gex) {
             return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
         } catch (Exception ex) {
@@ -98,6 +111,25 @@ public class CoreMethodsReturningXML {
         }
     }
 
+    public static Element getNextExercises(User user) throws GeneralException {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        try{
+            Element element = new Element("nextexercises");
+            element.setAttribute("secondsuntilnextexercise", String.valueOf(CoreMethods.getSecondsUntilNextExercise(user)));
+            ArrayList<ExerciseExtended> nextExercises = CoreMethods.getNextExercises(user);
+            for (Iterator it = nextExercises.iterator(); it.hasNext(); ) {
+                ExerciseExtended exExt = (ExerciseExtended)it.next();
+                element.addContent(XMLConverters.exerciseAsXML(exExt));
+            }
+            return element;
+        } catch (GeneralException gex) {
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+        }
+    }
+
     public static Element getExerciseLists(User user) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
@@ -150,7 +182,7 @@ public class CoreMethodsReturningXML {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
             Element element = new Element("bigrefresh");
-            element.addContent(getCurrentExercise(user));
+            element.addContent(getNextExercises(user));
             element.addContent(getLoggedInUser(user));
             element.addContent(getExerciseLists(user));
             element.addContent(getRooms(user));
@@ -200,19 +232,6 @@ public class CoreMethodsReturningXML {
             Element element = new Element("secondsuntilnextexercise");
             element.setContent(new Text(String.valueOf(secondsuntilnextexercise)));
             return element;
-        } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
-        } catch (Exception ex) {
-            logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
-        }
-    }
-
-    public static Element skipExercise(User user) throws GeneralException {
-        Logger logger = Logger.getLogger(CoreMethods.class);
-        try{
-            CoreMethods.skipExercise(user);
-            return getCurrentExercise(user);
         } catch (GeneralException gex) {
             return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
         } catch (Exception ex) {

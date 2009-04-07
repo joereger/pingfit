@@ -100,12 +100,13 @@ public class XMLConverters {
             String imageUrl = "http://"+ SystemProperty.getProp(SystemProperty.PROP_BASEURL) + "/images/exercises/" + exExt.getExercise().getImage();
             element.addContent(nameValueElement("image", imageUrl));
             element.addContent(nameValueElement("imagecredit", String.valueOf(exExt.getExercise().getImagecredit())));
-            element.addContent(nameValueElement("reps", String.valueOf(exExt.getExercise().getReps())));
-            element.addContent(nameValueElement("repsfromlist", String.valueOf(exExt.getRepsfromlist())));
+            element.addContent(nameValueElement("reps", String.valueOf(exExt.getReps())));
             element.addContent(nameValueElement("ispublic", String.valueOf(exExt.getExercise().getIspublic())));
             element.addContent(nameValueElement("issystem", String.valueOf(exExt.getExercise().getIssystem())));
             element.addContent(nameValueElement("exerciseplaceinlist", exExt.getExerciseplaceinlist()));
-            element.addContent(nameValueElement("secondsuntilnextexercise", String.valueOf(exExt.getSecondsuntilnextexercise())));
+            element.addContent(nameValueElement("timeinseconds", String.valueOf(exExt.getTimeinseconds())));
+            element.addContent(nameValueElement("exerciselistid", String.valueOf(exExt.getExerciselistid())));
+            element.addContent(nameValueElement("exerciselistitemid", String.valueOf(exExt.getExerciselistitemid())));
         }
         return element;
     }
@@ -145,6 +146,7 @@ public class XMLConverters {
         element.addContent(nameValueElement("issystem", String.valueOf(exerciselist.getIssystem())));
         element.addContent(nameValueElement("issystemdefault", String.valueOf(exerciselist.getIssystemdefault())));
         element.addContent(nameValueElement("useridofcreator", String.valueOf(exerciselist.getUseridofcreator())));
+        element.addContent(nameValueElement("isautoadvance", String.valueOf(exerciselist.getIsautoadvance())));
         if (includeExerciselistitems){
             for (Iterator<Exerciselistitem> iterator=exerciselist.getExerciselistitems().iterator(); iterator.hasNext();) {
                 Exerciselistitem exerciselistitem=iterator.next();

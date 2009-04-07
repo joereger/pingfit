@@ -95,6 +95,8 @@ public class RESTXmlApi extends HttpServlet {
                             element = CoreMethodsReturningXML.doExercise(user, exerciseid, reps, request.getParameter("exerciseplaceinlist"));
                         } else if (method.equalsIgnoreCase("getCurrentExercise")){
                             element = CoreMethodsReturningXML.getCurrentExercise(user);
+                        } else if (method.equalsIgnoreCase("getNextExercises")){
+                            element = CoreMethodsReturningXML.getNextExercises(user);
                         } else if (method.equalsIgnoreCase("signUp")){
                             String signupemail = request.getParameter("signupemail");
                             String signuppassword = request.getParameter("signuppassword");

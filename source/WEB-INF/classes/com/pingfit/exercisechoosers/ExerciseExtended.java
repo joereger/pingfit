@@ -10,9 +10,11 @@ import com.pingfit.dao.Exercise;
 public class ExerciseExtended {
 
     private Exercise exercise;
-    private int repsfromlist;
+    private int reps;
     private String exerciseplaceinlist;
-    private int secondsuntilnextexercise=0;
+    private int timeinseconds=0;
+    private int exerciselistitemid;
+    private int exerciselistid;
 
     public Exercise getExercise() {
         return exercise;
@@ -22,12 +24,12 @@ public class ExerciseExtended {
         this.exercise=exercise;
     }
 
-    public int getRepsfromlist() {
-        return repsfromlist;
+    public int getReps() {
+        return reps;
     }
 
-    public void setRepsfromlist(int repsfromlist) {
-        this.repsfromlist=repsfromlist;
+    public void setReps(int reps) {
+        this.reps=reps;
     }
 
     public String getExerciseplaceinlist() {
@@ -38,11 +40,27 @@ public class ExerciseExtended {
         this.exerciseplaceinlist=exerciseplaceinlist;
     }
 
-    public int getSecondsuntilnextexercise() {
-        return secondsuntilnextexercise;
+    public int getTimeinseconds() {
+        return timeinseconds;
     }
 
-    public void setSecondsuntilnextexercise(int secondsuntilnextexercise) {
-        this.secondsuntilnextexercise=secondsuntilnextexercise;
+    public void setTimeinseconds(int timeinseconds) {
+        this.timeinseconds=timeinseconds;
+    }
+
+    public int getExerciselistitemid() {
+        return exerciselistitemid;
+    }
+
+    public void setExerciselistitemid(int exerciselistitemid) {
+        this.exerciselistitemid=exerciselistitemid;
+    }
+
+    public int getExerciselistid() {
+        return exerciselistid;
+    }
+
+    public void setExerciselistid(int exerciselistid) {
+        this.exerciselistid=exerciselistid;
     }
 }

@@ -290,6 +290,25 @@ public class CoreMethods {
         return null;
     }
 
+    public static ArrayList<ExerciseExtended> getNextExercises(User user) throws GeneralException {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        try{
+            if (!isUserOk(user)){
+                return null;
+            }
+            //Find the next exercises using the ExerciseChooser infrastructure
+            ExerciseChooser exerciseChooser = ExerciseChooserFactory.get(user.getExercisechooserid());
+            if(exerciseChooser!=null){
+                return exerciseChooser.getNextExercises(user, 25);
+            } else {
+                throw new GeneralException("ExerciseChooser is null... a sysadmin is working on it.");
+            }
+        } catch (Exception ex) {
+            logger.error("", ex);
+            throw new GeneralException("Database error... sorry... please try again.");
+        }
+    }
+
     public static Exercise getExercise(int exerciseid) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{

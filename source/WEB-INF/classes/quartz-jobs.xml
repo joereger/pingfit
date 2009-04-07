@@ -44,8 +44,8 @@
             <group>surveyTriggers</group>
             <job-name>roomExerciseProgress</job-name>
             <job-group>surveyJobs</job-group>
-            <!-- every x minutes -->
-            <cron-expression>0 0/1 * * * ?</cron-expression>
+            <!-- every x seconds -->
+            <cron-expression>0/60 * * * * ?</cron-expression>
           </cron>
         </trigger>
     </job>

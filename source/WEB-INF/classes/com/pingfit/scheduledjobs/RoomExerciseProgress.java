@@ -26,7 +26,7 @@ import java.util.*;
  */
 public class RoomExerciseProgress implements Job {
 
-
+    private static int quartzrunseveryxseconds = 60;
 
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         Logger logger = Logger.getLogger(this.getClass().getName());
@@ -37,10 +37,10 @@ public class RoomExerciseProgress implements Job {
                                                    .add(Restrictions.eq("isenabled", true))
                                                    .setCacheable(true)
                                                    .list();
-                for (Iterator<Room> iterator=rooms.iterator(); iterator.hasNext();) {
-                    Room room=iterator.next();
-                    processRoom(room);
-                }
+            for (Iterator<Room> iterator=rooms.iterator(); iterator.hasNext();) {
+                Room room=iterator.next();
+                processRoom(room);
+            }
         } else {
             logger.debug("InstanceProperties.getRunScheduledTasksOnThisInstance() is FALSE for this instance so this task is not being executed.");
         }
@@ -49,27 +49,17 @@ public class RoomExerciseProgress implements Job {
     public static void processRoom(Room room){
         Logger logger = Logger.getLogger(RoomExerciseProgress.class);
         try{
+            ExerciseChooserGroup ecg = new ExerciseChooserGroup();
             logger.debug("---");
             logger.debug("---");
             logger.debug("processing roomid="+room.getRoomid()+" "+room.getName());
-            int secondsuntilnext = 0;
-            Calendar last = Time.getCalFromDate(room.getLastexercisetime());
-            Calendar next = Time.xSecondsAgo(last, (-1)*room.getExerciseeveryxminutes()*60);
-            logger.debug("last="+Time.dateformatcompactwithtime(last));
-            logger.debug("now ="+Time.dateformatcompactwithtime(Calendar.getInstance()));
-            logger.debug("next="+Time.dateformatcompactwithtime(next));
-            if (next.after(Calendar.getInstance())){
-                logger.debug("next.after(Calendar.getInstance())");
-                secondsuntilnext = DateDiff.dateDiff("second", next, Calendar.getInstance());
-            } else {
-                logger.debug("!next.after(Calendar.getInstance())");
-            }
-            logger.debug("secondsuntilnext="+secondsuntilnext);
-            if (secondsuntilnext<60){
+            //Figure out how long until the next exercise
+            int secondsuntilnext = ecg.getSecondsUntilNextExercise(room.getExerciselistid(), room.getLastexerciseplaceinlist(), Time.getCalFromDate(room.getLastexercisetime()));
+            //If it's time to workout
+            if (secondsuntilnext<=quartzrunseveryxseconds){
                 logger.debug("need to move the group forward");
                 //Move the exercise forward by recording lastexerciseplaceinlist
                 String lastexerciseplaceinlist = "";
-                ExerciseChooserGroup ecg = new ExerciseChooserGroup();
                 ArrayList<ExerciseExtended> currentExercises = ecg.getNextExercises(room.getExerciselistid(), room.getLastexerciseplaceinlist(), 1);
                 if (currentExercises!=null && currentExercises.size()>0){
                     ExerciseExtended currentExercise = currentExercises.get(0);
@@ -77,8 +67,8 @@ public class RoomExerciseProgress implements Job {
                 }
                 room.setLastexerciseplaceinlist(lastexerciseplaceinlist);
                 logger.debug("lastexerciseplaceinlist="+lastexerciseplaceinlist);
-                //@todo correct for the fact that this won't run at the exact moment... there's an offset of secondsuntilnext seconds
-                if (secondsuntilnext>0 && secondsuntilnext<60){
+                //Correct for the fact that this won't run at the exact moment... there's an offset of secondsuntilnext seconds
+                if (secondsuntilnext>0 && secondsuntilnext<=quartzrunseveryxseconds){
                     logger.debug("adding offset of "+secondsuntilnext+" seconds");
                     Date nowDate = new Date();
                     Calendar nowCal = Time.getCalFromDate(nowDate);
