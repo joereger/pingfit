@@ -18,8 +18,8 @@ public class Exerciselist extends BasePersistentClass implements java.io.Seriali
      private boolean issystem;
      private int useridofcreator;
      private boolean ispublic;
-     private int exerciseeveryxminutes;
      private boolean issystemdefault;
+     private boolean isautoadvance;
 
     private Set<Exerciselistitem> exerciselistitems = new HashSet<Exerciselistitem>();
 
@@ -117,13 +117,6 @@ public class Exerciselist extends BasePersistentClass implements java.io.Seriali
         this.ispublic = ispublic;
     }
 
-    public int getExerciseeveryxminutes() {
-        return exerciseeveryxminutes;
-    }
-
-    public void setExerciseeveryxminutes(int exerciseeveryxminutes) {
-        this.exerciseeveryxminutes=exerciseeveryxminutes;
-    }
 
     public boolean getIssystemdefault() {
         return issystemdefault;
@@ -131,5 +124,13 @@ public class Exerciselist extends BasePersistentClass implements java.io.Seriali
 
     public void setIssystemdefault(boolean issystemdefault) {
         this.issystemdefault=issystemdefault;
+    }
+
+    public boolean getIsautoadvance() {
+        return isautoadvance;
+    }
+
+    public void setIsautoadvance(boolean isautoadvance) {
+        this.isautoadvance=isautoadvance;
     }
 }

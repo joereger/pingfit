@@ -188,10 +188,6 @@ public class RESTXmlApi extends HttpServlet {
                         } else if (method.equalsIgnoreCase("createRoom")){
                             String name = request.getParameter("name");
                             String description = request.getParameter("description");
-                            int exerciseeveryxminutes = 0;
-                            if (Num.isinteger(request.getParameter("exerciseeveryxminutes"))){
-                                exerciseeveryxminutes = Integer.parseInt(request.getParameter("exerciseeveryxminutes"));
-                            }
                             int exerciselistid = 0;
                             if (Num.isinteger(request.getParameter("exerciselistid"))){
                                 exerciselistid = Integer.parseInt(request.getParameter("exerciselistid"));
@@ -204,7 +200,7 @@ public class RESTXmlApi extends HttpServlet {
                             if (request.getParameter("isfriendautopermit")!=null && (request.getParameter("isfriendautopermit").equals("true") || request.getParameter("isfriendautopermit").equals("1"))){
                                 isfriendautopermit = true;
                             }
-                            element = CoreMethodsReturningXML.createRoom(user, name, description, exerciseeveryxminutes, exerciselistid, isprivate, isfriendautopermit);
+                            element = CoreMethodsReturningXML.createRoom(user, name, description, exerciselistid, isprivate, isfriendautopermit);
                         } else if (method.equalsIgnoreCase("editRoom")){
                             int roomid = 0;
                             if (Num.isinteger(request.getParameter("roomid"))){
@@ -212,10 +208,6 @@ public class RESTXmlApi extends HttpServlet {
                             }
                             String name = request.getParameter("name");
                             String description = request.getParameter("description");
-                            int exerciseeveryxminutes = 0;
-                            if (Num.isinteger(request.getParameter("exerciseeveryxminutes"))){
-                                exerciseeveryxminutes = Integer.parseInt(request.getParameter("exerciseeveryxminutes"));
-                            }
                             int exerciselistid = 0;
                             if (Num.isinteger(request.getParameter("exerciselistid"))){
                                 exerciselistid = Integer.parseInt(request.getParameter("exerciselistid"));
@@ -228,7 +220,7 @@ public class RESTXmlApi extends HttpServlet {
                             if (request.getParameter("isfriendautopermit")!=null && (request.getParameter("isfriendautopermit").equals("true") || request.getParameter("isfriendautopermit").equals("1"))){
                                 isfriendautopermit = true;
                             }
-                            element = CoreMethodsReturningXML.editRoom(user, roomid, name, description, exerciseeveryxminutes, exerciselistid, isprivate, isfriendautopermit);
+                            element = CoreMethodsReturningXML.editRoom(user, roomid, name, description, exerciselistid, isprivate, isfriendautopermit);
                         } else if (method.equalsIgnoreCase("deleteRoom")){
                             int roomid = 0;
                             if (Num.isinteger(request.getParameter("roomid"))){

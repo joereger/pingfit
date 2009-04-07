@@ -20,9 +20,6 @@
         <property name="description" type="text">
             <column name="description" not-null="true" />
         </property>
-        <property name="exerciseeveryxminutes" type="int">
-            <column name="exerciseeveryxminutes" not-null="true" />
-        </property>
         <property name="issystem" type="boolean">
             <column name="issystem" />
         </property>
@@ -34,6 +31,9 @@
         </property>
         <property name="useridofcreator" type="int">
             <column name="useridofcreator" not-null="true" />
+        </property>
+        <property name="isautoadvance" type="boolean">
+            <column name="isautoadvance" />
         </property>
     </class>
 </hibernate-mapping>

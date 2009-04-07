@@ -15,6 +15,9 @@
         <property name="exerciseid" type="int">
             <column name="exerciseid" not-null="true" />
         </property>
+        <property name="timeinseconds" type="int">
+            <column name="timeinseconds" not-null="true" />
+        </property>
         <property name="reps" type="int">
             <column name="reps" not-null="true" />
         </property>

@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
  * Date: Nov 26, 2006
  * Time: 11:57:46 AM
  */
-public class Version14 implements UpgradeDatabaseOneVersion {
+public class Version15 implements UpgradeDatabaseOneVersion {
 
     Logger logger = Logger.getLogger(this.getClass().getName());
 
@@ -27,13 +27,25 @@ public class Version14 implements UpgradeDatabaseOneVersion {
 
         //-----------------------------------
         //-----------------------------------
-        int count = Db.RunSQLUpdate("UPDATE room set isprivate=false");
+        int count = Db.RunSQLUpdate("ALTER TABLE room DROP exerciseeveryxminutes");
         //-----------------------------------
         //-----------------------------------
 
         //-----------------------------------
         //-----------------------------------
-        int counts = Db.RunSQLUpdate("UPDATE room set isfriendautopermit=false");
+        int countd = Db.RunSQLUpdate("ALTER TABLE exerciselist DROP exerciseeveryxminutes");
+        //-----------------------------------
+        //-----------------------------------
+
+        //-----------------------------------
+        //-----------------------------------
+        int countf = Db.RunSQLUpdate("UPDATE exerciselistitem set timeinseconds='1200'");
+        //-----------------------------------
+        //-----------------------------------
+
+        //-----------------------------------
+        //-----------------------------------
+        int counte = Db.RunSQLUpdate("UPDATE exerciselist set isautoadvance=false");
         //-----------------------------------
         //-----------------------------------
 

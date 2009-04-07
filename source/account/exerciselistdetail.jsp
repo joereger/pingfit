@@ -26,8 +26,8 @@ String acl = "account";
     Exerciselist exerciselist = new Exerciselist();
     exerciselist.setIssystem(false);
     exerciselist.setIspublic(true);
+    exerciselist.setIsautoadvance(false);
     exerciselist.setIssystemdefault(false);
-    exerciselist.setExerciseeveryxminutes(20);
     exerciselist.setUseridofcreator(Pagez.getUserSession().getUser().getUserid());
     if (request.getParameter("exerciselistid") != null && !request.getParameter("exerciselistid").equals("0") && Num.isinteger(request.getParameter("exerciselistid"))) {
         exerciselist = Exerciselist.get(Integer.parseInt(request.getParameter("exerciselistid")));
@@ -42,12 +42,12 @@ String acl = "account";
             }
             exerciselist.setTitle(Textbox.getValueFromRequest("title", "Title", true, DatatypeString.DATATYPEID));
             exerciselist.setDescription(Textarea.getValueFromRequest("description", "Description", true));
-            exerciselist.setExerciseeveryxminutes(Textbox.getIntFromRequest("exerciseeveryxminutes", "Exercise Every X Minutes", true, DatatypeInteger.DATATYPEID));
             exerciselist.save();
             if (exerciselist.getExerciselistitems()==null || exerciselist.getExerciselistitems().size()==0){
                 Exerciselistitem eli = new Exerciselistitem();
                 eli.setExerciselistid(exerciselist.getExerciselistid());
                 eli.setExerciseid(1);
+                eli.setTimeinseconds(1200);
                 eli.setReps(10);
                 eli.setNum(1);
                 eli.save();
@@ -75,6 +75,7 @@ String acl = "account";
             Exerciselistitem eli = new Exerciselistitem();
             eli.setExerciselistid(exerciselist.getExerciselistid());
             eli.setExerciseid(Integer.parseInt(request.getParameter("exerciseid")));
+            eli.setTimeinseconds(1200);
             eli.setReps(Textbox.getIntFromRequest("reps", "Reps", true, DatatypeInteger.DATATYPEID));
             eli.setNum(currentmaxnum+1);
             eli.save();

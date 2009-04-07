@@ -24,8 +24,8 @@ public class SystemExerciseLists {
             Exerciselist ex = new Exerciselist();
             ex.setTitle("Basic Exercises");
             ex.setDescription("This is a good set of starter exercises that you can use to get familiar with the system.");
-            ex.setExerciseeveryxminutes(20);
             ex.setIssystemdefault(false);
+            ex.setIsautoadvance(false);
             ex.setIspublic(true);
             ex.setIssystem(true);
             ex.save();
@@ -34,6 +34,7 @@ public class SystemExerciseLists {
                 Exerciselistitem eli = new Exerciselistitem();
                 eli.setExerciselistid(ex.getExerciselistid());
                 eli.setExerciseid(1);
+                eli.setTimeinseconds(1200);
                 eli.setNum(1);
                 eli.setReps(10);
                 eli.save();
@@ -44,6 +45,7 @@ public class SystemExerciseLists {
                 Exerciselistitem eli = new Exerciselistitem();
                 eli.setExerciselistid(ex.getExerciselistid());
                 eli.setExerciseid(2);
+                eli.setTimeinseconds(1200);
                 eli.setNum(2);
                 eli.setReps(10);
                 eli.save();
@@ -64,6 +66,7 @@ public class SystemExerciseLists {
                 Exerciselistitem eli = new Exerciselistitem();
                 eli.setExerciselistid(ex.getExerciselistid());
                 eli.setExerciseid(4);
+                eli.setTimeinseconds(1200);
                 eli.setNum(4);
                 eli.setReps(10);
                 eli.save();

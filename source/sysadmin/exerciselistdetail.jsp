@@ -14,6 +14,7 @@
 <%@ page import="com.pingfit.helpers.ExercisePropertyValues" %>
 <%@ page import="com.pingfit.dao.*" %>
 <%@ page import="com.pingfit.finders.FindExercises" %>
+<%@ page import="java.util.TreeMap" %>
 
 <%
 Logger logger = Logger.getLogger(this.getClass().getName());
@@ -26,8 +27,8 @@ String acl = "sysadmin";
     Exerciselist exerciselist = new Exerciselist();
     exerciselist.setIssystem(true);
     exerciselist.setIspublic(true);
+    exerciselist.setIsautoadvance(false);
     exerciselist.setIssystemdefault(false);
-    exerciselist.setExerciseeveryxminutes(20);
     exerciselist.setUseridofcreator(Pagez.getUserSession().getUser().getUserid());
     if (request.getParameter("exerciselistid") != null && !request.getParameter("exerciselistid").equals("0") && Num.isinteger(request.getParameter("exerciselistid"))) {
         exerciselist = Exerciselist.get(Integer.parseInt(request.getParameter("exerciselistid")));
@@ -50,8 +51,8 @@ String acl = "sysadmin";
             }
             exerciselist.setTitle(Textbox.getValueFromRequest("title", "Title", true, DatatypeString.DATATYPEID));
             exerciselist.setDescription(Textarea.getValueFromRequest("description", "Description", true));
-            exerciselist.setExerciseeveryxminutes(Textbox.getIntFromRequest("exerciseeveryxminutes", "Exercise Every X Minutes", true, DatatypeInteger.DATATYPEID));
             exerciselist.setIssystemdefault(CheckboxBoolean.getValueFromRequest("issystemdefault"));
+            exerciselist.setIsautoadvance(CheckboxBoolean.getValueFromRequest("isautoadvance"));
             exerciselist.save();
             //If chosen as system default, make sure all others are turned off
             if (exerciselist.getIssystemdefault()){
@@ -83,6 +84,7 @@ String acl = "sysadmin";
             int currentmaxnum = NumFromUniqueResult.getInt("select max(num) from Exerciselistitem where exerciselistid='"+exerciselist.getExerciselistid()+"'");
             Exerciselistitem eli = new Exerciselistitem();
             eli.setExerciselistid(exerciselist.getExerciselistid());
+            eli.setTimeinseconds(Dropdown.getIntFromRequest("timeinseconds", "Time", true));
             eli.setExerciseid(Integer.parseInt(request.getParameter("exerciseid")));
             eli.setReps(Textbox.getIntFromRequest("reps", "Reps", true, DatatypeInteger.DATATYPEID));
             eli.setNum(currentmaxnum+1);
@@ -168,14 +170,6 @@ String acl = "sysadmin";
                         </td>
                     </tr>
 
-                    <tr>
-                        <td valign="top">
-                            <font class="formfieldnamefont">Exercise Every X Minutes</font>
-                        </td>
-                        <td valign="top">
-                            <%=Textbox.getHtml("exerciseeveryxminutes", String.valueOf(exerciselist.getExerciseeveryxminutes()), 5, 5, "", "")%>
-                        </td>
-                    </tr>
 
                     <tr>
                         <td valign="top">
@@ -184,6 +178,16 @@ String acl = "sysadmin";
                             <%=CheckboxBoolean.getHtml("issystemdefault", exerciselist.getIssystemdefault(), "", "")%>
                             <font class="formfieldnamefont">System Default List?</font><br>
                             <font class="tinyfont">(only one allowed in system)</font>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td valign="top">
+                        </td>
+                        <td valign="top">
+                            <%=CheckboxBoolean.getHtml("isautoadvance", exerciselist.getIsautoadvance(), "", "")%>
+                            <font class="formfieldnamefont">Auto Advance?</font><br>
+                            <font class="tinyfont">(user doesn't get Do Exercise button)</font>
                         </td>
                     </tr>
 
@@ -307,6 +311,26 @@ String acl = "sysadmin";
                             </td>
                             <td valign="top">
                                 Reps
+                            </td>
+                            <td valign="top">
+                                <%
+                                    TreeMap<String, String> options = new TreeMap<String, String>();
+                                    options.put(".25", "15");
+                                    options.put(".5", "30");
+                                    options.put("1", "60");
+                                    options.put("2", "120");
+                                    options.put("3", "180");
+                                    options.put("4", "240");
+                                    options.put("5", "300");
+                                    options.put("10", "600");
+                                    options.put("15", "900");
+                                    options.put("20", "1200");
+                                    options.put("40", "2400");
+                                %>
+                                <%=Dropdown.getHtml("timeinseconds", "1200", options, "", "")%>
+                            </td>
+                            <td valign="top">
+                                Mins
                             </td>
                             <td valign="top">
                                 <input type="submit" class="formsubmitbutton" value="Add">

@@ -26,7 +26,6 @@ public class Room extends BasePersistentClass implements java.io.Serializable, A
      private String name;
      private String description;
      private Date createdate;
-     private int exerciseeveryxminutes;
      private int exerciselistid;
      private Date lastexercisetime;
      private String lastexerciseplaceinlist;
@@ -121,14 +120,6 @@ public class Room extends BasePersistentClass implements java.io.Serializable, A
 
     public void setCreatedate(Date createdate) {
         this.createdate=createdate;
-    }
-
-    public int getExerciseeveryxminutes() {
-        return exerciseeveryxminutes;
-    }
-
-    public void setExerciseeveryxminutes(int exerciseeveryxminutes) {
-        this.exerciseeveryxminutes=exerciseeveryxminutes;
     }
 
     public int getExerciselistid() {

@@ -120,8 +120,11 @@ public class XMLConverters {
         element.addContent(nameValueElement("useridofcreator", String.valueOf(room.getUseridofcreator())));
         element.addContent(nameValueElement("name", String.valueOf(room.getName())));
         element.addContent(nameValueElement("description", String.valueOf(room.getDescription())));
-        element.addContent(nameValueElement("exerciseeveryxminutes", String.valueOf(room.getExerciseeveryxminutes())));
         element.addContent(nameValueElement("exerciselistid", String.valueOf(room.getExerciselistid())));
+        Exerciselist exerciselist = Exerciselist.get(room.getExerciselistid());
+        if (exerciselist!=null && exerciselist.getExerciselistid()>0){
+            element.addContent(exerciseListAsXML(exerciselist, false, false));
+        }
         return element;
     }
 

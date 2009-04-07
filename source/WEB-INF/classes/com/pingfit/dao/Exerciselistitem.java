@@ -12,6 +12,7 @@ public class Exerciselistitem extends BasePersistentClass implements java.io.Ser
      private int exerciselistitemid;
      private int exerciselistid;
      private int exerciseid;
+     private int timeinseconds;
      private int reps;
      private int num;
 
@@ -91,5 +92,13 @@ public class Exerciselistitem extends BasePersistentClass implements java.io.Ser
 
     public void setNum(int num) {
         this.num = num;
+    }
+
+    public int getTimeinseconds() {
+        return timeinseconds;
+    }
+
+    public void setTimeinseconds(int timeinseconds) {
+        this.timeinseconds=timeinseconds;
     }
 }

@@ -370,10 +370,10 @@ public class CoreMethodsReturningXML {
         }
     }
 
-    public static Element createRoom(User user, String name, String description, int exerciseeveryxminutes, int exerciselistid, boolean isprivate, boolean isfriendautopermit) throws GeneralException{
+    public static Element createRoom(User user, String name, String description, int exerciselistid, boolean isprivate, boolean isfriendautopermit) throws GeneralException{
         Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
         try{
-            CoreMethods.createRoom(user, name, description, exerciseeveryxminutes, exerciselistid, isprivate, isfriendautopermit);
+            CoreMethods.createRoom(user, name, description, exerciselistid, isprivate, isfriendautopermit);
             return XMLConverters.resultXml(true, "");
         } catch (GeneralException gex) {
             return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
@@ -383,10 +383,10 @@ public class CoreMethodsReturningXML {
         }
     }
 
-    public static Element editRoom(User user, int roomid, String name, String description, int exerciseeveryxminutes, int exerciselistid, boolean isprivate, boolean isfriendautopermit) throws GeneralException{
+    public static Element editRoom(User user, int roomid, String name, String description, int exerciselistid, boolean isprivate, boolean isfriendautopermit) throws GeneralException{
         Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
         try{
-            CoreMethods.editRoom(user, roomid, name, description, exerciseeveryxminutes, exerciselistid, isprivate, isfriendautopermit);
+            CoreMethods.editRoom(user, roomid, name, description, exerciselistid, isprivate, isfriendautopermit);
             return XMLConverters.resultXml(true, "");
         } catch (GeneralException gex) {
             return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());

@@ -43,9 +43,6 @@
             <column name="createdate" not-null="true" />
         </property>
 
-        <property name="exerciseeveryxminutes" type="int">
-            <column name="exerciseeveryxminutes" not-null="true" />
-        </property>
 
         <property name="exerciselistid" type="int">
             <column name="exerciselistid" not-null="true" />

@@ -463,7 +463,6 @@ public class CoreMethods {
                 Room room = new Room();
                 room.setCreatedate(new Date());
                 room.setDescription(exerciselist.getDescription());
-                room.setExerciseeveryxminutes(exerciselist.getExerciseeveryxminutes());
                 room.setExerciselistid(exerciselist.getExerciselistid());
                 room.setIsenabled(true);
                 room.setIssystem(exerciselist.getIssystem());
@@ -612,10 +611,20 @@ public class CoreMethods {
         }
     }
 
-    public static void createRoom(User user, String name, String description, int exerciseeveryxminutes, int exerciselistid, boolean isprivate, boolean isfriendautopermit) throws GeneralException{
+    public static void createRoom(User user, String name, String description, int exerciselistid, boolean isprivate, boolean isfriendautopermit) throws GeneralException{
         Logger logger = Logger.getLogger(CoreMethods.class);
         if (!isUserOk(user)){
             throw new GeneralException("User invalid.");
+        }
+        if (name==null || name.equals("")){
+            throw new GeneralException("Room Name is required.");
+        }
+        if (description==null || description.equals("")){
+            throw new GeneralException("Room Description is required.");
+        }
+        Exerciselist exList = Exerciselist.get(exerciselistid);
+        if (exList==null || exList.getExerciselistid()<0){
+            throw new GeneralException("The ExerciseListId doesn't appear valid.");
         }
         List<Room> rooms = HibernateUtil.getSession().createCriteria(Room.class)
                                             .add(Restrictions.eq("useridofcreator", user.getUserid()))
@@ -629,7 +638,6 @@ public class CoreMethods {
                 room.setName(name);
                 room.setDescription(description);
                 room.setCreatedate(new Date());
-                room.setExerciseeveryxminutes(exerciseeveryxminutes);
                 room.setExerciselistid(exerciselistid);
                 room.setIsenabled(true);
                 room.setIssystem(false);
@@ -650,14 +658,24 @@ public class CoreMethods {
             }
         } else {
             //@todo throw error, room by that name already exists
-            throw new GeneralException("A room by that name already exists.");
+            throw new GeneralException("A Room by that name already exists for this user.");
         }
     }
 
-    public static void editRoom(User user, int roomid, String name, String description, int exerciseeveryxminutes, int exerciselistid, boolean isprivate, boolean isfriendautopermit) throws GeneralException{
+    public static void editRoom(User user, int roomid, String name, String description, int exerciselistid, boolean isprivate, boolean isfriendautopermit) throws GeneralException{
         Logger logger = Logger.getLogger(CoreMethods.class);
         if (!isUserOk(user)){
             throw new GeneralException("User invalid.");
+        }
+        if (name==null || name.equals("")){
+            throw new GeneralException("Room Name is required.");
+        }
+        if (description==null || description.equals("")){
+            throw new GeneralException("Room Description is required.");
+        }
+        Exerciselist exList = Exerciselist.get(exerciselistid);
+        if (exList==null || exList.getExerciselistid()<0){
+            throw new GeneralException("The ExerciseListId doesn't appear valid.");
         }
         try{
             Room room = Room.get(roomid);
@@ -669,7 +687,6 @@ public class CoreMethods {
             }
             room.setName(name);
             room.setDescription(description);
-            room.setExerciseeveryxminutes(exerciseeveryxminutes);
             room.setExerciselistid(exerciselistid);
             room.setIsprivate(isprivate);
             room.setIsfriendautopermit(isfriendautopermit);
