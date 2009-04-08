@@ -47,7 +47,7 @@ public class EulaHelper {
         List results = HibernateUtil.getSession().createQuery("from Usereula where userid='"+user.getUserid()+"'").list();
         for (Iterator<Usereula> iterator = results.iterator(); iterator.hasNext();) {
             Usereula usereula = iterator.next();
-            logger.debug("usereulaid="+usereula.getUsereulaid()+" eulaid="+usereula.getEulaid());
+            logger.debug("userid="+user.getUserid()+" usereulaid="+usereula.getUsereulaid()+" eulaid="+usereula.getEulaid());
             if (usereula.getEulaid()>highestEulaidForUser){
                 highestEulaidForUser = usereula.getEulaid();
                 logger.debug("setting highestEulaidForUser="+highestEulaidForUser);
@@ -58,7 +58,7 @@ public class EulaHelper {
         if (highestEulaidForUser>=getMostRecentEula().getEulaid()){
             logger.debug("returning true because highesteulaidforuser>=getMostRecentEula().getEulaid()");
             return true;
-        }
+        }                   
         logger.debug("returning false");
         return false;
     }

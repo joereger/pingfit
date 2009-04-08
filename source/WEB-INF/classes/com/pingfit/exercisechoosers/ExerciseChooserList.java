@@ -10,6 +10,7 @@ import com.pingfit.util.Num;
 import com.pingfit.util.DateDiff;
 import com.pingfit.util.Time;
 import com.pingfit.util.GeneralException;
+import com.pingfit.api.CoreMethods;
 import org.apache.log4j.Logger;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.Order;
@@ -108,6 +109,11 @@ public class ExerciseChooserList implements ExerciseChooser {
             if (i>=exerciselistitems.size()){ i = 0; }
             if (out.size()>=numbertoget){ break; }
         }
+        //If there isn't one, find the default system ex just to make sure things don't crash and get ugly on the client side
+        if (out.size()==0){
+            try{out.add(CoreMethods.getDefaultSystemExerciseExtended());}catch(Exception ex){logger.error("", ex);}
+        }
+        //Return
         return out;
     }
 

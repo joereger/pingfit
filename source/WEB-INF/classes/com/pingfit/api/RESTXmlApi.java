@@ -53,11 +53,11 @@ public class RESTXmlApi extends HttpServlet {
         String method = request.getParameter("method");
         //Cache off for now
         boolean cache = false;
-        if (request.getParameter("cache")!=null && request.getParameter("cache").equals("true")){
-            cache = true;
-        } else if (request.getParameter("cache")!=null && request.getParameter("cache").equals("1")){
-            cache = true;
-        }
+//        if (request.getParameter("cache")!=null && request.getParameter("cache").equals("true")){
+//            cache = true;
+//        } else if (request.getParameter("cache")!=null && request.getParameter("cache").equals("1")){
+//            cache = true;
+//        }
         //Find a user
         User user = null;
         List users = HibernateUtil.getSession().createQuery("FROM User as user WHERE user.email='"+ Str.cleanForSQL(email)+"' AND user.password='"+Str.cleanForSQL(password)+"'").setMaxResults(1).setCacheable(true).list();

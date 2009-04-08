@@ -192,6 +192,55 @@ public class CoreMethods {
         }
     }
 
+    public static Exercise getDefaultSystemExercise() throws GeneralException {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        try{
+            //@todo better way to define default system exercise
+            Exercise exercise = null;
+            List<Exercise> exercises = HibernateUtil.getSession().createCriteria(Exercise.class)
+                                               .add(Restrictions.eq("issystem", true))
+                                               .add(Restrictions.eq("issystem", true))
+                                               .setMaxResults(1)
+                                               .setCacheable(true)
+                                               .list();
+            for (Iterator<Exercise> exerciseIterator=exercises.iterator(); exerciseIterator.hasNext();) {
+                Exercise ex=exerciseIterator.next();
+                exercise = ex;
+            }
+            if (exercise==null){
+                throw new GeneralException("Sorry, no default exercise found.");
+            }
+            return exercise;
+        } catch (Exception ex) {
+            logger.error("", ex);
+            throw new GeneralException("Database error... sorry... please try again.");
+        }
+    }
+
+    public static ExerciseExtended getDefaultSystemExerciseExtended() throws GeneralException {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        try{
+            Exerciselist exerciselist = CoreMethods.getDefaultSystemExerciselist();
+            Exerciselistitem exerciselistitem = null;
+            for (Iterator<Exerciselistitem> exerciselistitemIterator=exerciselist.getExerciselistitems().iterator(); exerciselistitemIterator.hasNext();) {
+                Exerciselistitem exli=exerciselistitemIterator.next();
+                exerciselistitem = exli;
+            }
+            Exercise exercise = Exercise.get(exerciselistitem.getExerciseid());
+            ExerciseExtended exExt = new ExerciseExtended();
+            exExt.setExercise(exercise);
+            exExt.setReps(exerciselistitem.getReps());
+            exExt.setExerciseplaceinlist(String.valueOf(exerciselistitem.getExerciselistitemid()));
+            exExt.setTimeinseconds(exerciselistitem.getTimeinseconds());
+            exExt.setExerciselistid(exerciselistitem.getExerciselistid());
+            exExt.setExerciselistitemid(exerciselistitem.getExerciselistitemid());
+            return exExt;
+        } catch (Exception ex) {
+            logger.error("", ex);
+            throw new GeneralException("Database error... sorry... please try again.");
+        }
+    }
+
     public static Room getCurrentRoom(User user) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
