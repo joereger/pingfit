@@ -1,0 +1,7 @@
+<$args.0$> has invited you to pingFit, the social fitness community.
+
+<$baseUrl.includinghttp$>?refid=<$args.1$>
+
+Best,
+
+The pingFit Team

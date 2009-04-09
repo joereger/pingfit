@@ -14,6 +14,7 @@ import com.pingfit.session.PersistentLogin;
 import com.pingfit.dao.User;
 import com.pingfit.util.Time;
 import com.pingfit.util.Io;
+import com.pingfit.util.Num;
 import com.pingfit.systemprops.SystemProperty;
 import com.pingfit.systemprops.BaseUrl;
 import com.pingfit.systemprops.WebAppRootDir;
@@ -35,7 +36,16 @@ public class BadgeInstallJs extends HttpServlet {
         Logger logger = Logger.getLogger(this.getClass().getName());
         String airVersion = Io.textFileRead(WebAppRootDir.getWebAppRootPath()  + "PingFitAirVersion.txt").toString();
         String airUrl = "http://"+ SystemProperty.getProp(SystemProperty.PROP_BASEURL) + "/PingFit.air";
-        String flashVars = "refbyuserid=123456";
+        int refid = 0;
+        if (request.getParameter("refid")!=null && Num.isinteger(request.getParameter("refid"))){
+            refid = Integer.parseInt(request.getParameter("refid"));
+        }
+        if (refid==0){
+            if (Pagez.getUserSession().getRefid()>0){
+                refid = Pagez.getUserSession().getRefid();
+            }
+        }
+        String flashVars = "refid="+refid;
         String jsFile = Io.textFileRead(WebAppRootDir.getWebAppRootPath() + "badgefiles" + java.io.File.separator  + "badgeInstall.js").toString();
         String output = jsFile;
         output = output.replaceAll("---VERSION---", airVersion);

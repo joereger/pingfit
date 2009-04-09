@@ -1,10 +1,25 @@
+<%@ page import="com.pingfit.util.Num" %>
+<%@ page import="com.pingfit.htmlui.Pagez" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<%
+int refid = 0;
+if (request.getParameter("refid")!=null && Num.isinteger(request.getParameter("refid"))){
+    refid = Integer.parseInt(request.getParameter("refid"));
+    Pagez.getUserSession().setRefid(refid);
+}
+if (refid==0){
+    if (Pagez.getUserSession().getRefid()>0){
+        refid = Pagez.getUserSession().getRefid();
+    }
+}
+%>
 
 <html>
 <head>
 	<title>pingFit</title>
-	<script type='text/javascript' src='badgefiles/swfobject.js'></script>
-    <script type='text/javascript' src='badgefiles/badgeInstall.js'></script>
+	<script type='text/javascript' src='badgefiles/swfobject.js?refid=<%=refid%>'></script>
+    <script type='text/javascript' src='badgefiles/badgeInstall.js?refid=<%=refid%>'></script>
 	<link type='text/css' rel='stylesheet' href='badgefiles/style.css' />
 	<style type="text/css">
 	body {

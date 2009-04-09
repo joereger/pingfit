@@ -23,7 +23,7 @@ public class EmailActivationSend {
         user.setEmailactivationkey(RandomString.randomAlphanumeric(5));
         user.setEmailactivationlastsent(new Date());
         try{user.save();} catch (GeneralException gex){logger.error("registerAction failed: " + gex.getErrorsAsSingleString());}
-        EmailTemplateProcessor.sendMail("dNeero Account Activation", "accountactivation", user);
+        EmailTemplateProcessor.sendMail("pingFit Account Activation", "accountactivation", user);
     }
 
 }

@@ -126,6 +126,9 @@ public class RESTXmlApi extends HttpServlet {
                                 userid = Integer.parseInt(request.getParameter("userid"));
                             }
                             element = CoreMethodsReturningXML.getUser(userid);
+                        } else if (method.equalsIgnoreCase("inviteByEmail")){
+                            String emailtoinvite = request.getParameter("emailtoinvite");
+                            element = CoreMethodsReturningXML.inviteByEmail(user, emailtoinvite);
                         } else if (method.equalsIgnoreCase("getLoggedInUser")){
                             element = CoreMethodsReturningXML.getLoggedInUser(user);
                         } else if (method.equalsIgnoreCase("bigRefresh")){

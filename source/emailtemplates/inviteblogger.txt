@@ -1,9 +1,0 @@
-<$user.firstname$> <$user.lastname$> has invited you to earn money with your blog by using PingFit.
-
-<$args.0$>
-
-<$baseUrl.includinghttp$>invite.jsp?referredby=<$user.userid$>
-
-Best,
-
-The PingFit Team

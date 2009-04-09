@@ -27,7 +27,7 @@ public class LostPasswordSend {
             logger.error("registerAction failed: " + gex.getErrorsAsSingleString());
         }
 
-        EmailTemplateProcessor.sendMail("dNeero Password Recovery", "lostpassword", user);
+        EmailTemplateProcessor.sendMail("pingFit Password Recovery", "lostpassword", user);
 
     }
 

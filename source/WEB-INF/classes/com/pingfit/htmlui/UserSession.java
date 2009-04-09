@@ -39,6 +39,7 @@ public class UserSession implements Serializable {
     private boolean istrayui = false;
     private String message = "";
     private Calendar createdate = Calendar.getInstance();
+    private int refid = 0;
 
     public UserSession(){
         Logger logger = Logger.getLogger(this.getClass().getName());
@@ -250,5 +251,13 @@ public class UserSession implements Serializable {
 
     public void setLoggedInToBeta(boolean loggedInToBeta) {
         isLoggedInToBeta = loggedInToBeta;
+    }
+
+    public int getRefid() {
+        return refid;
+    }
+
+    public void setRefid(int refid) {
+        this.refid=refid;
     }
 }

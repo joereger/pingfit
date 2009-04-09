@@ -66,6 +66,19 @@ public class CoreMethodsReturningXML {
         }
     }
 
+    public static Element inviteByEmail(User user, String emailtoinvite) {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        try{
+            CoreMethods.inviteByEmail(user, emailtoinvite);
+            return XMLConverters.resultXml(true, "");
+        } catch (GeneralException gex) {
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+        }
+    }
+
     public static Element skipExercise(User user) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{

@@ -19,6 +19,7 @@
         <mapping resource="com/pingfit/dao/Exerciselistitem.hbm.xml" />
         <mapping resource="com/pingfit/dao/Facebookpendingreferredby.hbm.xml" />
         <mapping resource="com/pingfit/dao/Genre.hbm.xml" />
+        <mapping resource="com/pingfit/dao/Invitebyemail.hbm.xml" />
         <mapping resource="com/pingfit/dao/Massemail.hbm.xml" />
         <mapping resource="com/pingfit/dao/Musclegroup.hbm.xml" />
         <mapping resource="com/pingfit/dao/Pageperformance.hbm.xml" />

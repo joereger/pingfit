@@ -13,6 +13,7 @@ import com.pingfit.htmluibeans.Registration;
 import com.pingfit.eula.EulaHelper;
 import com.pingfit.htmlui.ValidationException;
 import com.pingfit.friends.RoomPermissionRequest;
+import com.pingfit.email.EmailTemplateProcessor;
 
 import java.util.*;
 
@@ -489,6 +490,42 @@ public class CoreMethods {
         }
     }
 
+    public static void inviteByEmail(User user, String emailtoinvite) throws GeneralException {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        try{
+            if (!isUserOk(user)){
+                return;
+            }
+            List<User> users = HibernateUtil.getSession().createCriteria(User.class)
+                                               .add(Restrictions.eq("email", emailtoinvite.trim()))
+                                               .setCacheable(true)
+                                               .list();
+            if (users!=null && users.size()>0){
+                for (Iterator<User> userIterator=users.iterator(); userIterator.hasNext();) {
+                    User userAlreadyInSystem=userIterator.next();
+                    addFriend(user, userAlreadyInSystem.getUserid());
+                }
+            } else {
+                //Send the friend an email
+                String[] args = new String[2];
+                args[0] = user.getFirstname()+" "+user.getLastname();
+                args[1] = String.valueOf(user.getUserid());
+                EmailTemplateProcessor.sendMail(user.getFirstname()+" "+user.getLastname()+" wants you to see pingFit!", "invite", null, args, emailtoinvite, user.getEmail());
+                //Create a record of the invite
+                Invitebyemail invitebyemail = new Invitebyemail();
+                invitebyemail.setUserid(user.getUserid());
+                invitebyemail.setDate(new Date());
+                invitebyemail.setEmail(emailtoinvite.trim());
+                invitebyemail.setIsaccepted(false);
+                invitebyemail.setAcceptdate(new Date());
+                invitebyemail.save();
+            }
+        } catch (Exception ex) {
+            logger.error("", ex);
+            throw new GeneralException("Error... sorry... please try again.");
+        }
+    }
+
     public static void signUp(String email, String password, String passwordverify, String firstname, String lastname, String nickname) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
@@ -503,6 +540,24 @@ public class CoreMethods {
             registration.setEula(EulaHelper.getMostRecentEula().getEula().trim());
             registration.setDisplaytempresponsesavedmessage(false);
             registration.registerAction();
+            User newUser = User.get(registration.getUserid());
+            //Now see if anybody had invited this person
+            List<Invitebyemail> invitebyemails = HibernateUtil.getSession().createCriteria(Invitebyemail.class)
+                                               .add(Restrictions.eq("email", email.trim()))
+                                               .setCacheable(true)
+                                               .list();
+            for (Iterator<Invitebyemail> invitebyemailIterator=invitebyemails.iterator(); invitebyemailIterator.hasNext();) {
+                Invitebyemail invitebyemail=invitebyemailIterator.next();
+                User userWhoInvited = User.get(invitebyemail.getUserid());
+                //Create friendship both ways
+                addFriend(newUser, userWhoInvited.getUserid());
+                addFriend(userWhoInvited, newUser.getUserid());
+                //Update the invitebyemail records
+                invitebyemail.setAcceptdate(new Date());
+                invitebyemail.setIsaccepted(true);
+                invitebyemail.save();
+                //@todo Send Email to userWhoInvited
+            }
         } catch (ValidationException vex){
             throw new GeneralException(vex.getErrorsAsSingleString());
         } catch (Exception ex){
