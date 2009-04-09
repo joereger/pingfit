@@ -18,6 +18,41 @@ import java.util.ArrayList;
  */
 public class CoreMethodsReturningXML {
 
+    public static Element bigRefresh(User user) throws GeneralException {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        try{
+            Element element = new Element("bigrefresh");
+            element.addContent(getNextExercises(user));
+            element.addContent(getLoggedInUser(user));
+            element.addContent(getExerciseLists(user));
+            element.addContent(getRooms(user));
+            element.addContent(getCurrentEula());
+            element.addContent(getFriends(user));
+            element.addContent(getNotifications(user));
+            return element;
+        } catch (GeneralException gex) {
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+        }
+    }
+
+    public static Element getNotifications(User user) throws GeneralException {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        try{
+            Element element = new Element("notifications");
+            element.addContent(getFriendRequests(user));
+            element.addContent(getRoomPermissionRequests(user));
+            return element;
+        } catch (GeneralException gex) {
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+        }
+    }
+
     public static Element doExercise(User user, int exerciseid, int reps, String exerciseplaceinlist) {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
@@ -178,26 +213,7 @@ public class CoreMethodsReturningXML {
         }
     }
 
-    public static Element bigRefresh(User user) throws GeneralException {
-        Logger logger = Logger.getLogger(CoreMethods.class);
-        try{
-            Element element = new Element("bigrefresh");
-            element.addContent(getNextExercises(user));
-            element.addContent(getLoggedInUser(user));
-            element.addContent(getExerciseLists(user));
-            element.addContent(getRooms(user));
-            element.addContent(getCurrentEula());
-            element.addContent(getFriends(user));
-            element.addContent(getFriendRequests(user));
-            element.addContent(getRoomPermissionRequests(user));
-            return element;
-        } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
-        } catch (Exception ex) {
-            logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
-        }
-    }
+
 
     public static Element getExercise(int exerciseid) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
@@ -345,7 +361,7 @@ public class CoreMethodsReturningXML {
         }
     }
 
-    public static Element getFriendRequests(User user){
+    public static Element getFriendRequests(User user) throws GeneralException{
         Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
         try{
             Element element = new Element("friendrequests");

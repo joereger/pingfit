@@ -130,6 +130,8 @@ public class RESTXmlApi extends HttpServlet {
                             element = CoreMethodsReturningXML.getLoggedInUser(user);
                         } else if (method.equalsIgnoreCase("bigRefresh")){
                             element = CoreMethodsReturningXML.bigRefresh(user);
+                        } else if (method.equalsIgnoreCase("getNotifications")){
+                            element = CoreMethodsReturningXML.getNotifications(user);
                         } else if (method.equalsIgnoreCase("getRooms")){
                             element = CoreMethodsReturningXML.getRooms(user);
                         } else if (method.equalsIgnoreCase("getExercise")){
