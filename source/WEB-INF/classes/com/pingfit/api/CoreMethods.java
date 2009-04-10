@@ -490,11 +490,14 @@ public class CoreMethods {
         }
     }
 
-    public static void inviteByEmail(User user, String emailtoinvite) throws GeneralException {
+    public static void inviteByEmail(User user, String emailtoinvite, String custommessage) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
             if (!isUserOk(user)){
                 return;
+            }
+            if (custommessage==null || custommessage.equals("null")){
+                custommessage = "";
             }
             List<User> users = HibernateUtil.getSession().createCriteria(User.class)
                                                .add(Restrictions.eq("email", emailtoinvite.trim()))
@@ -507,18 +510,29 @@ public class CoreMethods {
                 }
             } else {
                 //Send the friend an email
-                String[] args = new String[2];
+                String[] args = new String[4];
                 args[0] = user.getFirstname()+" "+user.getLastname();
                 args[1] = String.valueOf(user.getUserid());
+                args[2] = "<br/><br/>"+user.getFirstname()+" "+user.getLastname()+" says:<br/>"+custommessage;
+                args[3] = "\n\n"+user.getFirstname()+" "+user.getLastname()+" says:\n"+custommessage;
                 EmailTemplateProcessor.sendMail(user.getFirstname()+" "+user.getLastname()+" wants you to see pingFit!", "invite", null, args, emailtoinvite, user.getEmail());
-                //Create a record of the invite
-                Invitebyemail invitebyemail = new Invitebyemail();
-                invitebyemail.setUserid(user.getUserid());
-                invitebyemail.setDate(new Date());
-                invitebyemail.setEmail(emailtoinvite.trim());
-                invitebyemail.setIsaccepted(false);
-                invitebyemail.setAcceptdate(new Date());
-                invitebyemail.save();
+                //See if they've invited already
+                List<Invitebyemail> invitebyemails = HibernateUtil.getSession().createCriteria(Invitebyemail.class)
+                                                   .add(Restrictions.eq("userid", user.getUserid()))
+                                                   .add(Restrictions.eq("email", emailtoinvite.trim()))
+                                                   .setCacheable(true)
+                                                   .list();
+                if (invitebyemails==null || invitebyemails.size()==0){
+                    //User hasn't invited this user before so create a record of the invite
+                    Invitebyemail invitebyemail = new Invitebyemail();
+                    invitebyemail.setUserid(user.getUserid());
+                    invitebyemail.setDate(new Date());
+                    invitebyemail.setEmail(emailtoinvite.trim());
+                    invitebyemail.setCustommessage(custommessage.trim());
+                    invitebyemail.setIsaccepted(false);
+                    invitebyemail.setAcceptdate(new Date());
+                    invitebyemail.save();
+                }
             }
         } catch (Exception ex) {
             logger.error("", ex);

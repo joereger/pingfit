@@ -18,6 +18,9 @@
         <property name="email" type="string">
             <column name="email" not-null="true" />
         </property>
+        <property name="custommessage" type="text">
+            <column name="custommessage" not-null="true" />
+        </property>
         <property name="isaccepted" type="boolean">
             <column name="isaccepted" not-null="true" />
         </property>

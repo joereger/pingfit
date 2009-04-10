@@ -128,7 +128,11 @@ public class RESTXmlApi extends HttpServlet {
                             element = CoreMethodsReturningXML.getUser(userid);
                         } else if (method.equalsIgnoreCase("inviteByEmail")){
                             String emailtoinvite = request.getParameter("emailtoinvite");
-                            element = CoreMethodsReturningXML.inviteByEmail(user, emailtoinvite);
+                            String custommessage = "";
+                            if (request.getParameter("custommessage")!=null){
+                                custommessage = request.getParameter("custommessage");
+                            }
+                            element = CoreMethodsReturningXML.inviteByEmail(user, emailtoinvite, custommessage);
                         } else if (method.equalsIgnoreCase("getLoggedInUser")){
                             element = CoreMethodsReturningXML.getLoggedInUser(user);
                         } else if (method.equalsIgnoreCase("bigRefresh")){

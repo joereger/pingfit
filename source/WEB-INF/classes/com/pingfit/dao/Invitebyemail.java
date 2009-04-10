@@ -17,6 +17,7 @@ public class Invitebyemail extends BasePersistentClass implements java.io.Serial
      private int userid;
      private Date date;
      private String email;
+    private String custommessage;
     private boolean isaccepted;
     private Date acceptdate;
 
@@ -102,5 +103,13 @@ public class Invitebyemail extends BasePersistentClass implements java.io.Serial
 
     public void setAcceptdate(Date acceptdate) {
         this.acceptdate=acceptdate;
+    }
+
+    public String getCustommessage() {
+        return custommessage;
+    }
+
+    public void setCustommessage(String custommessage) {
+        this.custommessage=custommessage;
     }
 }

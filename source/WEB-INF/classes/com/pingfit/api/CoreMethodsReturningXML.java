@@ -66,10 +66,10 @@ public class CoreMethodsReturningXML {
         }
     }
 
-    public static Element inviteByEmail(User user, String emailtoinvite) {
+    public static Element inviteByEmail(User user, String emailtoinvite, String custommessage) {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
-            CoreMethods.inviteByEmail(user, emailtoinvite);
+            CoreMethods.inviteByEmail(user, emailtoinvite, custommessage);
             return XMLConverters.resultXml(true, "");
         } catch (GeneralException gex) {
             return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
