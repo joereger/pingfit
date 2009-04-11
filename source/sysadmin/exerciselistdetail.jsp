@@ -12,9 +12,13 @@
 <%@ page import="java.util.Iterator" %>
 <%@ page import="com.pingfit.dao.hibernate.NumFromUniqueResult" %>
 <%@ page import="com.pingfit.helpers.ExercisePropertyValues" %>
-<%@ page import="com.pingfit.dao.*" %>
+<%@ page import="com.pingfit.exerciseattributes.*" %>
 <%@ page import="com.pingfit.finders.FindExercises" %>
 <%@ page import="java.util.TreeMap" %>
+<%@ page import="com.pingfit.dao.*" %>
+<%@ page import="com.pingfit.exerciseattributes.Musclegroup" %>
+<%@ page import="com.pingfit.exerciseattributes.Equipment" %>
+<%@ page import="com.pingfit.exerciseattributes.Genre" %>
 
 <%
 Logger logger = Logger.getLogger(this.getClass().getName());

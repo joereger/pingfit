@@ -11,19 +11,24 @@
         </id>
 
 
-        <set name="musclegroups" table="exercisemusclegroupjoin">
-            <key column="exerciseid"/>
-            <many-to-many column="musclegroupid" unique="true" class="com.pingfit.dao.Musclegroup"/>
+
+
+        <set name="exercisegenres" inverse="true" cascade="all-delete-orphan">
+            <cache usage="transactional"/>
+            <key column="exerciseid"></key>
+            <one-to-many class="com.pingfit.dao.Exercisegenre" not-found="ignore"></one-to-many>
         </set>
 
-        <set name="equipments" table="exerciseequipmentjoin">
-            <key column="exerciseid"/>
-            <many-to-many column="equipmentid" unique="true" class="com.pingfit.dao.Equipment"/>
+        <set name="exercisemusclegroups" inverse="true" cascade="all-delete-orphan">
+            <cache usage="transactional"/>
+            <key column="exerciseid"></key>
+            <one-to-many class="com.pingfit.dao.Exercisemusclegroup" not-found="ignore"></one-to-many>
         </set>
 
-        <set name="genres" table="exercisegenrejoin">
-            <key column="exerciseid"/>
-            <many-to-many column="genreid" unique="true" class="com.pingfit.dao.Genre"/>
+        <set name="exerciseequipments" inverse="true" cascade="all-delete-orphan">
+            <cache usage="transactional"/>
+            <key column="exerciseid"></key>
+            <one-to-many class="com.pingfit.dao.Exerciseequipment" not-found="ignore"></one-to-many>
         </set>
 
 

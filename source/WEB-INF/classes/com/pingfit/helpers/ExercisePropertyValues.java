@@ -1,9 +1,8 @@
 package com.pingfit.helpers;
 
-import com.pingfit.dao.Musclegroup;
-import com.pingfit.dao.Equipment;
-import com.pingfit.dao.Genre;
+
 import com.pingfit.dao.hibernate.HibernateUtil;
+import com.pingfit.exerciseattributes.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +24,7 @@ public class ExercisePropertyValues {
         return musclegroups;
     }
     public static ArrayList<Musclegroup> getMusclegroups(){
-        return (ArrayList)HibernateUtil.getSession().createQuery("from Musclegroup order by name asc").list();
+        return MusclegroupFactory.getAll();
     }
 
 
@@ -38,7 +37,7 @@ public class ExercisePropertyValues {
         return equipments;
     }
     public static ArrayList<Equipment> getEquipments(){
-        return (ArrayList)HibernateUtil.getSession().createQuery("from Equipment order by name asc").list();
+        return EquipmentFactory.getAll();
     }
 
     public static ArrayList<String> getGenresAsStrings(){
@@ -50,7 +49,7 @@ public class ExercisePropertyValues {
         return genres;
     }
     public static ArrayList<Genre> getGenres(){     
-        return (ArrayList)HibernateUtil.getSession().createQuery("from Genre order by name asc").list();
+        return GenreFactory.getAll();
     }
 
 

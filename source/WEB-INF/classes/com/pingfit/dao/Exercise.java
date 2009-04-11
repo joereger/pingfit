@@ -23,9 +23,9 @@ public class Exercise extends BasePersistentClass implements java.io.Serializabl
      private int useridofcreator;
      private boolean ispublic;
      private String imagecredit;
-     private Set<Musclegroup> musclegroups = new HashSet<Musclegroup>();
-     private Set<Equipment> equipments = new HashSet<Equipment>();
-     private Set<Genre> genres = new HashSet<Genre>();
+     private Set<Exercisemusclegroup> exercisemusclegroups = new HashSet<Exercisemusclegroup>();
+     private Set<Exerciseequipment> exerciseequipments = new HashSet<Exerciseequipment>();
+     private Set<Exercisegenre> exercisegenres = new HashSet<Exercisegenre>();
 
 
     public static Exercise get(int id) {
@@ -136,27 +136,27 @@ public class Exercise extends BasePersistentClass implements java.io.Serializabl
         this.imagecredit=imagecredit;
     }
 
-    public Set<Musclegroup> getMusclegroups() {
-        return musclegroups;
+    public Set<Exercisemusclegroup> getExercisemusclegroups() {
+        return exercisemusclegroups;
     }
 
-    public void setMusclegroups(Set<Musclegroup> musclegroups) {
-        this.musclegroups=musclegroups;
+    public void setExercisemusclegroups(Set<Exercisemusclegroup> exercisemusclegroups) {
+        this.exercisemusclegroups=exercisemusclegroups;
     }
 
-    public Set<Equipment> getEquipments() {
-        return equipments;
+    public Set<Exerciseequipment> getExerciseequipments() {
+        return exerciseequipments;
     }
 
-    public void setEquipments(Set<Equipment> equipments) {
-        this.equipments=equipments;
+    public void setExerciseequipments(Set<Exerciseequipment> exerciseequipments) {
+        this.exerciseequipments=exerciseequipments;
     }
 
-    public Set<Genre> getGenres() {
-        return genres;
+    public Set<Exercisegenre> getExercisegenres() {
+        return exercisegenres;
     }
 
-    public void setGenres(Set<Genre> genres) {
-        this.genres=genres;
+    public void setExercisegenres(Set<Exercisegenre> exercisegenres) {
+        this.exercisegenres=exercisegenres;
     }
 }

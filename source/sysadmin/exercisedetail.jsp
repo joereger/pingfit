@@ -10,11 +10,12 @@
 <%@ page import="org.hibernate.criterion.Restrictions" %>
 <%@ page import="org.hibernate.criterion.Order" %>
 <%@ page import="com.pingfit.util.Num" %>
-<%@ page import="com.pingfit.dao.Musclegroup" %>
 <%@ page import="java.util.Iterator" %>
-<%@ page import="com.pingfit.dao.Equipment" %>
-<%@ page import="com.pingfit.dao.Genre" %>
 <%@ page import="com.pingfit.helpers.ExercisePropertyValues" %>
+<%@ page import="com.pingfit.dao.Exercisemusclegroup" %>
+<%@ page import="com.pingfit.dao.Exerciseequipment" %>
+<%@ page import="com.pingfit.exerciseattributes.*" %>
+<%@ page import="com.pingfit.dao.Exercisegenre" %>
 <%
 Logger logger = Logger.getLogger(this.getClass().getName());
 String pagetitle = "Exercise";
@@ -50,9 +51,9 @@ String acl = "sysadmin";
             exercise.setImagecredit(Textbox.getValueFromRequest("imagecredit", "Image Credit", false, DatatypeString.DATATYPEID));
             exercise.setReps(Textbox.getIntFromRequest("reps", "Reps", true, DatatypeInteger.DATATYPEID));
             exercise.setDescription(Textarea.getValueFromRequest("description", "Description", true));
-            exercise.getMusclegroups().removeAll(exercise.getMusclegroups());
-            exercise.getEquipments().removeAll(exercise.getEquipments());
-            exercise.getGenres().removeAll(exercise.getGenres());
+            exercise.getExercisemusclegroups().removeAll(exercise.getExercisemusclegroups());
+            exercise.getExerciseequipments().removeAll(exercise.getExerciseequipments());
+            exercise.getExercisegenres().removeAll(exercise.getExercisegenres());
             exercise.save();
 
             if (1==1){
@@ -62,7 +63,11 @@ String acl = "sysadmin";
                     for (Iterator<Musclegroup> objIt=musclegroupObjs.iterator(); objIt.hasNext();) {
                         Musclegroup musclegroup=objIt.next();
                         if (musclegroup.getName().equals(s)){
-                            exercise.getMusclegroups().add(musclegroup);
+                            logger.debug("adding musclegroup:"+musclegroup.getName());
+                            Exercisemusclegroup record = new Exercisemusclegroup();
+                            record.setExerciseid(exercise.getExerciseid());
+                            record.setMusclegroupid(musclegroup.getMusclegroupid());
+                            exercise.getExercisemusclegroups().add(record);
                         }
                     }
                 }
@@ -74,7 +79,11 @@ String acl = "sysadmin";
                     for (Iterator<Genre> objIt=genreObjs.iterator(); objIt.hasNext();) {
                         Genre genre=objIt.next();
                         if (genre.getName().equals(s)){
-                            exercise.getGenres().add(genre);
+                            logger.debug("adding genre:"+genre.getName());
+                            Exercisegenre record = new Exercisegenre();
+                            record.setExerciseid(exercise.getExerciseid());
+                            record.setGenreid(genre.getGenreid());
+                            exercise.getExercisegenres().add(record);
                         }
                     }
                 }
@@ -86,7 +95,10 @@ String acl = "sysadmin";
                     for (Iterator<Equipment> objIt=equipmentObjs.iterator(); objIt.hasNext();) {
                         Equipment equipment=objIt.next();
                         if (equipment.getName().equals(s)){
-                            exercise.getEquipments().add(equipment);
+                            Exerciseequipment record = new Exerciseequipment();
+                            record.setExerciseid(exercise.getExerciseid());
+                            record.setEquipmentid(equipment.getEquipmentid());
+                            exercise.getExerciseequipments().add(record);
                         }
                     }
                 }
@@ -106,23 +118,23 @@ String acl = "sysadmin";
 %>
 <%
     ArrayList<String> selectedmusclegroups = new ArrayList<String>();
-    for (Iterator<Musclegroup> exmgit=exercise.getMusclegroups().iterator(); exmgit.hasNext();) {
-        Musclegroup musclegroup=exmgit.next();
-        selectedmusclegroups.add(musclegroup.getName());
+    for (Iterator<Exercisemusclegroup> exmgit=exercise.getExercisemusclegroups().iterator(); exmgit.hasNext();) {
+        Exercisemusclegroup musclegroup=exmgit.next();
+        selectedmusclegroups.add(MusclegroupFactory.getById(musclegroup.getMusclegroupid()).getName());
     }
 %>
 <%
     ArrayList<String> selectedequipments = new ArrayList<String>();
-    for (Iterator<Equipment> exeqit=exercise.getEquipments().iterator(); exeqit.hasNext();) {
-        Equipment equipment=exeqit.next();
-        selectedequipments.add(equipment.getName());
+    for (Iterator<Exerciseequipment> exeqit=exercise.getExerciseequipments().iterator(); exeqit.hasNext();) {
+        Exerciseequipment equipment=exeqit.next();
+        selectedequipments.add(EquipmentFactory.getById(equipment.getEquipmentid()).getName());
     }
 %>
 <%
     ArrayList<String> selectedgenres = new ArrayList<String>();
-    for (Iterator<Genre> exgenit=exercise.getGenres().iterator(); exgenit.hasNext();) {
-        Genre genre=exgenit.next();
-        selectedgenres.add(genre.getName());
+    for (Iterator<Exercisegenre> exgenit=exercise.getExercisegenres().iterator(); exgenit.hasNext();) {
+        Exercisegenre genre=exgenit.next();
+        selectedgenres.add(GenreFactory.getById(genre.getGenreid()).getName());
     }
 %>
 <%

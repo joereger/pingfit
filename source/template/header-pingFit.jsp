@@ -69,7 +69,7 @@
             <%if (1==1){%><a href="/blog.jsp"><font class="subnavfont" style="color: #ffffff;">Blog</font></a><%}%>
         <%}%>
 
-        <%if (navtab.equals("exercise")){%>
+        <%if (1==2 && navtab.equals("exercise")){%>
             <%if (Pagez.getUserSession().getIsloggedin()){%>
                 <img src="/images/clear.gif" alt="" width="10" height="1"/>
                 <a href="/account/exerciselist.jsp"><font class="subnavfont" style="color: #ffffff;">Your Exercises</font></a>
@@ -89,11 +89,11 @@
                 <%--<img src="/images/clear.gif" alt="" width="10" height="1"/>--%>
                 <%--<a href="/account/accountbalance.jsp"><font class="subnavfont" style="color: #ffffff;">Account Balance</font></a>--%>
                 <%--<img src="/images/clear.gif" alt="" width="10" height="1"/>--%>
-                <a href="/account/exerciselist.jsp"><font class="subnavfont" style="color: #ffffff;">Your Exercises</font></a>
-                <img src="/images/clear.gif" alt="" width="10" height="1"/>
-                <a href="/account/exerciselistlist.jsp"><font class="subnavfont" style="color: #ffffff;">Your Exercise Lists</font></a>
-                <img src="/images/clear.gif" alt="" width="10" height="1"/>
-                <a href="/account/reports.jsp"><font class="subnavfont" style="color: #ffffff;">Reports</font></a>
+                <%--<a href="/account/exerciselist.jsp"><font class="subnavfont" style="color: #ffffff;">Your Exercises</font></a>--%>
+                <%--<img src="/images/clear.gif" alt="" width="10" height="1"/>--%>
+                <%--<a href="/account/exerciselistlist.jsp"><font class="subnavfont" style="color: #ffffff;">Your Exercise Lists</font></a>--%>
+                <%--<img src="/images/clear.gif" alt="" width="10" height="1"/>--%>
+                <%--<a href="/account/reports.jsp"><font class="subnavfont" style="color: #ffffff;">Reports</font></a>--%>
             <%}%>
         <%}%>
 
