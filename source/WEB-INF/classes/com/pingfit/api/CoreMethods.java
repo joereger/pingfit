@@ -9,6 +9,7 @@ import com.pingfit.dao.hibernate.HibernateUtil;
 import com.pingfit.exercisechoosers.ExerciseChooserFactory;
 import com.pingfit.exercisechoosers.ExerciseChooser;
 import com.pingfit.exercisechoosers.ExerciseExtended;
+import com.pingfit.exercisechoosers.ExerciseChooserGroup;
 import com.pingfit.htmluibeans.Registration;
 import com.pingfit.eula.EulaHelper;
 import com.pingfit.htmlui.ValidationException;
@@ -626,7 +627,7 @@ public class CoreMethods {
         ArrayList<User> out = new ArrayList<User>();
         List<Userfriend> userfriends = HibernateUtil.getSession().createCriteria(Userfriend.class)
                                            .add(Restrictions.eq("userid", user.getUserid()))
-                                           .add(Restrictions.eq("ispendingapproval", false))
+                                           .add(Restrictions.eq("isfulltwoway", true))
                                            .setCacheable(true)
                                            .list();
         for (Iterator<Userfriend> userfriendIterator=userfriends.iterator(); userfriendIterator.hasNext();) {
@@ -676,6 +677,7 @@ public class CoreMethods {
                     //If they're not approved, approve them
                     if (userfriend.getIspendingapproval()){
                         userfriend.setIspendingapproval(false);
+                        userfriend.setIsfulltwoway(true);
                         userfriend.save();
                     }
                 }
@@ -697,9 +699,11 @@ public class CoreMethods {
                     if (theyWannaBeFriends){
                         //They want to be friends with you so no need for approval
                         userfriend.setIspendingapproval(false);
+                        userfriend.setIsfulltwoway(true);
                     } else {
                         //They haven't said they want to be friends with you so you need approval
                         userfriend.setIspendingapproval(true);
+                        userfriend.setIsfulltwoway(false);
                     }
                     userfriend.save();
                 } catch (Exception ex){
@@ -1004,8 +1008,10 @@ public class CoreMethods {
         }
         //Add user to room
         if (userCanJoinRoom){
+            ExerciseChooserGroup ecg = new ExerciseChooserGroup();
             user.setRoomid(room.getRoomid());
             user.setExerciselistid(room.getExerciselistid());
+            user.setExercisechooserid(ecg.getId());
             user.save();
         } else {
             throw new GeneralException("This room is private... a request for access has been made to the room's owner.");

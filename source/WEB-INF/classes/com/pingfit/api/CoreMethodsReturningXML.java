@@ -226,8 +226,6 @@ public class CoreMethodsReturningXML {
         }
     }
 
-
-
     public static Element getExercise(int exerciseid) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{

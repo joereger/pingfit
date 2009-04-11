@@ -17,6 +17,7 @@ public class Userfriend extends BasePersistentClass implements java.io.Serializa
      private int userid;
      private int useridoffriend;
      private boolean ispendingapproval;
+     private boolean isfulltwoway;
 
 
     public static Userfriend get(int id) {
@@ -84,5 +85,13 @@ public class Userfriend extends BasePersistentClass implements java.io.Serializa
 
     public void setIspendingapproval(boolean ispendingapproval) {
         this.ispendingapproval=ispendingapproval;
+    }
+
+    public boolean isIsfulltwoway() {
+        return isfulltwoway;
+    }
+
+    public void setIsfulltwoway(boolean isfulltwoway) {
+        this.isfulltwoway=isfulltwoway;
     }
 }

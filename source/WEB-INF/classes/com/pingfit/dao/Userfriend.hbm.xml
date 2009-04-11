@@ -18,5 +18,8 @@
         <property name="ispendingapproval" type="boolean">
             <column name="ispendingapproval" />
         </property>
+        <property name="isfulltwoway" type="boolean">
+            <column name="isfulltwoway" />
+        </property>
     </class>
 </hibernate-mapping>
