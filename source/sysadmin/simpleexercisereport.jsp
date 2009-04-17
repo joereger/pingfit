@@ -55,7 +55,6 @@ String acl = "sysadmin";
             ArrayList<GridCol> cols = new ArrayList<GridCol>();
             cols.add(new GridCol("Date", "<$pingback.date$>", true, "", "tinyfont", "", ""));
             cols.add(new GridCol("User", "<a href=\"/sysadmin/userdetail.jsp?userid=<$user.userid$>\"><$user.firstname$> <$user.lastname$></a>", false, "", "tinyfont"));
-            cols.add(new GridCol("Interface", "<$userinterfaceStr$>", false, "", "tinyfont"));
             cols.add(new GridCol("Exercise", "<$exercise.title$>", false, "", "tinyfont"));
             cols.add(new GridCol("Reps", "<$pingback.reps$>", false, "", "tinyfont"));
         %>

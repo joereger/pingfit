@@ -1,6 +1,6 @@
 <$args.0$> has invited you to pingFit, the social fitness community.
 
-<$baseUrl.includinghttp$>?refid=<$args.1$>
+<$baseUrl.includinghttp$>?refid=<$args.1$> If you sign up with the email address this message was sent to we'll automatically make you friends with <$args.0$>.
 <$args.3$>
 
 Best,

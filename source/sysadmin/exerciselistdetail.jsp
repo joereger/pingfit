@@ -232,7 +232,7 @@ String acl = "sysadmin";
                         Exerciselistitem exerciselistitem =  iterator.next();
                         Exercise exercise = Exercise.get(exerciselistitem.getExerciseid());
                         %>
-                        <font class="tinyfont">(Order:<%=exerciselistitem.getNum()%>) <%=exercise.getTitle()%> x <%=exerciselistitem.getReps()%></font>
+                        <font class="tinyfont">(Order:<%=exerciselistitem.getNum()%>) <%=exercise.getTitle()%> x <%=exerciselistitem.getReps()%> x <%=exerciselistitem.getTimeinseconds()/60%> Mins</font>
                         <font class="tinyfont"><a href="/sysadmin/exerciselistdetail.jsp?action=deleteexerciselistitem&exerciselistid=<%=exerciselist.getExerciselistid()%>&exerciselistitemid=<%=exerciselistitem.getExerciselistitemid()%>">Delete</a></font>
                         <br/>
                         <%

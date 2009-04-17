@@ -1,0 +1,9 @@
+<$args.0$> wants to be friends with you on pingFit, the social fitness community.
+
+1) Log in to your pingFit account
+2) Click Notifications (button in upper right)
+3) Click to Confirm or Ignore this friend request
+
+Best,
+
+The pingFit Team

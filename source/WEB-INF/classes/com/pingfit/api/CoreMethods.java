@@ -516,7 +516,7 @@ public class CoreMethods {
                 args[1] = String.valueOf(user.getUserid());
                 args[2] = "<br/><br/>"+user.getFirstname()+" "+user.getLastname()+" says:<br/>"+custommessage;
                 args[3] = "\n\n"+user.getFirstname()+" "+user.getLastname()+" says:\n"+custommessage;
-                EmailTemplateProcessor.sendMail(user.getFirstname()+" "+user.getLastname()+" wants you to see pingFit!", "invite", null, args, emailtoinvite, user.getEmail());
+                EmailTemplateProcessor.sendMail(user.getFirstname()+" "+user.getLastname()+" wants to be your pingFit friend!", "invite", null, args, emailtoinvite, user.getEmail());
                 //See if they've invited already
                 List<Invitebyemail> invitebyemails = HibernateUtil.getSession().createCriteria(Invitebyemail.class)
                                                    .add(Restrictions.eq("userid", user.getUserid()))
@@ -661,6 +661,18 @@ public class CoreMethods {
         if (!isUserOk(user)){
             throw new GeneralException("User invalid.");
         }
+        //Get the userfriend
+        User friendUser = User.get(useridoffriend);
+        if (!isUserOk(friendUser)){
+            throw new GeneralException("Friend User invalid.");
+        }
+        //Send email
+        String[] args = new String[4];
+        args[0] = user.getFirstname()+" "+user.getLastname();
+        args[1] = String.valueOf(user.getUserid());
+        args[2] = "";
+        args[3] = "";
+        EmailTemplateProcessor.sendMail(user.getFirstname()+" "+user.getLastname()+" wants to be friends on pingFit!", "friendrequest", null, args, friendUser.getEmail(), user.getEmail());
         //See if they have a pending or accepted friendship with you
         boolean theyWannaBeFriends = false;
         if (1==1){
