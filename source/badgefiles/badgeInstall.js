@@ -6,8 +6,8 @@ flashvars.appurl = '---AIRURL---';
 flashvars.appid = 'com.pingFit';
 flashvars.pubid = '';
 flashvars.appversion = '---VERSION---';
-flashvars.installarg = '---FLASHVARS---';
-flashvars.launcharg = '---FLASHVARS---';
+flashvars.appinstallarg = '---FLASHVARS---';
+flashvars.applauncharg = '---FLASHVARS---';
 flashvars.helpurl = '';
 flashvars.hidehelp = 'true';
 flashvars.skiptransition = 'false';
@@ -22,5 +22,6 @@ params.menu = 'false';
 params.quality = 'high';
 
 var attributes = {};
+
 
 swfobject.embedSWF('badgefiles/AIRInstallBadge.swf', 'badge_div', '215', '180', '9.0.115', 'badgefiles/expressInstall.swf', flashvars, params, attributes);
