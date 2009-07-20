@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Apr 17, 2006 3:45:28 PM by Hibernate Tools 3.1.0.beta4 -->
+<hibernate-mapping>
+    <class name="com.pingfit.dao.Pl" table="pl">
+        <cache usage="transactional"/>
+        <id name="plid" type="int">
+            <column name="plid" />
+            <generator class="native" />
+        </id>
+        <property name="name" type="string">
+            <column name="name" not-null="true" />
+        </property>
+        <property name="nameforui" type="string">
+            <column name="nameforui" not-null="true" />
+        </property>
+        <property name="subdomain" type="string">
+            <column name="subdomain" not-null="true" />
+        </property>
+        <property name="customdomain1" type="string">
+            <column name="customdomain1" not-null="true" />
+        </property>
+        <property name="customdomain2" type="string">
+            <column name="customdomain2" not-null="true" />
+        </property>
+        <property name="customdomain3" type="string">
+            <column name="customdomain3" not-null="true" />
+        </property>
+        <property name="webhtmlheader" type="text">
+            <column name="webhtmlheader" not-null="true" />
+        </property>
+        <property name="webhtmlfooter" type="text">
+            <column name="webhtmlfooter" not-null="true" />
+        </property>
+        <property name="emailhtmlheader" type="text">
+            <column name="emailhtmlheader" not-null="true" />
+        </property>
+        <property name="emailhtmlfooter" type="text">
+            <column name="emailhtmlfooter" not-null="true" />
+        </property>
+        <property name="ishttpson" type="boolean">
+            <column name="ishttpson" />
+        </property>
+        <property name="twitterusername" type="text">
+            <column name="twitterusername" not-null="true" />
+        </property>
+        <property name="twitterpassword" type="text">
+            <column name="twitterpassword" not-null="true" />
+        </property>
+        <property name="homepagetemplate" type="text">
+            <column name="homepagetemplate" not-null="true" />
+        </property>
+        <property name="peers" type="text">
+            <column name="peers" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

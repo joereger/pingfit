@@ -1,5 +1,4 @@
 <%@ page import="com.pingfit.htmlui.Authorization" %>
-<%@ page import="com.pingfit.htmlui.Pagez" %>
 <%
     boolean isauthorised=Authorization.check(acl);
     if (!isauthorised){

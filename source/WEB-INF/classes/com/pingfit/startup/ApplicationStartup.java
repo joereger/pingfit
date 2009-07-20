@@ -5,6 +5,7 @@ import com.pingfit.systemprops.InstanceProperties;
 import com.pingfit.systemprops.SystemProperty;
 import com.pingfit.dao.hibernate.HibernateUtil;
 import com.pingfit.dao.hibernate.HibernateSessionQuartzCloser;
+import com.pingfit.dao.Pl;
 import com.pingfit.xmpp.SendXMPPMessage;
 import com.pingfit.scheduledjobs.SystemStats;
 import com.pingfit.pageperformance.PagePerformanceUtil;
@@ -25,6 +26,7 @@ import org.quartz.impl.StdSchedulerFactory;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.List;
 
 /**
  * User: Joe Reger Jr
@@ -69,6 +71,10 @@ public class ApplicationStartup implements ServletContextListener {
             //Logger.getRootLogger().setLevel();
         } else {
             logger.info("InstanceProperties.haveValidConfig()=false");
+        }
+        if (isdatabasereadyforapprun){
+            //Make sure at least one PL exists
+            guaranteeAtLeastOnePlExists();
         }
         //Load SystemProps
         SystemProperty.refreshAllProps();
@@ -201,6 +207,30 @@ public class ApplicationStartup implements ServletContextListener {
             }
         } catch (Exception ex){
             logger.error("",ex);
+        }
+    }
+
+    private static void guaranteeAtLeastOnePlExists(){
+        Logger logger = Logger.getLogger(ApplicationStartup.class);
+        List pls = HibernateUtil.getSession().createQuery("from Pl").list();
+        if (pls==null || pls.size()<=0){
+            Pl pl = new Pl();
+            pl.setName("pingFit.com");
+            pl.setSubdomain("");
+            pl.setCustomdomain1("");
+            pl.setCustomdomain2("");
+            pl.setCustomdomain3("");
+            pl.setEmailhtmlfooter("");
+            pl.setEmailhtmlheader("");
+            pl.setWebhtmlfooter("");
+            pl.setWebhtmlheader("");
+            pl.setIshttpson(false);
+            pl.setNameforui("pingFit.com");
+            pl.setTwitterusername("");
+            pl.setTwitterpassword("");
+            pl.setHomepagetemplate("");
+            pl.setPeers("0");
+            try{pl.save();}catch(Exception ex){logger.error(ex);}
         }
     }
 

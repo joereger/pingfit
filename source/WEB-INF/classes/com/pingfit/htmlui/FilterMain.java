@@ -14,12 +14,14 @@ import com.pingfit.cache.providers.CacheFactory;
 import com.pingfit.session.UrlSplitter;
 import com.pingfit.session.PersistentLogin;
 import com.pingfit.dao.User;
+import com.pingfit.dao.Pl;
 import com.pingfit.util.Time;
 import com.pingfit.systemprops.SystemProperty;
 import com.pingfit.systemprops.BaseUrl;
 import com.pingfit.facebook.FacebookAuthorizationJsp;
 import com.pingfit.eula.EulaHelper;
 import com.pingfit.xmpp.SendXMPPMessage;
+import com.pingfit.privatelabel.PlFinder;
 
 
 /**
@@ -94,6 +96,10 @@ public class FilterMain implements Filter {
                         return;
                     }
                 }
+
+                //Set Private Label (Pl)
+                Pl pl = PlFinder.find(httpServletRequest);
+                Pagez.getUserSession().setPl(pl);
 
                 //Facebook start
                 FacebookAuthorizationJsp.doAuth();
