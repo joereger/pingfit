@@ -16,6 +16,8 @@ public class Eula extends BasePersistentClass implements java.io.Serializable, A
      private int eulaid;
      private String eula;
      private Date date;
+     private int plid;
+
 
 
 
@@ -77,5 +79,13 @@ public class Eula extends BasePersistentClass implements java.io.Serializable, A
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public int getPlid() {
+        return plid;
+    }
+
+    public void setPlid(int plid) {
+        this.plid=plid;
     }
 }

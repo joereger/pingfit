@@ -19,6 +19,23 @@ public class PlFinder {
 
     public static String CACHEGROUP = "PlFinder";
 
+    public static Pl defaultPl(){
+        Logger logger = Logger.getLogger(PlFinder.class);
+        List<Pl> plsDefault= HibernateUtil.getSession().createCriteria(Pl.class)
+                           .add(Restrictions.eq("isdefault", true))
+                           .setCacheable(true)
+                           .list();
+            logger.debug("plsDefault.size()="+ plsDefault.size());
+            if (plsDefault !=null && plsDefault.size()>1){
+                logger.error("More than one pingFit pl with isdefault=true");
+            }
+            for (Iterator<Pl> plIterator=plsDefault.iterator(); plIterator.hasNext();) {
+                Pl pl=plIterator.next();
+                return pl;
+            }
+            return Pl.get(1); //Backup plan... just return the first... in production will be pingFit.com
+    }
+
     public static Pl find(HttpServletRequest request){
         Logger logger = Logger.getLogger(PlFinder.class);
         logger.debug("request.getServerName()="+request.getServerName());
@@ -37,7 +54,7 @@ public class PlFinder {
         } catch (Exception ex){
             logger.error("", ex);
         }
-        return Pl.get(1);
+        return PlFinder.defaultPl();
     }
 
     private static Pl doDatabaseSearching(HttpServletRequest request){
@@ -57,7 +74,7 @@ public class PlFinder {
                            .list();
             logger.debug("plsSubdomain.size()="+plsSubdomain.size());
             if (plsSubdomain!=null && plsSubdomain.size()>1){
-                logger.error("More than one dNeero pl with subdomain="+subdomain);
+                logger.error("More than one pingFit pl with subdomain="+subdomain);
             }
             for (Iterator<Pl> plIterator=plsSubdomain.iterator(); plIterator.hasNext();) {
                 Pl pl=plIterator.next();
@@ -96,9 +113,8 @@ public class PlFinder {
             return pl;
         }
 
-
-        //None found, return the basic
-        return Pl.get(1);
+        //None found, return the default
+        return PlFinder.defaultPl();
     }
 
 }

@@ -15,7 +15,9 @@
         <property name="date" type="timestamp">
             <column name="date" not-null="true" />
         </property>
-
+        <property name="plid" type="int">
+            <column name="plid" not-null="true" />
+        </property>
 
     </class>
 </hibernate-mapping>

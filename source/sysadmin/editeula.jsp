@@ -1,6 +1,7 @@
 <%@ page import="org.apache.log4j.Logger" %>
 <%@ page import="com.pingfit.htmluibeans.SysadminEditEula" %>
 <%@ page import="com.pingfit.htmlui.*" %>
+<%@ page import="com.pingfit.dao.Pl" %>
 <%
 Logger logger = Logger.getLogger(this.getClass().getName());
 String pagetitle = "Edit EULA";
@@ -12,12 +13,16 @@ String acl = "sysadmin";
 SysadminEditEula sysadminEditEula = (SysadminEditEula)Pagez.getBeanMgr().get("SysadminEditEula");
 %>
 <%
+Pl pl = Pl.get(sysadminEditEula.getPlid());
+pagetitle = "Edit EULA for PL '"+pl.getName()+"'";
+%>
+<%
     if (request.getParameter("action") != null && request.getParameter("action").equals("save")) {
         try {
             sysadminEditEula.setEula(Textbox.getValueFromRequest("eula", "Eula", false, DatatypeString.DATATYPEID));
             sysadminEditEula.edit();
             Pagez.getUserSession().setMessage("EULA updated.");
-            Pagez.sendRedirect("/sysadmin/index.jsp");
+            Pagez.sendRedirect("/sysadmin/privatelabeledit.jsp?plid="+sysadminEditEula.getPlid());
             return;
         } catch (ValidationException vex) {
             Pagez.getUserSession().setMessage(vex.getErrorsAsSingleString());
@@ -34,6 +39,7 @@ SysadminEditEula sysadminEditEula = (SysadminEditEula)Pagez.getBeanMgr().get("Sy
          <form action="/sysadmin/editeula.jsp" method="post">
             <input type="hidden" name="dpage" value="/sysadmin/editeula.jsp">
             <input type="hidden" name="action" value="save">
+            <input type="hidden" name="plid" value="<%=sysadminEditEula.getPlid()%>">
 
             <table cellpadding="0" cellspacing="0" border="0">
 

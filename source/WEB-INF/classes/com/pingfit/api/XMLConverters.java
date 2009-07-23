@@ -52,6 +52,15 @@ public class XMLConverters {
         return element;
     }
 
+    public static Element plPublicInfoAsXML(Pl pl) {
+        Element element = new Element("pl");
+        element.addContent(nameValueElement("plid", String.valueOf(pl.getPlid())));
+        element.addContent(nameValueElement("name", String.valueOf(pl.getNameforui())));
+        element.addContent(nameValueElement("airlogo", String.valueOf(pl.getAirlogo())));
+        element.addContent(nameValueElement("airbgcolor", String.valueOf(pl.getAirbgcolor())));
+        return element;
+    }
+
     public static Element exerciseAsXML(Exercise exercise) {
         Element element = new Element("exercise");
         element.addContent(nameValueElement("exerciseid", String.valueOf(exercise.getExerciseid())));

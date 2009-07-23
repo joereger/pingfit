@@ -5,6 +5,7 @@ import com.pingfit.dao.User;
 import com.pingfit.dao.Usereula;
 
 import com.pingfit.util.GeneralException;
+import com.pingfit.htmlui.Pagez;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -27,7 +28,7 @@ public class PublicEula implements Serializable {
 
 
     public void initBean(){
-        eula = EulaHelper.getMostRecentEula().getEula();
+        eula = EulaHelper.getMostRecentEula(Pagez.getUserSession().getPl().getPlid()).getEula();
     }
 
 

@@ -3,6 +3,7 @@ package com.pingfit.eula;
 import com.pingfit.dao.Eula;
 import com.pingfit.dao.User;
 import com.pingfit.dao.Usereula;
+import com.pingfit.dao.Pl;
 import com.pingfit.dao.hibernate.HibernateUtil;
 
 import java.util.List;
@@ -18,28 +19,22 @@ import org.apache.log4j.Logger;
  */
 public class EulaHelper {
 
-    public static Eula eula;
+    //public static Eula eula;
 
-    public static Eula getMostRecentEula(){
-        if (eula==null){
-            refreshMostRecentEula();
-        }
-        return eula;
-    }
-
-    public static void refreshMostRecentEula(){
-        eula = new Eula();
-        synchronized(eula){
-            List eulas = HibernateUtil.getSession().createQuery("from Eula order by eulaid desc").list();
-            if (eulas!=null && eulas.size()>0){
-                eula = (Eula)eulas.get(0);
-                return;
-            }
+    public static Eula getMostRecentEula(int plid){
+        Eula eula = new Eula();
+        List eulas = HibernateUtil.getSession().createQuery("from Eula order by eulaid desc").list();
+        if (eulas!=null && eulas.size()>0){
+            eula = (Eula)eulas.get(0);
+        } else {
             //But since none was found in DB, create a blank empty one
             eula.setDate(new Date());
             eula.setEula("End User License Agreement");
         }
+        return eula;
     }
+
+
 
     public static boolean isUserUsingMostRecentEula(User user){
         Logger logger = Logger.getLogger(EulaHelper.class);
@@ -54,8 +49,8 @@ public class EulaHelper {
             }
         }
         logger.debug("highestEulaidForUser="+highestEulaidForUser);
-        logger.debug("getMostRecentEula().getEulaid()="+getMostRecentEula().getEulaid());
-        if (highestEulaidForUser>=getMostRecentEula().getEulaid()){
+        logger.debug("getMostRecentEula().getEulaid()="+getMostRecentEula(user.getPlid()).getEulaid());
+        if (highestEulaidForUser>=getMostRecentEula(user.getPlid()).getEulaid()){
             logger.debug("returning true because highesteulaidforuser>=getMostRecentEula().getEulaid()");
             return true;
         }                   

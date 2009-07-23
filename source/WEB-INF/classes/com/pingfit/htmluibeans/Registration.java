@@ -39,6 +39,7 @@ public class Registration implements Serializable {
     private String eula;
     private boolean displaytempresponsesavedmessage;
     private boolean isflashsignup = true;
+    private int plid = 1;
 
 
     //private String temp;
@@ -54,7 +55,13 @@ public class Registration implements Serializable {
     public void initBean(){
         Logger logger = Logger.getLogger(this.getClass().getName());
         displaytempresponsesavedmessage = false;
-        eula = EulaHelper.getMostRecentEula().getEula();
+        if (Pagez.getUserSession()!=null && Pagez.getUserSession().getPl()!=null){
+            plid = Pagez.getUserSession().getPl().getPlid();
+        } else {
+            plid = 1;
+        }
+        eula = EulaHelper.getMostRecentEula(plid).getEula();
+
         
     }
 
@@ -117,7 +124,7 @@ public class Registration implements Serializable {
 
         //@todo need to check for lcase(firstname), lcase(lastname), email in the database... people are changing caps on name and creating another account.
 
-        if (eula==null || !eula.trim().equals(EulaHelper.getMostRecentEula().getEula().trim())){
+        if (eula==null || !eula.trim().equals(EulaHelper.getMostRecentEula(plid).getEula().trim())){
             //@todo Registration EULA validation
             //logger.debug("eula="+eula);
             //logger.debug("EulaHelper.getMostRecentEula().getEula()="+EulaHelper.getMostRecentEula().getEula());
@@ -134,6 +141,7 @@ public class Registration implements Serializable {
         //@todo Use http://www.jasypt.org/ to encrypt password
         User user = new User();
         user.setEmail(email);
+        user.setPlid(plid);
         user.setPassword(password);
         user.setFirstname(firstname);
         user.setLastname(lastname);
@@ -174,7 +182,7 @@ public class Registration implements Serializable {
         if (isflashsignup){
             usereula.setEulaid(0);
         } else {
-            usereula.setEulaid(EulaHelper.getMostRecentEula().getEulaid());
+            usereula.setEulaid(EulaHelper.getMostRecentEula(plid).getEulaid());
         }
         usereula.setUserid(user.getUserid());
         usereula.setIp(Pagez.getRequest().getRemoteAddr());
@@ -297,5 +305,13 @@ public class Registration implements Serializable {
 
     public void setNickname(String nickname) {
         this.nickname=nickname;
+    }
+
+    public int getPlid() {
+        return plid;
+    }
+
+    public void setPlid(int plid) {
+        this.plid=plid;
     }
 }

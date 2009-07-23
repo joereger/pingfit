@@ -48,15 +48,16 @@ public class CoreMethods {
         }
     }
 
-    public static Eula getCurrentEula() throws GeneralException {
+    public static Eula getCurrentEula(int plid) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
-            return EulaHelper.getMostRecentEula();
+            return EulaHelper.getMostRecentEula(plid);
         } catch (Exception ex) {
             logger.error("", ex);
             throw new GeneralException("Database error... sorry... please try again.");
         }
     }
+
 
     public static boolean isUserEulaUpToDate(User user) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
@@ -541,7 +542,7 @@ public class CoreMethods {
         }
     }
 
-    public static void signUp(String email, String password, String passwordverify, String firstname, String lastname, String nickname) throws GeneralException {
+    public static void signUp(String email, String password, String passwordverify, String firstname, String lastname, String nickname, int plid) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
             Registration registration = new Registration();
@@ -552,7 +553,8 @@ public class CoreMethods {
             registration.setFirstname(firstname);
             registration.setLastname(lastname);
             registration.setNickname(nickname);
-            registration.setEula(EulaHelper.getMostRecentEula().getEula().trim());
+            registration.setEula(EulaHelper.getMostRecentEula(plid).getEula().trim());
+            registration.setPlid(plid);
             registration.setDisplaytempresponsesavedmessage(false);
             registration.registerAction();
             User newUser = User.get(registration.getUserid());

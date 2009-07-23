@@ -54,5 +54,14 @@
         <property name="peers" type="text">
             <column name="peers" not-null="true" />
         </property>
+        <property name="airlogo" type="string">
+            <column name="airlogo" not-null="true" />
+        </property>
+        <property name="airbgcolor" type="string">
+            <column name="airbgcolor" not-null="true" />
+        </property>
+        <property name="isdefault" type="boolean">
+            <column name="isdefault" />
+        </property>
     </class>
 </hibernate-mapping>

@@ -230,6 +230,9 @@ public class ApplicationStartup implements ServletContextListener {
             pl.setTwitterpassword("");
             pl.setHomepagetemplate("");
             pl.setPeers("0");
+            pl.setAirlogo("");
+            pl.setAirbgcolor("");
+            pl.setIsdefault(true);
             try{pl.save();}catch(Exception ex){logger.error(ex);}
         }
     }

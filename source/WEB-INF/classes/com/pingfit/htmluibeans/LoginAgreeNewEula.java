@@ -28,7 +28,7 @@ public class LoginAgreeNewEula implements Serializable {
     }
 
     public void initBean(){
-        eula = EulaHelper.getMostRecentEula().getEula();
+        eula = EulaHelper.getMostRecentEula(Pagez.getUserSession().getPl().getPlid()).getEula();
     }
 
     public void agree() throws ValidationException {
@@ -36,7 +36,7 @@ public class LoginAgreeNewEula implements Serializable {
         Logger logger = Logger.getLogger(this.getClass().getName());
         User user = Pagez.getUserSession().getUser();
 
-        if (!eula.equals(EulaHelper.getMostRecentEula().getEula())){
+        if (!eula.equals(EulaHelper.getMostRecentEula(user.getPlid()).getEula())){
             //@todo LoginAgreeNewEula validate eula
             //vex.addValidationError("The end user license can't be edited.");
             //eula = EulaHelper.getMostRecentEula().getEula();
@@ -45,7 +45,7 @@ public class LoginAgreeNewEula implements Serializable {
 
         Usereula usereula = new Usereula();
         usereula.setDate(new Date());
-        usereula.setEulaid(EulaHelper.getMostRecentEula().getEulaid());
+        usereula.setEulaid(EulaHelper.getMostRecentEula(user.getPlid()).getEulaid());
         usereula.setUserid(user.getUserid());
         usereula.setIp(Pagez.getRequest().getRemoteAddr());
         try{

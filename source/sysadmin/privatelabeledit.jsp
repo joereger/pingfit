@@ -69,6 +69,8 @@ String acl = "sysadmin";
                 pl.setIshttpson(CheckboxBoolean.getValueFromRequest("ishttpson"));
                 pl.setTwitterusername(Textbox.getValueFromRequest("twitterusername", "Twitter Username", false, DatatypeString.DATATYPEID));
                 pl.setTwitterpassword(Textbox.getValueFromRequest("twitterpassword", "Twitter Password", false, DatatypeString.DATATYPEID));
+                pl.setAirlogo(Textbox.getValueFromRequest("airlogo", "Air Logo", false, DatatypeString.DATATYPEID));
+                pl.setAirbgcolor(Textbox.getValueFromRequest("airbgcolor", "Air BgColor", false, DatatypeString.DATATYPEID));
                 //Validate data
                 if (PlVerification.isValid(pl)){
                     pl.save();
@@ -98,6 +100,28 @@ String acl = "sysadmin";
                 } else {
                     Pagez.getUserSession().setMessage("Pl Fails Validation!");
                 }
+            }
+        } catch (Exception vex) {
+            Pagez.getUserSession().setMessage(vex.toString());
+        }
+    }
+%>
+<%
+    if (request.getParameter("action") != null) {
+        try {
+            if (request.getParameter("action").equals("makedefault")){
+                //Set all to not default
+                List pls = HibernateUtil.getSession().createQuery("from Pl").setCacheable(true).list();
+                for (Iterator iterator=pls.iterator(); iterator.hasNext();) {
+                    Pl plTmp=(Pl) iterator.next();
+                    plTmp.setIsdefault(false);
+                    try{plTmp.save();} catch (Exception vex) {Pagez.getUserSession().setMessage(vex.toString());}
+                }
+                //Now update the correct one
+                pl.setIsdefault(true);
+                pl.save();
+                CacheFactory.getCacheProvider().flush(PlFinder.CACHEGROUP);
+                Pagez.getUserSession().setMessage("Done! Is default.");
             }
         } catch (Exception vex) {
             Pagez.getUserSession().setMessage(vex.toString());
@@ -196,8 +220,25 @@ String acl = "sysadmin";
                     </td>
                     <td valign="top">
                         <%=Textbox.getHtml("name", pl.getName(), 255, 35, "", "")%>
+                        <br>
+                        <font class="tinyfont"><a href="/sysadmin/editeula.jsp?plid=<%=pl.getPlid()%>">View/Edit EULA for this PL</a></font>
                     </td>
                 </tr>
+
+                <tr>
+                    <td valign="top">
+                        <font class="formfieldnamefont">Default PL?</font>
+                    </td>
+                    <td valign="top">
+                        <%if (pl.getIsdefault()){%>
+                            <font class="tinyfont">This is the default pl.</font>
+                        <%} else {%>
+                            <font class="tinyfont">This is not the default pl. <a href="/sysadmin/privatelabeledit.jsp?plid=<%=pl.getPlid()%>&action=setwebhtmlheadertodefault">(make it the default PL)</a></font>
+                        <%}%>
+                    </td>
+                </tr>
+
+
                 <tr>
                     <td valign="top">
                         <font class="formfieldnamefont">Name for UI</font>
@@ -263,6 +304,22 @@ String acl = "sysadmin";
                     </td>
                     <td valign="top">
                         <%=Textbox.getHtml("twitterpassword", pl.getTwitterpassword(), 255, 35, "", "")%>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="top">
+                        <font class="formfieldnamefont">Air Logo</font>
+                    </td>
+                    <td valign="top">
+                        <%=Textbox.getHtml("airlogo", pl.getAirlogo(), 255, 35, "", "")%>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="top">
+                        <font class="formfieldnamefont">Air BgColor</font>
+                    </td>
+                    <td valign="top">
+                        <%=Textbox.getHtml("airbgcolor", pl.getAirbgcolor(), 255, 35, "", "")%>
                     </td>
                 </tr>
                 <tr>

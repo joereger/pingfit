@@ -26,7 +26,6 @@
     }
     </style>
     <![endif]-->
-
 </head>
 
 
@@ -137,7 +136,6 @@
                 <a href="/sysadmin/transactions.jsp"><font class="subnavfont" style=" color: #ffffff;">Trans</font></a>
                 <a href="/sysadmin/balance.jsp"><font class="subnavfont" style=" color: #ffffff;">Balance</font></a>
                 <a href="/sysadmin/userlist.jsp"><font class="subnavfont" style=" color: #ffffff;">Users</font></a>
-                <a href="/sysadmin/editeula.jsp"><font class="subnavfont" style=" color: #ffffff;">Eula</font></a>
                 <a href="/sysadmin/sysadminsupportissueslist.jsp"><font class="subnavfont" style=" color: #ffffff;">Support</font></a>
                 <a href="/sysadmin/manuallyrunscheduledtask.jsp"><font class="subnavfont" style=" color: #ffffff;">Schds</font></a>
                 <a href="/sysadmin/systemprops.jsp"><font class="subnavfont" style=" color: #ffffff;">SysP</font></a>

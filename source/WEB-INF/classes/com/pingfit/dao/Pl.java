@@ -31,6 +31,9 @@ public class Pl extends BasePersistentClass implements java.io.Serializable, Aut
     private String twitterpassword;
     private String homepagetemplate;
     private String peers;
+    private String airlogo;
+    private String airbgcolor;
+    private boolean isdefault;
 
 
 
@@ -217,5 +220,29 @@ public class Pl extends BasePersistentClass implements java.io.Serializable, Aut
 
     public void setPeers(String peers) {
         this.peers=peers;
+    }
+
+    public String getAirlogo() {
+        return airlogo;
+    }
+
+    public void setAirlogo(String airlogo) {
+        this.airlogo=airlogo;
+    }
+
+    public String getAirbgcolor() {
+        return airbgcolor;
+    }
+
+    public void setAirbgcolor(String airbgcolor) {
+        this.airbgcolor=airbgcolor;
+    }
+
+    public boolean getIsdefault() {
+        return isdefault;
+    }
+
+    public void setIsdefault(boolean isdefault) {
+        this.isdefault=isdefault;
     }
 }

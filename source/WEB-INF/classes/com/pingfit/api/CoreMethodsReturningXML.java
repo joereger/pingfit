@@ -4,6 +4,7 @@ import com.pingfit.dao.*;
 import com.pingfit.util.GeneralException;
 import com.pingfit.exercisechoosers.ExerciseExtended;
 import com.pingfit.friends.RoomPermissionRequest;
+import com.pingfit.privatelabel.PlFinder;
 import org.apache.log4j.Logger;
 import org.jdom.Element;
 import org.jdom.Text;
@@ -26,7 +27,7 @@ public class CoreMethodsReturningXML {
             element.addContent(getLoggedInUser(user));
             element.addContent(getExerciseLists(user));
             element.addContent(getRooms(user));
-            element.addContent(getCurrentEula());
+            element.addContent(getCurrentEula(user.getPlid()));
             element.addContent(getFriends(user));
             element.addContent(getNotifications(user));
             return element;
@@ -108,10 +109,24 @@ public class CoreMethodsReturningXML {
         }
     }
 
-    public static Element getCurrentEula() {
+    public static Element getPlPublicInfo(int plid) {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
-            Eula eula = CoreMethods.getCurrentEula();
+            Pl pl = Pl.get(plid);
+            if (pl==null || pl.getPlid()==0){
+                pl = PlFinder.defaultPl();
+            }
+            return XMLConverters.plPublicInfoAsXML(pl);
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+        }
+    }
+
+    public static Element getCurrentEula(int plid) {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        try{
+            Eula eula = CoreMethods.getCurrentEula(plid);
             return XMLConverters.eulaAsXML(eula);
         } catch (GeneralException gex) {
             return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
@@ -341,10 +356,10 @@ public class CoreMethodsReturningXML {
         }
     }
 
-    public static Element signUp(String email, String password, String passwordverify, String firstname, String lastname, String nickname) throws GeneralException {
+    public static Element signUp(String email, String password, String passwordverify, String firstname, String lastname, String nickname, int plid) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
-            CoreMethods.signUp(email, password, passwordverify, firstname, lastname, nickname);
+            CoreMethods.signUp(email, password, passwordverify, firstname, lastname, nickname, plid);
             return XMLConverters.resultXml(true, "");
         } catch (GeneralException gex) {
             return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());

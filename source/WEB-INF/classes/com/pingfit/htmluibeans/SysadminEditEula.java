@@ -5,8 +5,10 @@ import com.pingfit.dao.Eula;
 import com.pingfit.util.GeneralException;
 
 import com.pingfit.util.Time;
+import com.pingfit.util.Num;
 import com.pingfit.htmlui.Pagez;
 import com.pingfit.htmlui.ValidationException;
+import com.pingfit.privatelabel.PlFinder;
 import com.mysql.jdbc.TimeUtil;
 
 import java.util.Date;
@@ -24,6 +26,7 @@ public class SysadminEditEula implements Serializable {
     private String eula;
     private int eulaid;
     private String date;
+    private int plid;
 
     public SysadminEditEula(){
 
@@ -32,17 +35,23 @@ public class SysadminEditEula implements Serializable {
 
 
     public void initBean(){
-        eula = EulaHelper.getMostRecentEula().getEula();
-        eulaid = EulaHelper.getMostRecentEula().getEulaid();
-        date = Time.dateformatcompactwithtime(Time.getCalFromDate(EulaHelper.getMostRecentEula().getDate()));
+        if (Num.isinteger(Pagez.getRequest().getParameter("plid"))){
+            plid = Integer.parseInt(Pagez.getRequest().getParameter("plid"));
+        } else {
+            plid =  PlFinder.defaultPl().getPlid();
+        }
+        eula = EulaHelper.getMostRecentEula(plid).getEula();
+        eulaid = EulaHelper.getMostRecentEula(plid).getEulaid();
+        date = Time.dateformatcompactwithtime(Time.getCalFromDate(EulaHelper.getMostRecentEula(plid).getDate()));
     }
 
     public void edit() throws ValidationException {
         Logger logger = Logger.getLogger(this.getClass().getName());
-        if (!eula.equals(EulaHelper.getMostRecentEula().getEula())){
+        if (!eula.equals(EulaHelper.getMostRecentEula(plid).getEula())){
             Eula eulaObj = new Eula();
             eulaObj.setDate(new Date());
             eulaObj.setEula(eula);
+            eulaObj.setPlid(plid);
             try{
                 eulaObj.save();
             } catch (GeneralException gex){
@@ -51,7 +60,6 @@ public class SysadminEditEula implements Serializable {
                 Pagez.getUserSession().setMessage("Error... please try again.");
                 throw new ValidationException("Error with db.");
             }
-            EulaHelper.refreshMostRecentEula();
         }
     }
 
@@ -79,5 +87,13 @@ public class SysadminEditEula implements Serializable {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public int getPlid() {
+        return plid;
+    }
+
+    public void setPlid(int plid) {
+        this.plid=plid;
     }
 }
