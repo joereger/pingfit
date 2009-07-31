@@ -23,7 +23,7 @@ public class EulaHelper {
 
     public static Eula getMostRecentEula(int plid){
         Eula eula = new Eula();
-        List eulas = HibernateUtil.getSession().createQuery("from Eula order by eulaid desc").list();
+        List eulas = HibernateUtil.getSession().createQuery("from Eula where plid='"+plid+"' order by eulaid desc").list();
         if (eulas!=null && eulas.size()>0){
             eula = (Eula)eulas.get(0);
         } else {

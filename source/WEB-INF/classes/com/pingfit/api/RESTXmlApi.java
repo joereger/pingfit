@@ -117,6 +117,12 @@ public class RESTXmlApi extends HttpServlet {
                                 plid = Integer.parseInt(request.getParameter("plid"));
                             }
                             element = CoreMethodsReturningXML.getCurrentEula(plid);
+                        } else if (method.equalsIgnoreCase("getPl")){
+                            int plid = 1;
+                            if (Num.isinteger(request.getParameter("plid"))){
+                                plid = Integer.parseInt(request.getParameter("plid"));
+                            }
+                            element = CoreMethodsReturningXML.getPlPublicInfo(plid);
                         } else if (method.equalsIgnoreCase("getCurrentRoom")){
                             element = CoreMethodsReturningXML.getCurrentRoom(user);
                         } else if (method.equalsIgnoreCase("isUserEulaUpToDate")){

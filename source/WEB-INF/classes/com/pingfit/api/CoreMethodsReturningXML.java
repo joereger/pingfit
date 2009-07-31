@@ -30,6 +30,7 @@ public class CoreMethodsReturningXML {
             element.addContent(getCurrentEula(user.getPlid()));
             element.addContent(getFriends(user));
             element.addContent(getNotifications(user));
+            element.addContent(getPlPublicInfo(user.getPlid()));
             return element;
         } catch (GeneralException gex) {
             return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());

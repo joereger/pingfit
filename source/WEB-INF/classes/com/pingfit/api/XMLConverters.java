@@ -87,6 +87,7 @@ public class XMLConverters {
         element.addContent(nameValueElement("exercisechooserid", String.valueOf(user.getExercisechooserid())));
         element.addContent(nameValueElement("exerciseeveryxminutes", String.valueOf(user.getExerciseeveryxminutes())));
         element.addContent(nameValueElement("createdate", String.valueOf(Time.dateformatUtc(Time.getCalFromDate(user.getCreatedate())))));
+        element.addContent(nameValueElement("plid", String.valueOf(user.getPlid())));
         element.addContent(nameValueElement("roomid", String.valueOf(user.getRoomid())));
         element.addContent(CoreMethodsReturningXML.isUserEulaUpToDate(user));
         try{
