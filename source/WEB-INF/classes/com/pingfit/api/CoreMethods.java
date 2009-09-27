@@ -20,6 +20,7 @@ import java.util.*;
 
 import org.apache.log4j.Logger;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.Order;
 
 /**
  * User: Joe Reger Jr
@@ -57,7 +58,6 @@ public class CoreMethods {
             throw new GeneralException("Database error... sorry... please try again.");
         }
     }
-
 
     public static boolean isUserEulaUpToDate(User user) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
@@ -359,6 +359,31 @@ public class CoreMethods {
             logger.error("", ex);
             throw new GeneralException("Database error... sorry... please try again.");
         }
+    }
+
+    public static ArrayList<Pingback> getRecentExercises(User user, int useridToShowRecentExercisesFor, int numberToGet) throws GeneralException {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        ArrayList<Pingback> out = new ArrayList<Pingback>();
+        try{
+            User userToShowRecentExercisesFor = User.get(useridToShowRecentExercisesFor);
+            if (!isUserOk(userToShowRecentExercisesFor)){ return null; }
+            //@todo user-specific privacy controls to manage who can see what
+            if (numberToGet>100){ numberToGet = 100; }
+            List<Pingback> pingbacks = HibernateUtil.getSession().createCriteria(Pingback.class)
+                                               .add(Restrictions.eq("userid", useridToShowRecentExercisesFor))
+                                               .addOrder(Order.desc("pingbackid"))
+                                               .setMaxResults(numberToGet)
+                                               .setCacheable(true)
+                                               .list();
+            for (Iterator<Pingback> pingbackIterator=pingbacks.iterator(); pingbackIterator.hasNext();) {
+                Pingback pingback=pingbackIterator.next();
+                out.add(pingback);
+            }
+        } catch (Exception ex) {
+            logger.error("", ex);
+            throw new GeneralException("Database error... sorry... please try again.");
+        }
+        return out;
     }
 
     public static Exercise getExercise(int exerciseid) throws GeneralException {

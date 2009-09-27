@@ -75,6 +75,17 @@ public class XMLConverters {
         return element;
     }
 
+    public static Element pingbackAsXML(Pingback pingback) {
+        Element element = new Element("pingback");
+        element.addContent(nameValueElement("pingbackid", String.valueOf(pingback.getPingbackid())));
+        element.addContent(nameValueElement("userid", String.valueOf(pingback.getUserid())));
+        element.addContent(nameValueElement("date", String.valueOf(Time.dateformatUtc(Time.getCalFromDate(pingback.getDate())))));
+        element.addContent(nameValueElement("reps", String.valueOf(pingback.getReps())));
+        Exercise exercise = Exercise.get(pingback.getExerciseid());
+        element.addContent(exerciseAsXML(exercise));
+        return element;
+    }
+
     public static Element userAsXML(User user) {
         Logger logger = Logger.getLogger(XMLConverters.class);
         Element element = new Element("user");
@@ -90,6 +101,7 @@ public class XMLConverters {
         element.addContent(nameValueElement("plid", String.valueOf(user.getPlid())));
         element.addContent(nameValueElement("roomid", String.valueOf(user.getRoomid())));
         element.addContent(CoreMethodsReturningXML.isUserEulaUpToDate(user));
+        element.addContent(CoreMethodsReturningXML.getRecentExercises(user, user.getUserid(), 20));
         try{
             Room currentRoom = CoreMethods.getCurrentRoom(user);
             element.addContent(roomAsXML(currentRoom));

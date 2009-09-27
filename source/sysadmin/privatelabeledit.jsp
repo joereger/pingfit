@@ -11,7 +11,7 @@
 <%@ page import="java.util.Iterator" %>
 <%@ page import="com.pingfit.dao.hibernate.HibernateUtil" %>
 <%@ page import="java.util.TreeMap" %>
-<%@ page import="java.util.logging.Logger" %>
+<%@ page import="org.apache.log4j.Logger" %>
 <%
 Logger logger = Logger.getLogger(this.getClass().getName());
 String pagetitle = "Private Label";

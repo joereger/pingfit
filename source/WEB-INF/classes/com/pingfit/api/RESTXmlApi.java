@@ -167,6 +167,16 @@ public class RESTXmlApi extends HttpServlet {
                                 exerciselistid = Integer.parseInt(request.getParameter("exerciselistid"));
                             }
                             element = CoreMethodsReturningXML.getExerciselist(exerciselistid);
+                        } else if (method.equalsIgnoreCase("getRecentExercises")){
+                            int useridToShowRecentExercisesFor = 0;
+                            if (Num.isinteger(request.getParameter("useridToShowRecentExercisesFor"))){
+                                useridToShowRecentExercisesFor = Integer.parseInt(request.getParameter("useridToShowRecentExercisesFor"));
+                            }
+                            int numberToGet = 0;
+                            if (Num.isinteger(request.getParameter("numberToGet"))){
+                                numberToGet = Integer.parseInt(request.getParameter("numberToGet"));
+                            }
+                            element = CoreMethodsReturningXML.getRecentExercises(user, useridToShowRecentExercisesFor, numberToGet);
                         } else if (method.equalsIgnoreCase("skipExercise")){
                             element = CoreMethodsReturningXML.skipExercise(user);
                         } else if (method.equalsIgnoreCase("getSecondsUntilNextExercise")){

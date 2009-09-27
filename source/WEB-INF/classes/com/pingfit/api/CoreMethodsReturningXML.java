@@ -30,7 +30,7 @@ public class CoreMethodsReturningXML {
             element.addContent(getCurrentEula(user.getPlid()));
             element.addContent(getFriends(user));
             element.addContent(getNotifications(user));
-            element.addContent(getPlPublicInfo(user.getPlid()));
+            element.addContent(getCurrentPl(user.getPlid()));
             return element;
         } catch (GeneralException gex) {
             return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
@@ -110,6 +110,19 @@ public class CoreMethodsReturningXML {
         }
     }
 
+
+    public static Element getCurrentPl(int plid) {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        try{
+            Element element = new Element("currentpl");
+            element.addContent(getPlPublicInfo(plid));
+            return element;
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+        }
+    }
+
     public static Element getPlPublicInfo(int plid) {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
@@ -149,6 +162,8 @@ public class CoreMethodsReturningXML {
         }
     }
 
+
+
     public static Element agreeToEula(User user, int eulaid, String ip) {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
@@ -184,6 +199,25 @@ public class CoreMethodsReturningXML {
             for (Iterator it = nextExercises.iterator(); it.hasNext(); ) {
                 ExerciseExtended exExt = (ExerciseExtended)it.next();
                 element.addContent(XMLConverters.exerciseAsXML(exExt));
+            }
+            return element;
+        } catch (GeneralException gex) {
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+        }
+    }
+
+
+    public static Element getRecentExercises(User user, int useridToShowRecentExercisesFor, int numberToGet) {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        try{
+            Element element = new Element("recentexercises");
+            ArrayList<Pingback> recentExercises = CoreMethods.getRecentExercises(user, useridToShowRecentExercisesFor, numberToGet);
+            for (Iterator it = recentExercises.iterator(); it.hasNext(); ) {
+                Pingback pingback = (Pingback)it.next();
+                element.addContent(XMLConverters.pingbackAsXML(pingback));
             }
             return element;
         } catch (GeneralException gex) {
