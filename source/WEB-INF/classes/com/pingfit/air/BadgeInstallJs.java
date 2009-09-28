@@ -46,7 +46,7 @@ public class BadgeInstallJs extends HttpServlet {
             }
         }    
 
-        String flashVars = "refid="+refid+":"+"plid="+"23"+":"+"some=var";
+        String flashVars = "refid="+refid+":"+"plid="+Pagez.getUserSession().getPl().getPlid()+":"+"some=var";
         String jsFile = Io.textFileRead(WebAppRootDir.getWebAppRootPath() + "badgefiles" + java.io.File.separator  + "badgeInstall.js").toString();
         String output = jsFile;
         output = output.replaceAll("---VERSION---", airVersion);

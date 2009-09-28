@@ -2,8 +2,8 @@
 <html>
 <head>
 	<title>pingFit</title>
-	<script type='text/javascript' src='badgefiles/swfobject.js?refid=<%=refid%>'></script>
-    <script type='text/javascript' src='badgefiles/badgeInstall.js?refid=<%=refid%>'></script>
+	<script type='text/javascript' src='badgefiles/swfobject.js?refid=$refid'></script>
+    <script type='text/javascript' src='badgefiles/badgeInstall.js?refid=$refid'></script>
 	<link type='text/css' rel='stylesheet' href='badgefiles/style.css' />
 	<style type="text/css">
 	body {

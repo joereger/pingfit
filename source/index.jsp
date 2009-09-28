@@ -31,6 +31,7 @@
             templateHomepageName= "index-plid-default";
         }
         VelocityContext velocityContext = new VelocityContext();
+        velocityContext.put("refid", refid);
         String homepage = TemplateProcessor.process(templateHomepageName, templateHomepage, velocityContext);
         %>
         <%=homepage%>
