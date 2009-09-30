@@ -161,7 +161,6 @@
             <br/><br/>
         #end
         #if ($userSession.message!="")
-            %>
             <br/>
             <center><div style="background: #e6e6e6; text-align: left; padding: 20px;"><font class="formfieldnamefont">$userSession.message</font></div></center>
             <br/><br/>
