@@ -222,6 +222,8 @@ String acl = "sysadmin";
                         <%=Textbox.getHtml("name", pl.getName(), 255, 35, "", "")%>
                         <br>
                         <font class="tinyfont"><a href="/sysadmin/editeula.jsp?plid=<%=pl.getPlid()%>">View/Edit EULA for this PL</a></font>
+                        <br/>
+                        <font class="tinyfont"><a href="/sysadmin/plexerciselist.jsp">Exercise List Permissions</a></font>
                     </td>
                 </tr>
 

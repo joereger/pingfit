@@ -15,6 +15,7 @@ import com.pingfit.eula.EulaHelper;
 import com.pingfit.htmlui.ValidationException;
 import com.pingfit.friends.RoomPermissionRequest;
 import com.pingfit.email.EmailTemplateProcessor;
+import com.pingfit.helpers.PlExerciseListHelper;
 
 import java.util.*;
 
@@ -135,16 +136,20 @@ public class CoreMethods {
             }
             ArrayList<Exerciselist> out = new ArrayList<Exerciselist>();
             if (1==1){
+                //Get exercise lists that this pl has permission to access
                 List<Exerciselist> systemlists = HibernateUtil.getSession().createCriteria(Exerciselist.class)
                                                    .add(Restrictions.eq("issystem", true))
                                                    .setCacheable(true)
                                                    .list();
                 for (Iterator<Exerciselist> exerciselistIterator=systemlists.iterator(); exerciselistIterator.hasNext();) {
                     Exerciselist exerciselist=exerciselistIterator.next();
-                    out.add(exerciselist);
+                    if (PlExerciseListHelper.canPlUseExerciseList(user.getPlid(), exerciselist.getExerciselistid())){
+                        out.add(exerciselist);
+                    }
                 }
             }
             if (1==1){
+                //Get this user's exercise lists
                 List<Exerciselist> userlists = HibernateUtil.getSession().createCriteria(Exerciselist.class)
                                                    .add(Restrictions.eq("issystem", false))
                                                    .add(Restrictions.eq("useridofcreator", user.getUserid()))

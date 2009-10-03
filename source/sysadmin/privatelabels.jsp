@@ -36,8 +36,9 @@ String acl = "sysadmin";
 
 
      <br/><br/>
-     <a href="/sysadmin/privatelabeledit.jsp"><font class="mediumfont">New Private Label</font></a>
-
+     <a href="/sysadmin/privatelabeledit.jsp"><font class="normalfont">New Private Label</font></a>
+     <br/>
+     <a href="/sysadmin/plexerciselist.jsp"><font class="normalfont">Private Label Exercise List Permissions</font></a>
 
 
 <%@ include file="/template/footer.jsp" %>

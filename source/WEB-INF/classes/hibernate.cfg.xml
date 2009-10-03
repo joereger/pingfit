@@ -25,6 +25,7 @@
         <mapping resource="com/pingfit/dao/Pageperformance.hbm.xml" />
         <mapping resource="com/pingfit/dao/Pingback.hbm.xml" />
         <mapping resource="com/pingfit/dao/Pl.hbm.xml" />
+        <mapping resource="com/pingfit/dao/Plexerciselist.hbm.xml" />
         <mapping resource="com/pingfit/dao/Room.hbm.xml" />
         <mapping resource="com/pingfit/dao/Roompermission.hbm.xml" />
         <mapping resource="com/pingfit/dao/Supportissue.hbm.xml" />
