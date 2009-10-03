@@ -79,7 +79,7 @@ String acl = "sysadmin";
         <%//Body rows%>
         <%
             List<Exerciselist> exerciseLists = HibernateUtil.getSession().createCriteria(Exerciselist.class)
-                    .add(Restrictions.ne("issystem", true))
+                    .add(Restrictions.eq("issystem", true))
                     .addOrder(Order.asc("exerciselistid"))
                     .setCacheable(true)
                     .list();
