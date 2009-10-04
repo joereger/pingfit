@@ -7,6 +7,13 @@
 <%@ page import="com.pingfit.htmlui.*" %>
 <%@ page import="com.pingfit.money.CurrentBalanceCalculator" %>
 <%@ page import="com.pingfit.htmluibeans.StaticVariables" %>
+<%@ page import="com.pingfit.dao.Pl" %>
+<%@ page import="org.hibernate.criterion.Order" %>
+<%@ page import="com.pingfit.dao.hibernate.HibernateUtil" %>
+<%@ page import="java.util.List" %>
+<%@ page import="com.pingfit.util.Num" %>
+<%@ page import="com.pingfit.helpers.PlExerciseListHelper" %>
+<%@ page import="com.pingfit.helpers.PlAdminHelper" %>
 <%
 Logger logger = Logger.getLogger(this.getClass().getName());
 String pagetitle = "User: "+((SysadminUserDetail) Pagez.getBeanMgr().get("SysadminUserDetail")).getEmail();
@@ -20,9 +27,12 @@ SysadminUserDetail sysadminUserDetail = (SysadminUserDetail)Pagez.getBeanMgr().g
 <%
     if (request.getParameter("action") != null && request.getParameter("action").equals("save")) {
         try {
+            sysadminUserDetail.setPlid(Textbox.getIntFromRequest("plid", "Private Label", true, DatatypeInteger.DATATYPEID));
             sysadminUserDetail.setFirstname(Textbox.getValueFromRequest("firstname", "First Name", true, DatatypeString.DATATYPEID));
             sysadminUserDetail.setLastname(Textbox.getValueFromRequest("lastname", "Last Name", true, DatatypeString.DATATYPEID));
+            sysadminUserDetail.setNickname(Textbox.getValueFromRequest("nickname", "Nickname", true, DatatypeString.DATATYPEID));
             sysadminUserDetail.setEmail(Textbox.getValueFromRequest("email", "Email", false, DatatypeString.DATATYPEID));
+            sysadminUserDetail.setPassword(Textbox.getValueFromRequest("password", "Password", true, DatatypeString.DATATYPEID));
             sysadminUserDetail.setFacebookuid(Textbox.getValueFromRequest("facebookuserid", "Facebookuserid", false, DatatypeString.DATATYPEID));
             sysadminUserDetail.save();
             Pagez.getUserSession().setMessage("User details saved");
@@ -42,12 +52,23 @@ SysadminUserDetail sysadminUserDetail = (SysadminUserDetail)Pagez.getBeanMgr().g
     }
 %>
 <%
+    if (request.getParameter("action") != null && request.getParameter("action").equals("togglepladmin")) {
+        try {
+            sysadminUserDetail.setActivitypin(Textbox.getValueFromRequest("activitypin", "Activity Pin", false, DatatypeString.DATATYPEID));
+            sysadminUserDetail.togglepladminprivs();
+        } catch (com.pingfit.htmlui.ValidationException vex) {
+            Pagez.getUserSession().setMessage(vex.getErrorsAsSingleString());
+        }
+    }
+%>
+<%
     if (request.getParameter("action") != null && request.getParameter("action").equals("deleteuser")) {
         try {
             sysadminUserDetail.setActivitypin(Textbox.getValueFromRequest("activitypin", "Activity Pin", false, DatatypeString.DATATYPEID));
             sysadminUserDetail.deleteuser();
             Pagez.getUserSession().setMessage("User deleted");
             Pagez.sendRedirect("/sysadmin/userlist.jsp");
+            return;
         } catch (com.pingfit.htmlui.ValidationException vex) {
             Pagez.getUserSession().setMessage(vex.getErrorsAsSingleString());
         }
@@ -124,6 +145,32 @@ SysadminUserDetail sysadminUserDetail = (SysadminUserDetail)Pagez.getBeanMgr().g
         }
     }
 %>
+<%
+    if (request.getParameter("action") != null && request.getParameter("action").equals("grantpladmin")) {
+        try {
+            int pladminplid = 0;
+            if (Num.isinteger(request.getParameter("pladminplid"))) { pladminplid = Integer.parseInt(request.getParameter("pladminplid")); }
+            PlAdminHelper.grantPlControlToUser(sysadminUserDetail.getUserid(), pladminplid);
+            Pagez.getUserSession().setMessage("Changes saved.");
+        } catch (Exception ex){
+            logger.error("", ex);
+            Pagez.getUserSession().setMessage("There has been an error... stuff may be smoking!");
+        }
+    }
+%>
+<%
+    if (request.getParameter("action") != null && request.getParameter("action").equals("revokepladmin")) {
+        try {
+            int pladminplid = 0;
+            if (Num.isinteger(request.getParameter("pladminplid"))) { pladminplid = Integer.parseInt(request.getParameter("pladminplid")); }
+            PlAdminHelper.revokePlControlFromUser(sysadminUserDetail.getUserid(), pladminplid);
+            Pagez.getUserSession().setMessage("Changes saved.");
+        } catch (Exception ex){
+            logger.error("", ex);
+            Pagez.getUserSession().setMessage("There has been an error... stuff may be smoking!");
+        }
+    }
+%>
 <%@ include file="/template/header.jsp" %>
 
         <%
@@ -142,6 +189,30 @@ SysadminUserDetail sysadminUserDetail = (SysadminUserDetail)Pagez.getBeanMgr().g
                                 <table cellpadding="0" cellspacing="0" border="0">
                                     <tr>
                                         <td valign="top">
+                                            <font class="formfieldnamefont">Private Label</font>
+                                        </td>
+                                        <td valign="top">
+                                            <select name="plid">
+                                            <%
+                                            if (1==1){
+                                            List<Pl> pls = HibernateUtil.getSession().createCriteria(Pl.class)
+                                                    .addOrder(Order.asc("plid"))
+                                                    .setCacheable(true)
+                                                    .list();
+                                            if (pls!=null && pls.size()>0){
+                                                for (Iterator<Pl> plIterator=pls.iterator(); plIterator.hasNext();) {
+                                                    Pl pl=plIterator.next();
+                                                    String sel = "";
+                                                    if (pl.getPlid()==sysadminUserDetail.getUser().getPlid()){sel=" selected";}
+                                                    %><option value="<%=pl.getPlid()%>" <%=sel%>><%=pl.getName()%></option><%
+                                                }
+                                            }
+                                            }%>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td valign="top">
                                             <font class="formfieldnamefont">First Name</font>
                                         </td>
                                         <td valign="top">
@@ -158,10 +229,26 @@ SysadminUserDetail sysadminUserDetail = (SysadminUserDetail)Pagez.getBeanMgr().g
                                     </tr>
                                     <tr>
                                         <td valign="top">
+                                            <font class="formfieldnamefont">Nickname</font>
+                                        </td>
+                                        <td valign="top">
+                                            <%=Textbox.getHtml("nickname", sysadminUserDetail.getNickname(), 255, 35, "", "")%>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td valign="top">
                                             <font class="formfieldnamefont">Email</font>
                                         </td>
                                         <td valign="top">
                                             <%=Textbox.getHtml("email", sysadminUserDetail.getEmail(), 255, 35, "", "")%>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td valign="top">
+                                            <font class="formfieldnamefont">Password</font>
+                                        </td>
+                                        <td valign="top">
+                                            <%=TextboxSecret.getHtml("password", sysadminUserDetail.getPassword(), 255, 35, "", "")%>
                                         </td>
                                     </tr>
                                     <tr>
@@ -233,6 +320,54 @@ SysadminUserDetail sysadminUserDetail = (SysadminUserDetail)Pagez.getBeanMgr().g
                                 <br/>
                                 <font class="tinyfont">You must type "yes, i want to do this" in the box to make this happen</font>
                             </form>
+                        </div>
+                        <div class="rounded" style="padding: 15px; margin: 5px; background: #BFFFBF;">
+                            <form action="/sysadmin/userdetail.jsp" method="post">
+                                <input type="hidden" name="dpage" value="/sysadmin/userdetail.jsp">
+                                <input type="hidden" name="action" value="togglepladmin">
+                                <input type="hidden" name="userid" value="<%=sysadminUserDetail.getUserid()%>">
+                                <%if (sysadminUserDetail.getIspladmin()){%>
+                                    <font class="mediumfont">User is a PLAdmin.</font>
+                                <%} else {%>
+                                    <font class="mediumfont">User is not a PLAdmin.</font>
+                                <%}%>
+                                <br/>
+                                <input type="submit" class="formsubmitbutton" value="Toggle PLAdmin Privileges">
+                                <%=Textbox.getHtml("activitypin", String.valueOf(sysadminUserDetail.getActivitypin()), 255, 25, "", "")%>
+                                <br/>
+                                <font class="tinyfont">You must type "yes, i want to do this" in the box to make this happen</font>
+                            </form>
+                            <%if (sysadminUserDetail.getIspladmin()){%>
+                                <div class="rounded" style="padding: 15px; margin: 5px; background: #cccccc;">
+                                    <table cellpadding="2" cellspacing="2" border="0">
+
+                                            <%
+                                            if (1==1){
+                                            List<Pl> pls = HibernateUtil.getSession().createCriteria(Pl.class)
+                                                    .addOrder(Order.asc("plid"))
+                                                    .setCacheable(true)
+                                                    .list();
+                                            if (pls!=null && pls.size()>0){
+                                                for (Iterator<Pl> plIterator=pls.iterator(); plIterator.hasNext();) {
+                                                    Pl pl=plIterator.next();
+                                                    %>
+                                                    <%
+                                                    boolean hasaccess = PlAdminHelper.canUserControlPl(sysadminUserDetail.getUserid(), pl.getPlid());
+                                                    %>
+                                                    <tr>
+                                                    <td valign="top"><font class="tinyfont"><%=pl.getName()%></font></td>
+                                                    <%if (hasaccess){%>
+                                                        <td valign="top" bgcolor="#00ff00"><center><a href="/sysadmin/userdetail.jsp?action=revokepladmin&pladminplid=<%=pl.getPlid()%>&userid=<%=sysadminUserDetail.getUserid()%>"><img src="/images/16x16-button-green.png" border="0" width="16" height="16"></a></center></td>
+                                                    <%} else {%>
+                                                        <td valign="top" bgcolor="#e6e6e6"><center><a href="/sysadmin/userdetail.jsp?action=grantpladmin&pladminplid=<%=pl.getPlid()%>&userid=<%=sysadminUserDetail.getUserid()%>"><img src="/images/16x16-button-white.png" border="0" width="16" height="16"></a></center></td>
+                                                    <%}%>
+                                                    </tr>
+                                                <%}%>
+                                            <%}%>
+                                        <%}%>
+                                    </table>
+                                </div>
+                            <%}%>
                         </div>
                         <div class="rounded" style="padding: 15px; margin: 5px; background: #BFFFBF;">
                             <form action="/sysadmin/userdetail.jsp" method="post">

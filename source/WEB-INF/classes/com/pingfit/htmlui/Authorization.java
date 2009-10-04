@@ -36,7 +36,7 @@ public class Authorization {
             if (acl!=null && acl.equals("user")){
                 for (Iterator<Userrole> iterator = Pagez.getUserSession().getUser().getUserroles().iterator(); iterator.hasNext();) {
                     Userrole userrole = iterator.next();
-                    if (userrole.getRoleid()== Userrole.USER){
+                    if (userrole.getRoleid()==Userrole.USER){
                         logger.debug("Authorized.");
                         return true;
                     }
@@ -44,7 +44,17 @@ public class Authorization {
                 return false;
             }
 
-
+            if (acl!=null && acl.equals("pladmin")){
+                for (Iterator<Userrole> iterator = Pagez.getUserSession().getUser().getUserroles().iterator(); iterator.hasNext();) {
+                    Userrole userrole = iterator.next();
+                    //PLadmin or Sysadmin rights
+                    if (userrole.getRoleid()==Userrole.PLADMIN || userrole.getRoleid()==Userrole.SYSADMIN){
+                        logger.debug("Authorized.");
+                        return true;
+                    }
+                }
+                return false;
+            }
 
             if (acl!=null && acl.equals("sysadmin")){
                 return isUserSysadmin(Pagez.getUserSession().getUser());

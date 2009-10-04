@@ -25,11 +25,15 @@ import org.apache.log4j.Logger;
 public class SysadminUserDetail implements Serializable {
 
     private int userid;
+    private int plid;
     private String firstname;
     private String lastname;
+    private String nickname;
     private String email;
+    private String password;
     private String facebookuid="";
     private boolean issysadmin = false;
+    private boolean ispladmin = false;
     private String activitypin;
     private double amt;
     private String reason;
@@ -56,17 +60,27 @@ public class SysadminUserDetail implements Serializable {
         }
         if (user!=null && user.getUserid()>0){
             this.userid = user.getUserid();
+            this.plid = user.getPlid();
             this.user = user;
             firstname = user.getFirstname();
             lastname = user.getLastname();
+            nickname = user.getNickname();
             email = user.getEmail();
+            password = user.getPassword();
             isenabled = user.getIsenabled();
             issysadmin = false;
+            ispladmin = false;
             facebookuid = String.valueOf(user.getFacebookuserid());
             for (Iterator<Userrole> iterator = user.getUserroles().iterator(); iterator.hasNext();) {
                 Userrole userrole = iterator.next();
                 if (userrole.getRoleid()== Userrole.SYSADMIN){
                     issysadmin = true;
+                }
+            }
+            for (Iterator<Userrole> iterator = user.getUserroles().iterator(); iterator.hasNext();) {
+                Userrole userrole = iterator.next();
+                if (userrole.getRoleid()== Userrole.PLADMIN){
+                    ispladmin = true;
                 }
             }
 
@@ -131,6 +145,9 @@ public class SysadminUserDetail implements Serializable {
             user.setFirstname(firstname);
             user.setLastname(lastname);
             user.setEmail(email);
+            user.setPlid(plid);
+            user.setPassword(password);
+            user.setNickname(nickname);
             if (Num.isinteger(facebookuid)){
                 user.setFacebookuserid(Integer.parseInt(facebookuid));
             }
@@ -222,6 +239,52 @@ public class SysadminUserDetail implements Serializable {
         return "sysadminuserdetail";
     }
 
+    public String togglepladminprivs() throws ValidationException {
+        Logger logger = Logger.getLogger(this.getClass().getName());
+        logger.debug("togglepladminprivs()");
+        if (activitypin.equals("yes, i want to do this")){
+            activitypin = "";
+            User user = User.get(userid);
+            if (user!=null && user.getUserid()>0){
+                issysadmin = false;
+                for (Iterator<Userrole> iterator = user.getUserroles().iterator(); iterator.hasNext();) {
+                    Userrole userrole = iterator.next();
+                    if (userrole.getRoleid()== Userrole.PLADMIN){
+                        ispladmin = true;
+                    }
+                }
+                if (ispladmin){
+                    logger.debug("is a ispladmin");
+                    //@todo revoke ispladmin privs doesn't work
+                    //int userroleidtodelete=0;
+                    for (Iterator<Userrole> iterator = user.getUserroles().iterator(); iterator.hasNext();) {
+                        Userrole userrole = iterator.next();
+                        logger.debug("found roleid="+userrole.getRoleid());
+                        if (userrole.getRoleid()==Userrole.PLADMIN){
+                            logger.debug("removing it from iterator");
+                            iterator.remove();
+                        }
+                    }
+                    try{user.save();} catch (Exception ex){logger.error("",ex);}
+                    ispladmin = false;
+                    Pagez.getUserSession().setMessage("User is no longer a pladmin");
+                } else {
+                    Userrole role = new Userrole();
+                    role.setUserid(user.getUserid());
+                    role.setRoleid(Userrole.PLADMIN);
+                    user.getUserroles().add(role);
+                    try{role.save();} catch (Exception ex){logger.error("",ex);}
+                    ispladmin = true;
+                    Pagez.getUserSession().setMessage("User is now a pladmin");
+                }
+                initBean();
+            }
+        } else {
+            Pagez.getUserSession().setMessage("Activity Pin Not Correct.");
+        }
+        return "sysadminuserdetail";
+    }
+
     public void deleteuser() throws ValidationException {
         Logger logger = Logger.getLogger(this.getClass().getName());
         logger.debug("deleteuser()");
@@ -296,6 +359,13 @@ public class SysadminUserDetail implements Serializable {
         this.userid = userid;
     }
 
+    public int getPlid() {
+        return plid;
+    }
+
+    public void setPlid(int plid) {
+        this.plid=plid;
+    }
 
     public String getActivitypin() {
         return activitypin;
@@ -356,8 +426,13 @@ public class SysadminUserDetail implements Serializable {
     }
 
 
+    public String getPassword() {
+        return password;
+    }
 
-
+    public void setPassword(String password) {
+        this.password=password;
+    }
 
     public User getUser() {
         return user;
@@ -368,10 +443,13 @@ public class SysadminUserDetail implements Serializable {
     }
 
 
+    public boolean getIspladmin() {
+        return ispladmin;
+    }
 
-
-
-
+    public void setIspladmin(boolean ispladmin) {
+        this.ispladmin=ispladmin;
+    }
 
     public boolean getOnlyshowsuccessfultransactions() {
         return onlyshowsuccessfultransactions;
@@ -411,5 +489,13 @@ public class SysadminUserDetail implements Serializable {
 
     public void setFundstype(int fundstype) {
         this.fundstype = fundstype;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname=nickname;
     }
 }

@@ -23,11 +23,14 @@ import org.apache.log4j.Logger;
 public class SysadminUserList implements Serializable {
 
     private List users;
+    private String searchplid="";
     private String searchuserid="";
     private String searchfirstname="";
     private String searchlastname="";
+    private String searchnickname="";
     private String searchemail="";
     private boolean searchfacebookers=false;
+
 
     public SysadminUserList() {
 
@@ -42,6 +45,11 @@ public class SysadminUserList implements Serializable {
         logger.debug("searchlastname="+searchlastname);
         logger.debug("searchemail="+searchemail);
         Criteria crit = HibernateUtil.getSession().createCriteria(User.class);
+        if (searchplid!=null && !searchplid.equals("") && Num.isinteger(searchplid) && !searchplid.equals("0")){
+            crit.add(Restrictions.eq("plid", Integer.parseInt(searchplid)));
+        } else {
+            crit.add(Restrictions.gt("plid", 0));
+        }
         if (searchuserid!=null && !searchuserid.equals("") && Num.isinteger(searchuserid)){
             crit.add(Restrictions.eq("userid", Integer.parseInt(searchuserid)));
         } else {
@@ -52,6 +60,9 @@ public class SysadminUserList implements Serializable {
         }
         if (searchlastname!=null && !searchlastname.equals("")){
             crit.add(Restrictions.like("lastname", "%"+searchlastname+"%"));
+        }
+        if (searchnickname!=null && !searchnickname.equals("")){
+            crit.add(Restrictions.like("nickname", "%"+searchnickname+"%"));
         }
         if (searchemail!=null && !searchemail.equals("")){
             crit.add(Restrictions.like("email", "%"+searchemail+"%"));
@@ -97,6 +108,14 @@ public class SysadminUserList implements Serializable {
         this.searchlastname = searchlastname;
     }
 
+    public String getSearchnickname() {
+        return searchnickname;
+    }
+
+    public void setSearchnickname(String searchnickname) {
+        this.searchnickname=searchnickname;
+    }
+
     public String getSearchemail() {
         return searchemail;
     }
@@ -119,5 +138,13 @@ public class SysadminUserList implements Serializable {
 
     public void setSearchfacebookers(boolean searchfacebookers) {
         this.searchfacebookers = searchfacebookers;
+    }
+
+    public String getSearchplid() {
+        return searchplid;
+    }
+
+    public void setSearchplid(String searchplid) {
+        this.searchplid=searchplid;
     }
 }
