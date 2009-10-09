@@ -14,11 +14,12 @@
 <%@ page import="com.pingfit.util.Num" %>
 <%@ page import="com.pingfit.htmluibeans.Registration" %>
 <%@ page import="com.pingfit.eula.EulaHelper" %>
+<%@ page import="com.pingfit.helpers.PlAdminHelper" %>
 <%
 Logger logger = Logger.getLogger(this.getClass().getName());
 String pagetitle = "New User";
 String navtab = "sysadmin";
-String acl = "sysadmin";
+String acl = "pladmin";
 %>
 <%@ include file="/template/auth.jsp" %>
 <%
@@ -30,6 +31,11 @@ Registration registration = (Registration)Pagez.getBeanMgr().get("Registration")
             registration.setPlid(Textbox.getIntFromRequest("plid", "Plid", true, DatatypeInteger.DATATYPEID));
             registration.setEmail(Textbox.getValueFromRequest("email", "Email", true, DatatypeString.DATATYPEID));
             registration.setEula(EulaHelper.getMostRecentEula(Textbox.getIntFromRequest("plid", "Plid", true, DatatypeInteger.DATATYPEID)).getEula().trim());
+            if (!PlAdminHelper.canUserControlPl(Pagez.getUserSession().getUser().getUserid(), Textbox.getIntFromRequest("plid", "Plid", true, DatatypeInteger.DATATYPEID))){
+                Pagez.getUserSession().setMessage("You can't assign a user to a private label you don't have permission to manage.");
+                Pagez.sendRedirect("/sysadmin/usernew.jsp");
+                return;
+            }
             registration.setFirstname(Textbox.getValueFromRequest("firstname", "First Name", true, DatatypeString.DATATYPEID));
             registration.setLastname(Textbox.getValueFromRequest("lastname", "Last Name", true, DatatypeString.DATATYPEID));
             registration.setNickname(Textbox.getValueFromRequest("nickname", "Nickname", true, DatatypeString.DATATYPEID));
@@ -43,6 +49,7 @@ Registration registration = (Registration)Pagez.getBeanMgr().get("Registration")
         } catch (ValidationException vex) {
             Pagez.getUserSession().setMessage(vex.getErrorsAsSingleString());
         }
+
     }
 %>
 <%@ include file="/template/header.jsp" %>
@@ -68,9 +75,12 @@ Registration registration = (Registration)Pagez.getBeanMgr().get("Registration")
                             if (pls!=null && pls.size()>0){
                                 for (Iterator<Pl> plIterator=pls.iterator(); plIterator.hasNext();) {
                                     Pl pl=plIterator.next();
-                                    String sel = "";
-                                    if (String.valueOf(pl.getPlid()).equals(request.getParameter("plid"))){sel=" selected";}
-                                    %><option value="<%=pl.getPlid()%>" <%=sel%>><%=pl.getName()%></option><%
+                                    //Only add pls that the logged in user can control
+                                    if (PlAdminHelper.canUserControlPl(Pagez.getUserSession().getUser().getUserid(), pl.getPlid())){
+                                        String sel = "";
+                                        if (String.valueOf(pl.getPlid()).equals(request.getParameter("plid"))){sel=" selected";}
+                                        %><option value="<%=pl.getPlid()%>" <%=sel%>><%=pl.getName()%></option><%
+                                    }
                                 }
                             %>
                             <%}%>

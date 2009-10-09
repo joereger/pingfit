@@ -4,10 +4,10 @@ import com.pingfit.util.SortableList;
 import com.pingfit.util.Num;
 import com.pingfit.dao.hibernate.HibernateUtil;
 import com.pingfit.dao.User;
+import com.pingfit.helpers.PlAdminHelper;
+import com.pingfit.htmlui.Pagez;
 
-import java.util.List;
-import java.util.Comparator;
-import java.util.Collections;
+import java.util.*;
 import java.io.Serializable;
 
 import org.hibernate.Criteria;
@@ -70,7 +70,15 @@ public class SysadminUserList implements Serializable {
         if(searchfacebookers){
             crit.add(Restrictions.gt("facebookuserid", 0));
         }
-        users = crit.addOrder(Order.desc("userid")).list();
+        users = new ArrayList();
+        List usersTmp = crit.addOrder(Order.desc("userid")).list();
+        for (Iterator iterator=usersTmp.iterator(); iterator.hasNext();) {
+            User user=(User) iterator.next();
+            //Can only add users from pls that the logged in user can control
+            if (PlAdminHelper.canUserControlPl(Pagez.getUserSession().getUser().getUserid(), user.getPlid())){
+                users.add(user);
+            }
+        }
     }
     
 

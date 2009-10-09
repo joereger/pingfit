@@ -18,11 +18,18 @@
 Logger logger = Logger.getLogger(this.getClass().getName());
 String pagetitle = "User: "+((SysadminUserDetail) Pagez.getBeanMgr().get("SysadminUserDetail")).getEmail();
 String navtab = "sysadmin";
-String acl = "sysadmin";
+String acl = "pladmin";
 %>
 <%@ include file="/template/auth.jsp" %>
 <%
 SysadminUserDetail sysadminUserDetail = (SysadminUserDetail)Pagez.getBeanMgr().get("SysadminUserDetail");
+%>
+<%
+if (!PlAdminHelper.canUserControlPl(Pagez.getUserSession().getUser().getUserid(), sysadminUserDetail.getUser().getPlid())){
+    Pagez.getUserSession().setMessage("Sorry, you don't have permission to edit that user.");
+    Pagez.sendRedirect("/sysadmin/userlist.jsp");
+    return;
+}
 %>
 <%
     if (request.getParameter("action") != null && request.getParameter("action").equals("save")) {
@@ -42,7 +49,7 @@ SysadminUserDetail sysadminUserDetail = (SysadminUserDetail)Pagez.getBeanMgr().g
     }
 %>
 <%
-    if (request.getParameter("action") != null && request.getParameter("action").equals("togglesysadmin")) {
+    if (request.getParameter("action") != null && request.getParameter("action").equals("togglesysadmin") && Authorization.isUserSysadmin(Pagez.getUserSession().getUser())) {
         try {
             sysadminUserDetail.setActivitypin(Textbox.getValueFromRequest("activitypin", "Activity Pin", false, DatatypeString.DATATYPEID));
             sysadminUserDetail.togglesysadminprivs();
@@ -52,7 +59,7 @@ SysadminUserDetail sysadminUserDetail = (SysadminUserDetail)Pagez.getBeanMgr().g
     }
 %>
 <%
-    if (request.getParameter("action") != null && request.getParameter("action").equals("togglepladmin")) {
+    if (request.getParameter("action") != null && request.getParameter("action").equals("togglepladmin") && Authorization.isUserSysadmin(Pagez.getUserSession().getUser())) {
         try {
             sysadminUserDetail.setActivitypin(Textbox.getValueFromRequest("activitypin", "Activity Pin", false, DatatypeString.DATATYPEID));
             sysadminUserDetail.togglepladminprivs();
@@ -62,7 +69,7 @@ SysadminUserDetail sysadminUserDetail = (SysadminUserDetail)Pagez.getBeanMgr().g
     }
 %>
 <%
-    if (request.getParameter("action") != null && request.getParameter("action").equals("deleteuser")) {
+    if (request.getParameter("action") != null && request.getParameter("action").equals("deleteuser") && Authorization.isUserSysadmin(Pagez.getUserSession().getUser())) {
         try {
             sysadminUserDetail.setActivitypin(Textbox.getValueFromRequest("activitypin", "Activity Pin", false, DatatypeString.DATATYPEID));
             sysadminUserDetail.deleteuser();
@@ -84,7 +91,7 @@ SysadminUserDetail sysadminUserDetail = (SysadminUserDetail)Pagez.getBeanMgr().g
     }
 %>
 <%
-    if (request.getParameter("action") != null && request.getParameter("action").equals("giveusermoney")) {
+    if (request.getParameter("action") != null && request.getParameter("action").equals("giveusermoney") && Authorization.isUserSysadmin(Pagez.getUserSession().getUser())) {
         try {
             sysadminUserDetail.setAmt(Textbox.getDblFromRequest("amt", "Amount", true, DatatypeDouble.DATATYPEID));
             sysadminUserDetail.setReason(Textbox.getValueFromRequest("reason", "Reason", true, DatatypeString.DATATYPEID));
@@ -96,7 +103,7 @@ SysadminUserDetail sysadminUserDetail = (SysadminUserDetail)Pagez.getBeanMgr().g
     }
 %>
 <%
-    if (request.getParameter("action") != null && request.getParameter("action").equals("takeusermoney")) {
+    if (request.getParameter("action") != null && request.getParameter("action").equals("takeusermoney") && Authorization.isUserSysadmin(Pagez.getUserSession().getUser())) {
         try {
             sysadminUserDetail.setAmt(Textbox.getDblFromRequest("amt", "Amount", true, DatatypeDouble.DATATYPEID));
             sysadminUserDetail.setReason(Textbox.getValueFromRequest("reason", "Reason", true, DatatypeString.DATATYPEID));
@@ -126,7 +133,7 @@ SysadminUserDetail sysadminUserDetail = (SysadminUserDetail)Pagez.getBeanMgr().g
     }
 %>
 <%
-    if (request.getParameter("onlyshowsuccessfultransactions") != null && request.getParameter("onlyshowsuccessfultransactions").equals("1")) {
+    if (request.getParameter("onlyshowsuccessfultransactions") != null && request.getParameter("onlyshowsuccessfultransactions").equals("1") && Authorization.isUserSysadmin(Pagez.getUserSession().getUser())) {
         try {
             sysadminUserDetail.setOnlyshowsuccessfultransactions(true);
             sysadminUserDetail.initBean();
@@ -136,7 +143,7 @@ SysadminUserDetail sysadminUserDetail = (SysadminUserDetail)Pagez.getBeanMgr().g
     }
 %>
 <%
-    if (request.getParameter("onlyshownegativeamountbalance")!=null && request.getParameter("onlyshownegativeamountbalance").equals("1")) {
+    if (request.getParameter("onlyshownegativeamountbalance")!=null && request.getParameter("onlyshownegativeamountbalance").equals("1") && Authorization.isUserSysadmin(Pagez.getUserSession().getUser())) {
         try {
             sysadminUserDetail.setOnlyshownegativeamountbalance(true);
             sysadminUserDetail.initBean();
@@ -146,7 +153,7 @@ SysadminUserDetail sysadminUserDetail = (SysadminUserDetail)Pagez.getBeanMgr().g
     }
 %>
 <%
-    if (request.getParameter("action") != null && request.getParameter("action").equals("grantpladmin")) {
+    if (request.getParameter("action") != null && request.getParameter("action").equals("grantpladmin") && Authorization.isUserSysadmin(Pagez.getUserSession().getUser())) {
         try {
             int pladminplid = 0;
             if (Num.isinteger(request.getParameter("pladminplid"))) { pladminplid = Integer.parseInt(request.getParameter("pladminplid")); }
@@ -159,7 +166,7 @@ SysadminUserDetail sysadminUserDetail = (SysadminUserDetail)Pagez.getBeanMgr().g
     }
 %>
 <%
-    if (request.getParameter("action") != null && request.getParameter("action").equals("revokepladmin")) {
+    if (request.getParameter("action") != null && request.getParameter("action").equals("revokepladmin") && Authorization.isUserSysadmin(Pagez.getUserSession().getUser())) {
         try {
             int pladminplid = 0;
             if (Num.isinteger(request.getParameter("pladminplid"))) { pladminplid = Integer.parseInt(request.getParameter("pladminplid")); }
@@ -202,9 +209,12 @@ SysadminUserDetail sysadminUserDetail = (SysadminUserDetail)Pagez.getBeanMgr().g
                                             if (pls!=null && pls.size()>0){
                                                 for (Iterator<Pl> plIterator=pls.iterator(); plIterator.hasNext();) {
                                                     Pl pl=plIterator.next();
-                                                    String sel = "";
-                                                    if (pl.getPlid()==sysadminUserDetail.getUser().getPlid()){sel=" selected";}
-                                                    %><option value="<%=pl.getPlid()%>" <%=sel%>><%=pl.getName()%></option><%
+                                                        //Only add pls that the logged in user can control
+                                                        if (PlAdminHelper.canUserControlPl(Pagez.getUserSession().getUser().getUserid(), pl.getPlid())){
+                                                        String sel = "";
+                                                        if (pl.getPlid()==sysadminUserDetail.getUser().getPlid()){sel=" selected";}
+                                                        %><option value="<%=pl.getPlid()%>" <%=sel%>><%=pl.getName()%></option><%
+                                                    }
                                                 }
                                             }
                                             }%>
@@ -294,6 +304,7 @@ SysadminUserDetail sysadminUserDetail = (SysadminUserDetail)Pagez.getBeanMgr().g
                                 <input type="submit" class="formsubmitbutton" value="Force Re-Activation By Email">
                             </form>
                         </div>
+                        <%if (Authorization.isUserSysadmin(Pagez.getUserSession().getUser())){%>
                         <div class="rounded" style="padding: 15px; margin: 5px; background: #BFFFBF;">
                             <form action="/sysadmin/userdetail.jsp" method="post">
                                 <input type="hidden" name="dpage" value="/sysadmin/userdetail.jsp">
@@ -304,6 +315,8 @@ SysadminUserDetail sysadminUserDetail = (SysadminUserDetail)Pagez.getBeanMgr().g
                             <br/>
                             <font class="tinyfont">This will process account balances, remaining impressions, credit card transfers, etc for only this account.  Only does something if this user has a researcher record.</font>
                         </div>
+                        <%}%>
+                        <%if (Authorization.isUserSysadmin(Pagez.getUserSession().getUser())){%>
                         <div class="rounded" style="padding: 15px; margin: 5px; background: #BFFFBF;">
                             <form action="/sysadmin/userdetail.jsp" method="post">
                                 <input type="hidden" name="dpage" value="/sysadmin/userdetail.jsp">
@@ -321,6 +334,8 @@ SysadminUserDetail sysadminUserDetail = (SysadminUserDetail)Pagez.getBeanMgr().g
                                 <font class="tinyfont">You must type "yes, i want to do this" in the box to make this happen</font>
                             </form>
                         </div>
+                        <%}%>
+                        <%if (Authorization.isUserSysadmin(Pagez.getUserSession().getUser())){%>
                         <div class="rounded" style="padding: 15px; margin: 5px; background: #BFFFBF;">
                             <form action="/sysadmin/userdetail.jsp" method="post">
                                 <input type="hidden" name="dpage" value="/sysadmin/userdetail.jsp">
@@ -382,9 +397,8 @@ SysadminUserDetail sysadminUserDetail = (SysadminUserDetail)Pagez.getBeanMgr().g
                             </form>
                         </div>
                     </td>
-                 
+                    <%}%>
                     <td valign="top" width="50%">
-
                         <div class="rounded" style="padding: 15px; margin: 5px; background: #BFFFBF;">
                             <form action="/sysadmin/userdetail.jsp" method="post">
                                 <input type="hidden" name="dpage" value="/sysadmin/userdetail.jsp">
@@ -401,7 +415,7 @@ SysadminUserDetail sysadminUserDetail = (SysadminUserDetail)Pagez.getBeanMgr().g
                                 <%}%>
                             </form>
                         </div>
-
+                        <%if (Authorization.isUserSysadmin(Pagez.getUserSession().getUser())){%>
                         <div class="rounded" style="padding: 15px; margin: 5px; background: #BFFFBF;">
                             <form action="/sysadmin/userdetail.jsp" method="post">
                                 <input type="hidden" name="dpage" value="/sysadmin/userdetail.jsp">
@@ -423,8 +437,8 @@ SysadminUserDetail sysadminUserDetail = (SysadminUserDetail)Pagez.getBeanMgr().g
                                 <input type="submit" class="formsubmitbutton" value="Give User Money">
                             </form>
                         </div>
-
-
+                        <%}%>
+                        <%if (Authorization.isUserSysadmin(Pagez.getUserSession().getUser())){%>
                         <div class="rounded" style="padding: 15px; margin: 5px; background: #BFFFBF;">
                             <form action="/sysadmin/userdetail.jsp" method="post">
                                 <input type="hidden" name="dpage" value="/sysadmin/userdetail.jsp">
@@ -446,7 +460,7 @@ SysadminUserDetail sysadminUserDetail = (SysadminUserDetail)Pagez.getBeanMgr().g
                                 <input type="submit" class="formsubmitbutton" value="Take User Money">
                             </form>
                         </div>
-
+                        <%}%>
 
                    
                     </td>
@@ -455,6 +469,7 @@ SysadminUserDetail sysadminUserDetail = (SysadminUserDetail)Pagez.getBeanMgr().g
 
 
 
+        <%if (Authorization.isUserSysadmin(Pagez.getUserSession().getUser())){%>
         <div class="rounded" style="padding: 15px; margin: 5px; background: #BFFFBF;">
             <font class="mediumfont">Account Balance (Internal Account Money Movement)</font>
             <br/>
@@ -475,8 +490,8 @@ SysadminUserDetail sysadminUserDetail = (SysadminUserDetail)Pagez.getBeanMgr().g
                 <%=Grid.render(sysadminUserDetail.getBalances(), cols, 50, "/sysadmin/userdetail.jsp?userid="+sysadminUserDetail.getUser().getUserid()+"&onlyshownegativeamountbalance="+request.getParameter("onlyshownegativeamountbalance"), "pagetransactions")%>
             <%}%>
         </div>
-
-
+        <%}%>
+        <%if (Authorization.isUserSysadmin(Pagez.getUserSession().getUser())){%>
         <div class="rounded" style="padding: 15px; margin: 5px; background: #BFFFBF;">
             <font class="mediumfont">Account Transactions (Real World Money Movement)</font>
             <br/>
@@ -497,7 +512,8 @@ SysadminUserDetail sysadminUserDetail = (SysadminUserDetail)Pagez.getBeanMgr().g
                 <%=Grid.render(sysadminUserDetail.getTransactions(), cols, 50, "/sysadmin/userdetail.jsp?userid="+sysadminUserDetail.getUser().getUserid()+"&onlyshowsuccessfultransactions="+request.getParameter("onlyshowsuccessfultransactions"), "pagetransactions")%>
             <%}%>
         </div>
-
+        <%}%>
+                   
 
 
 

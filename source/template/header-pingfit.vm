@@ -71,7 +71,7 @@
         #if (1==2 && $navtab=="help" && $userSession.isloggedin)
             <font class="navtabfontlevel1"><a href="/help.jsp"><b>Help</b></a></font>
         #end
-        #if ($navtab!="sysadmin" && $userSession.isSysadmin)
+        #if (($userSession.isSysadmin || $userSession.isPladmin))
             <font class="navtabfontlevel1"><a href="/sysadmin/index.jsp"><b>SysAdmin</a></font>
         #end
     </td>
@@ -131,7 +131,7 @@
 
 
         #if ($navtab == "sysadmin")
-            #if ($userSession.isloggedin && $userSession.isSysadmin)
+            #if ($userSession.isloggedin && ($userSession.isSysadmin || $userSession.isPladmin))
                 <a href="/sysadmin/errorlist.jsp"><font class="subnavfont" style=" color: #ffffff;">Log</font></a>
                 <a href="/sysadmin/transactions.jsp"><font class="subnavfont" style=" color: #ffffff;">Trans</font></a>
                 <a href="/sysadmin/balance.jsp"><font class="subnavfont" style=" color: #ffffff;">Balance</font></a>

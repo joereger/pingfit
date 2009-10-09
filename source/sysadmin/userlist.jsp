@@ -9,11 +9,12 @@
 <%@ page import="com.pingfit.dao.hibernate.HibernateUtil" %>
 <%@ page import="org.hibernate.criterion.Order" %>
 <%@ page import="java.util.Iterator" %>
+<%@ page import="com.pingfit.helpers.PlAdminHelper" %>
 <%
 Logger logger = Logger.getLogger(this.getClass().getName());
 String pagetitle = "Users";
 String navtab = "sysadmin";
-String acl = "sysadmin";
+String acl = "pladmin";
 %>
 <%@ include file="/template/auth.jsp" %>
 <%
@@ -82,9 +83,12 @@ SysadminUserList sysadminUserList = (SysadminUserList)Pagez.getBeanMgr().get("Sy
                     if (pls!=null && pls.size()>0){
                         for (Iterator<Pl> plIterator=pls.iterator(); plIterator.hasNext();) {
                             Pl pl=plIterator.next();
-                            String sel = "";
-                            if (String.valueOf(pl.getPlid()).equals(request.getParameter("searchplid"))){sel=" selected";}
-                            %><option value="<%=pl.getPlid()%>" <%=sel%>><%=pl.getName()%></option><%
+                            //Only add pls that the logged in user can control
+                            if (PlAdminHelper.canUserControlPl(Pagez.getUserSession().getUser().getUserid(), pl.getPlid())){
+                                String sel = "";
+                                if (String.valueOf(pl.getPlid()).equals(request.getParameter("searchplid"))){sel=" selected";}
+                                %><option value="<%=pl.getPlid()%>" <%=sel%>><%=pl.getName()%></option><%
+                            }
                         }
                     }%>
                     </select>

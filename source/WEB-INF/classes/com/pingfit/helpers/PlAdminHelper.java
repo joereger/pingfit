@@ -2,6 +2,8 @@ package com.pingfit.helpers;
 
 import com.pingfit.dao.*;
 import com.pingfit.dao.hibernate.HibernateUtil;
+import com.pingfit.htmlui.UserSession;
+import com.pingfit.htmlui.Authorization;
 import org.hibernate.criterion.Restrictions;
 import org.apache.log4j.Logger;
 
@@ -20,6 +22,10 @@ public class PlAdminHelper {
     }
 
     public static boolean canUserControlPl(User user, Pl pl){
+        //Sysadmin can do all
+        if (Authorization.isUserSysadmin(user)){return true;}
+        //Non-pladmin can do none
+        if (!Authorization.isUserPladmin(user)){return false;}
         //The permission is very simple... if there's a row with plid and userid then the list is allowed in the pl
         List<Pladmin> pladmins = HibernateUtil.getSession().createCriteria(Pladmin.class)
                                            .add(Restrictions.eq("plid", pl.getPlid()))

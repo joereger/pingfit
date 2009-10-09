@@ -24,10 +24,10 @@ public class UserSession implements Serializable {
 
     private int userid;
     private boolean isloggedin = false;
-    private int currentSurveyid;
     private boolean isAllowedToResetPasswordBecauseHasValidatedByEmail = false;
     private int referredbyOnlyUsedForSignup = 0;
     private boolean isSysadmin = false;
+    private boolean isPladmin = false;
     private boolean isLoggedInToBeta = false;
     private boolean iseulaok = true;
     private String emailinvitesubject = "";
@@ -91,17 +91,16 @@ public class UserSession implements Serializable {
     public void setUser(User user) {
         if (user!=null){
             userid = user.getUserid();
-            isSysadmin = false;
-            for (Iterator<Userrole> iterator = user.getUserroles().iterator(); iterator.hasNext();) {
-                Userrole userrole = iterator.next();
-                if (userrole.getRoleid()== Userrole.SYSADMIN){
-                    isSysadmin = true;
-                }
-            }
+            isSysadmin = Authorization.isUserSysadmin(user);
+            isPladmin = Authorization.isUserPladmin(user);
         } else {
             userid = 0;
+            isSysadmin = false;
+            isPladmin = false;
         }
     }
+
+
 
     public Pl getPl() {
         return Pl.get(plid);
@@ -142,6 +141,14 @@ public class UserSession implements Serializable {
 
     public void setSysadmin(boolean sysadmin) {
         isSysadmin = sysadmin;
+    }
+
+    public boolean getIsPladmin() {
+        return isPladmin;
+    }
+
+    public void setIsPladmin(boolean isPladmin) {
+        this.isPladmin=isPladmin;
     }
 
     public boolean getIsLoggedInToBeta() {

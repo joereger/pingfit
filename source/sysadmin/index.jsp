@@ -7,7 +7,7 @@
 Logger logger = Logger.getLogger(this.getClass().getName());
 String pagetitle = "SysAdmin Home";
 String navtab = "sysadmin";
-String acl = "sysadmin";
+String acl = "pladmin";
 %>
 <%@ include file="/template/auth.jsp" %>
 <%
@@ -18,14 +18,7 @@ String acl = "sysadmin";
 
 
 
-
         <%=sysadminIndex.getServermemory()%>
-
-
-
-
-
-
 
 
 

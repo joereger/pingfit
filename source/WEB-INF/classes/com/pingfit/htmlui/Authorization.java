@@ -69,11 +69,25 @@ public class Authorization {
 
     }
 
+    public static boolean isUserSysadmin(int userid){ return isUserSysadmin(User.get(userid));}
     public static boolean isUserSysadmin(User user){
         if (user!=null){
             for (Iterator<Userrole> iterator = user.getUserroles().iterator(); iterator.hasNext();) {
                 Userrole userrole = iterator.next();
                 if (userrole.getRoleid()== Userrole.SYSADMIN){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean isUserPladmin(int userid){ return isUserPladmin(User.get(userid));}
+    public static boolean isUserPladmin(User user){
+        if (user!=null){
+            for (Iterator<Userrole> iterator = user.getUserroles().iterator(); iterator.hasNext();) {
+                Userrole userrole = iterator.next();
+                if (userrole.getRoleid()== Userrole.PLADMIN){
                     return true;
                 }
             }
