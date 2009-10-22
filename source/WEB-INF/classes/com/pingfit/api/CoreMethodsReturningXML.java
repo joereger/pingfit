@@ -33,10 +33,10 @@ public class CoreMethodsReturningXML {
             element.addContent(getCurrentPl(user.getPlid()));
             return element;
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -48,10 +48,10 @@ public class CoreMethodsReturningXML {
             element.addContent(getRoomPermissionRequests(user));
             return element;
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -59,12 +59,12 @@ public class CoreMethodsReturningXML {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
             CoreMethods.doExercise(user, exerciseid, reps, exerciseplaceinlist);
-            return XMLConverters.resultXml(true, "");
+            return XMLConverters.resultXml(true, "", "");
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -72,12 +72,12 @@ public class CoreMethodsReturningXML {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
             CoreMethods.inviteByEmail(user, emailtoinvite, custommessage);
-            return XMLConverters.resultXml(true, "");
+            return XMLConverters.resultXml(true, "", "");
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -85,12 +85,12 @@ public class CoreMethodsReturningXML {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
             CoreMethods.skipExercise(user);
-            return XMLConverters.resultXml(true, "");
+            return XMLConverters.resultXml(true, "", "");
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -98,15 +98,15 @@ public class CoreMethodsReturningXML {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
             if (CoreMethods.testApi(user)){
-                return XMLConverters.resultXml(true, "");
+                return XMLConverters.resultXml(true, "", "");
             } else {
-                return XMLConverters.resultXml(false, "Sorry, an error occurred and this test has failed.");
+                return XMLConverters.resultXml(false, "Sorry, an error occurred and this test has failed.", "");
             }
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -119,7 +119,7 @@ public class CoreMethodsReturningXML {
             return element;
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -133,7 +133,7 @@ public class CoreMethodsReturningXML {
             return XMLConverters.plPublicInfoAsXML(pl);
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -143,10 +143,10 @@ public class CoreMethodsReturningXML {
             Eula eula = CoreMethods.getCurrentEula(plid);
             return XMLConverters.eulaAsXML(eula);
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -155,10 +155,10 @@ public class CoreMethodsReturningXML {
         try{
             return XMLConverters.booleanAsElement(CoreMethods.isUserEulaUpToDate(user), "isusereulauptodate");
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -168,12 +168,12 @@ public class CoreMethodsReturningXML {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
             CoreMethods.agreeToEula(user, eulaid, ip);
-            return XMLConverters.resultXml(true, "");
+            return XMLConverters.resultXml(true, "", "");
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -183,10 +183,10 @@ public class CoreMethodsReturningXML {
             ExerciseExtended exExt = CoreMethods.getCurrentExercise(user);
             return XMLConverters.exerciseAsXML(exExt);
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -202,10 +202,10 @@ public class CoreMethodsReturningXML {
             }
             return element;
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -221,10 +221,10 @@ public class CoreMethodsReturningXML {
             }
             return element;
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -239,10 +239,10 @@ public class CoreMethodsReturningXML {
             }
             return element;
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -257,10 +257,10 @@ public class CoreMethodsReturningXML {
             }
             return element;
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -269,10 +269,10 @@ public class CoreMethodsReturningXML {
         try{
             return XMLConverters.roomAsXML(CoreMethods.getCurrentRoom(user));
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -282,10 +282,10 @@ public class CoreMethodsReturningXML {
             Exercise exExt = CoreMethods.getExercise(exerciseid);
             return XMLConverters.exerciseAsXML(exExt);
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -295,10 +295,10 @@ public class CoreMethodsReturningXML {
             Exerciselist exerciselist = CoreMethods.getExerciselist(exerciselistid);
             return XMLConverters.exerciseListAsXML(exerciselist, true, true);
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -310,10 +310,10 @@ public class CoreMethodsReturningXML {
             element.setContent(new Text(String.valueOf(secondsuntilnextexercise)));
             return element;
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -323,7 +323,22 @@ public class CoreMethodsReturningXML {
             return XMLConverters.userAsXML(User.get(userid));
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
+        }
+    }
+
+    public static Element getUserByFacebookuid(String facebookuid) throws GeneralException {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        try{
+            User user = CoreMethods.getUserByFacebookuid(facebookuid);
+            if (user!=null && user.getUserid()>0){
+                return getUser(user.getUserid());
+            } else {
+                return XMLConverters.resultXml(false, "Sorry, user not found.", "");
+            }
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -335,7 +350,7 @@ public class CoreMethodsReturningXML {
             return element;
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -345,10 +360,10 @@ public class CoreMethodsReturningXML {
             CoreMethods.setExerciseEveryXMinutes(user, minutes);
             return bigRefresh(user);
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -358,10 +373,10 @@ public class CoreMethodsReturningXML {
             CoreMethods.setNickname(user, nickname);
             return bigRefresh(user);
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -384,23 +399,23 @@ public class CoreMethodsReturningXML {
             CoreMethods.setExerciseChooser(user, exercisechooserid);
             return bigRefresh(user);
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
-    public static Element signUp(String email, String password, String passwordverify, String firstname, String lastname, String nickname, int plid) throws GeneralException {
+    public static Element signUp(String email, String password, String passwordverify, String firstname, String lastname, String nickname, String facebookuid, int plid) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
-            CoreMethods.signUp(email, password, passwordverify, firstname, lastname, nickname, plid);
-            return XMLConverters.resultXml(true, "");
+            CoreMethods.signUp(email, password, passwordverify, firstname, lastname, nickname, facebookuid, plid);
+            return XMLConverters.resultXml(true, "", "");
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -415,10 +430,10 @@ public class CoreMethodsReturningXML {
             }
             return element;
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -433,10 +448,10 @@ public class CoreMethodsReturningXML {
             }
             return element;
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -444,12 +459,12 @@ public class CoreMethodsReturningXML {
         Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
         try{
             CoreMethods.addFriend(user, useridoffriend);
-            return XMLConverters.resultXml(true, "");
+            return XMLConverters.resultXml(true, "", "");
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -457,12 +472,12 @@ public class CoreMethodsReturningXML {
         Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
         try{
             CoreMethods.breakFriendship(user, useridoffriend);
-            return XMLConverters.resultXml(true, "");
+            return XMLConverters.resultXml(true, "", "");
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -470,12 +485,12 @@ public class CoreMethodsReturningXML {
         Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
         try{
             CoreMethods.createRoom(user, name, description, exerciselistid, isprivate, isfriendautopermit);
-            return XMLConverters.resultXml(true, "");
+            return XMLConverters.resultXml(true, "", "");
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -483,12 +498,12 @@ public class CoreMethodsReturningXML {
         Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
         try{
             CoreMethods.editRoom(user, roomid, name, description, exerciselistid, isprivate, isfriendautopermit);
-            return XMLConverters.resultXml(true, "");
+            return XMLConverters.resultXml(true, "", "");
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -496,12 +511,12 @@ public class CoreMethodsReturningXML {
         Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
         try{
             CoreMethods.deleteRoom(user, roomid);
-            return XMLConverters.resultXml(true, "");
+            return XMLConverters.resultXml(true, "", "");
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -516,10 +531,10 @@ public class CoreMethodsReturningXML {
             }
             return element;
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -534,10 +549,10 @@ public class CoreMethodsReturningXML {
             }
             return element;
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -545,12 +560,12 @@ public class CoreMethodsReturningXML {
         Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
         try{
             CoreMethods.joinRoom(user, roomid);
-            return XMLConverters.resultXml(true, "");
+            return XMLConverters.resultXml(true, "", "");
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -558,12 +573,12 @@ public class CoreMethodsReturningXML {
         Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
         try{
             CoreMethods.removeFromMyRooms(user, roomid);
-            return XMLConverters.resultXml(true, "");
+            return XMLConverters.resultXml(true, "", "");
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -578,10 +593,10 @@ public class CoreMethodsReturningXML {
             }
             return element;
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -596,10 +611,10 @@ public class CoreMethodsReturningXML {
             }
             return element;
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -608,10 +623,10 @@ public class CoreMethodsReturningXML {
         try{
             return XMLConverters.booleanAsElement(CoreMethods.areFriends(userid1, userid2), "arefriends");
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -620,10 +635,10 @@ public class CoreMethodsReturningXML {
         try{
             return XMLConverters.booleanAsElement(CoreMethods.isAllowedInRoom(userid, roomid), "isallowedinroom");
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -632,10 +647,10 @@ public class CoreMethodsReturningXML {
         try{
             return XMLConverters.booleanAsElement(CoreMethods.isModeratorOfRoom(userid, roomid), "ismoderatorofroom");
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -643,12 +658,12 @@ public class CoreMethodsReturningXML {
         Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
         try{
             CoreMethods.grantRoomPermission(user, useridtogivepermissionto, roomid);
-            return XMLConverters.resultXml(true, "");
+            return XMLConverters.resultXml(true, "", "");
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -656,12 +671,12 @@ public class CoreMethodsReturningXML {
         Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
         try{
             CoreMethods.grantRoomMod(user, useridtogivepermissionto, roomid);
-            return XMLConverters.resultXml(true, "");
+            return XMLConverters.resultXml(true, "", "");
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -669,12 +684,12 @@ public class CoreMethodsReturningXML {
         Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
         try{
             CoreMethods.revokeRoomPermission(user, useridtorevokefrom, roomid);
-            return XMLConverters.resultXml(true, "");
+            return XMLConverters.resultXml(true, "", "");
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -682,12 +697,12 @@ public class CoreMethodsReturningXML {
         Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
         try{
             CoreMethods.revokeRoomMod(user, useridtorevokefrom, roomid);
-            return XMLConverters.resultXml(true, "");
+            return XMLConverters.resultXml(true, "", "");
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 
@@ -702,10 +717,10 @@ public class CoreMethodsReturningXML {
             }
             return element;
         } catch (GeneralException gex) {
-            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml());
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
         } catch (Exception ex) {
             logger.error("", ex);
-            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.");
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
         }
     }
 

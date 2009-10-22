@@ -40,6 +40,7 @@ public class Registration implements Serializable {
     private boolean displaytempresponsesavedmessage;
     private boolean isflashsignup = true;
     private int plid = 1;
+    private String facebookuid = "";
 
 
     //private String temp;
@@ -158,8 +159,7 @@ public class Registration implements Serializable {
             user.setChargemethod(PaymentMethod.PAYMENTMETHODCREDITCARD);
             user.setChargemethodcreditcardid(0);
             user.setIsenabled(true);
-            user.setFacebookappremoveddate(new Date());
-            user.setIsfacebookappremoved(false);
+            user.setFacebookuid(facebookuid);
             user.setExerciseeveryxminutes(20);
             ExerciseChooserGroup lst = new ExerciseChooserGroup();
             user.setExercisechooserid(lst.getId());
@@ -313,5 +313,13 @@ public class Registration implements Serializable {
 
     public void setPlid(int plid) {
         this.plid=plid;
+    }
+
+    public String getFacebookuid() {
+        return facebookuid;
+    }
+
+    public void setFacebookuid(String facebookuid) {
+        this.facebookuid=facebookuid;
     }
 }

@@ -21,9 +21,7 @@
                 .list();
         for (Iterator iterator = users.iterator(); iterator.hasNext();) {
             User user = (User)iterator.next();
-            user.setIsfacebookappremoved(true);
             user.setEmail("");
-            user.setFacebookappremoveddate(new Date());
             try {user.save();} catch (Exception ex) {logger.error("",ex);}
             SendXMPPMessage xmpp = new SendXMPPMessage(SendXMPPMessage.GROUP_CUSTOMERSUPPORT, "Uninstalled Facebook App by " + user.getFirstname() + " " + user.getLastname());
             xmpp.send();

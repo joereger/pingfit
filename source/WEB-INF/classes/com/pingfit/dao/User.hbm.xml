@@ -61,14 +61,8 @@
         <property name="chargemethodcreditcardid" type="int">
             <column name="chargemethodcreditcardid" not-null="true" />
         </property>
-        <property name="facebookuserid" type="int">
-            <column name="facebookuserid" not-null="true" />
-        </property>
-        <property name="isfacebookappremoved" type="boolean">
-            <column name="isfacebookappremoved" />
-        </property>
-        <property name="facebookappremoveddate" type="timestamp">
-            <column name="facebookappremoveddate" not-null="true" />
+        <property name="facebookuid" type="string">
+            <column name="facebookuid" not-null="true" />
         </property>
         <property name="exerciseeveryxminutes" type="int">
             <column name="exerciseeveryxminutes" not-null="true" />

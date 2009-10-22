@@ -47,7 +47,7 @@ public class Login implements Serializable {
 //                    //If no other account has this facebookid in use, save it
 //                    if (userswiththisfacebookid.size()==0){
 //
-//                        user.setFacebookuserid(Integer.parseInt(Pagez.getUserSession().getFacebookUser().getUid()));
+//                        user.setFacebookuid(String.valueOf(Pagez.getUserSession().getFacebookUser().getUid()));
 //                        try{user.save();}catch(Exception ex){logger.error("",ex);}
 //                    } else {
 //                        logger.error("User logged-on but we already have that facebookuid("+Pagez.getUserSession().getFacebookUser().getUid()+") in the database.");

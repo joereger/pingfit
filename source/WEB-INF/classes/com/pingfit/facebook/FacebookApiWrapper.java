@@ -45,11 +45,11 @@ public class FacebookApiWrapper {
             try{
                 FacebookRestClient facebookRestClient = new FacebookRestClient(SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_KEY), SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_SECRET), facebookSessionKey);
                 if (userSession.getUser()!=null && userSession.getUser().getUserid()>0){
-                    if (userSession.getUser().getFacebookuserid()>0){
-                        if (userSession.getUser().getFacebookuserid()==facebookRestClient.users_getLoggedInUser()){
+                    if (!userSession.getUser().getFacebookuid().equals("")){
+                        if (userSession.getUser().getFacebookuid().equals(String.valueOf(facebookRestClient.users_getLoggedInUser()))){
                             issessionok = true;
                         } else {
-                            logger.debug("userSession.getUser().getFacebookuserid()!=facebookRestClient.users_getLoggedInUser()");
+                            logger.debug("userSession.getUser().getFacebookuid()!=facebookRestClient.users_getLoggedInUser()");
                         }
                     } else {
                         logger.debug("userSession.getUser() (userid="+userSession.getUser().getUserid()+") passed to FacebookApiWrapper does not have a saved facebookuserid");
@@ -109,7 +109,7 @@ public class FacebookApiWrapper {
 
                 CharSequence cs = fbml.subSequence(0, fbml.length());
                 FacebookRestClient facebookRestClient = new FacebookRestClient(SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_KEY), SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_SECRET), facebookSessionKey);
-                boolean success = facebookRestClient.profile_setFBML(cs, Long.parseLong(String.valueOf(user.getFacebookuserid())));
+                boolean success = facebookRestClient.profile_setFBML(cs, Long.parseLong(user.getFacebookuid()));
                 if (success){
                     logger.debug("Apparently the setFBML was successful.");
                 } else {

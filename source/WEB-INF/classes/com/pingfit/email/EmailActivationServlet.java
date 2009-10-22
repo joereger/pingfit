@@ -49,7 +49,7 @@ public class EmailActivationServlet extends HttpServlet {
             try{user.save();} catch (Exception ex){logger.error("",ex);}
 
             //@todo send a welcome email message after successful email activation
-            if(user.getFacebookuserid()<=0){
+            if(user.getFacebookuid().equals("")){
                 Pagez.getUserSession().setMessage("Email activation was successful!  Your account is ready to roll!");
                 response.sendRedirect("/account/index.jsp");
                 return;

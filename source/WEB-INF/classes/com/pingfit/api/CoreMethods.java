@@ -104,6 +104,27 @@ public class CoreMethods {
         }
     }
 
+    public static User getUserByFacebookuid(String facebookuid) throws GeneralException {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        try{
+            if (facebookuid==null || facebookuid.equals("")){return null;}
+            List<User> users = HibernateUtil.getSession().createCriteria(User.class)
+                                               .add(Restrictions.eq("facebookuid", facebookuid.trim()))
+                                               .setCacheable(true)
+                                               .list();
+            for (Iterator<User> it=users.iterator(); it.hasNext();) {
+                User user=it.next();
+                return user;
+            }
+            return null;
+        } catch (Exception ex) {
+            logger.error("", ex);
+            throw new GeneralException("Database error... sorry... please try again.");
+        }
+    }
+
+
+
     public static void doExercise(User user, int exerciseid, int reps, String exerciseplaceinlist) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
@@ -572,7 +593,7 @@ public class CoreMethods {
         }
     }
 
-    public static void signUp(String email, String password, String passwordverify, String firstname, String lastname, String nickname, int plid) throws GeneralException {
+    public static void signUp(String email, String password, String passwordverify, String firstname, String lastname, String nickname, String facebookuid, int plid) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
             Registration registration = new Registration();
@@ -584,6 +605,7 @@ public class CoreMethods {
             registration.setLastname(lastname);
             registration.setNickname(nickname);
             registration.setEula(EulaHelper.getMostRecentEula(plid).getEula().trim());
+            registration.setFacebookuid(facebookuid);
             registration.setPlid(plid);
             registration.setDisplaytempresponsesavedmessage(false);
             registration.registerAction();

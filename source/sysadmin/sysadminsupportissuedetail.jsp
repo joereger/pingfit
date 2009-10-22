@@ -50,7 +50,7 @@ String acl = "sysadmin";
                     <%} else {%>
                         <font class="smallfont" style="font-weight: bold;">dNeero Admin</font>
                     <%}%>
-                    <% if (sysadminSupportIssueDetail.getFromuser().getFacebookuserid()>0){ %>
+                    <% if (!sysadminSupportIssueDetail.getFromuser().getFacebookuid().equals("")){ %>
                         <font class="smallfont" style="font-weight: bold;">(Facebook User)</font>
                     <% } %>
                     <br/>

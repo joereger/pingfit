@@ -26,15 +26,13 @@ public class User extends BasePersistentClass implements java.io.Serializable, A
      private String firstname;
      private String lastname;
      private String nickname;
+     private String facebookuid;
      private boolean isactivatedbyemail;
      private String emailactivationkey;
      private Date emailactivationlastsent;
      private Date createdate;
      private int chargemethod;
      private int chargemethodcreditcardid;
-     private int facebookuserid;
-     private boolean isfacebookappremoved;
-     private Date facebookappremoveddate;
      private int exerciseeveryxminutes;
      private int exercisechooserid;
      private int exerciselistid;
@@ -194,30 +192,6 @@ public class User extends BasePersistentClass implements java.io.Serializable, A
         this.chargemethodcreditcardid = chargemethodcreditcardid;
     }
 
-    public int getFacebookuserid() {
-        return facebookuserid;
-    }
-
-    public void setFacebookuserid(int facebookuserid) {
-        this.facebookuserid = facebookuserid;
-    }
-
-    public boolean getIsfacebookappremoved() {
-        return isfacebookappremoved;
-    }
-
-    public void setIsfacebookappremoved(boolean isfacebookappremoved) {
-        this.isfacebookappremoved = isfacebookappremoved;
-    }
-
-    public Date getFacebookappremoveddate() {
-        return facebookappremoveddate;
-    }
-
-    public void setFacebookappremoveddate(Date facebookappremoveddate) {
-        this.facebookappremoveddate = facebookappremoveddate;
-    }
-
     public Set<Userrole> getUserroles() {
         return userroles;
     }
@@ -296,5 +270,13 @@ public class User extends BasePersistentClass implements java.io.Serializable, A
 
     public void setPlid(int plid) {
         this.plid=plid;
+    }
+
+    public String getFacebookuid() {
+        return facebookuid;
+    }
+
+    public void setFacebookuid(String facebookuid) {
+        this.facebookuid=facebookuid;
     }
 }

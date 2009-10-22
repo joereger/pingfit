@@ -19,9 +19,11 @@ import com.pingfit.util.Util;
 import com.pingfit.util.Num;
 import com.pingfit.pageperformance.PagePerformanceUtil;
 import com.pingfit.systemprops.InstanceProperties;
+import com.pingfit.systemprops.SystemProperty;
 import com.pingfit.dao.hibernate.HibernateUtil;
 import com.pingfit.dao.User;
 import com.pingfit.session.UrlSplitter;
+import com.facebook.api.FacebookRestClient;
 
 
 /**
@@ -41,16 +43,19 @@ public class RESTXmlApi extends HttpServlet {
         Logger logger = Logger.getLogger(this.getClass().getName());
         long timestart = new java.util.Date().getTime();
         Document outDoc = new Document();
+        StringBuffer errorMsg = new StringBuffer();
+        String errorcode = "";
         UrlSplitter urlSplitter = new UrlSplitter(request);
         logger.debug("RESTXmlAPI: "+urlSplitter.getParametersAsQueryStringNoQuestionMark());
         logger.debug("request.getParameter(\"email\")="+request.getParameter("email"));
         logger.debug("request.getParameter(\"password\")="+request.getParameter("password"));
         logger.debug("request.getParameter(\"method\")="+request.getParameter("method"));
-
         //Put incoming stuff into variables
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String method = request.getParameter("method");
+        String facebook_session_key = request.getParameter("facebook_session_key");
+        String facebookuid = request.getParameter("facebookuid");
         //Cache off for now
         boolean cache = false;
 //        if (request.getParameter("cache")!=null && request.getParameter("cache").equals("true")){
@@ -60,17 +65,59 @@ public class RESTXmlApi extends HttpServlet {
 //        }
         //Find a user
         User user = null;
-        List users = HibernateUtil.getSession().createQuery("FROM User as user WHERE user.email='"+ Str.cleanForSQL(email)+"' AND user.password='"+Str.cleanForSQL(password)+"'").setMaxResults(1).setCacheable(true).list();
-        if (users.size()>0){
-            try{user = (User)users.get(0);}catch(Exception ex){logger.error("", ex);}
+        //Is this a facebook user I need to make certain the session key is valid
+        boolean isFacebookAuth = false;
+        boolean isFacebookAuthSuccess = false;
+        if (facebook_session_key!=null && !facebook_session_key.equals("") && facebookuid!=null && !facebookuid.equals("")){
+            isFacebookAuth = true;
         }
+        //Not facebookauth
+        if (!isFacebookAuth){
+            logger.debug("!isFacebookAuth");
+            List users = HibernateUtil.getSession().createQuery("FROM User as user WHERE user.email='"+ Str.cleanForSQL(email)+"' AND user.password='"+Str.cleanForSQL(password)+"'").setMaxResults(1).setCacheable(true).list();
+            if (users.size()>0){
+                try{user = (User)users.get(0);}catch(Exception ex){logger.error("", ex);}
+            }
+        }
+        //Is facebookauth
+        if (isFacebookAuth){
+            logger.debug("isFacebookAuth");
+            List users = HibernateUtil.getSession().createQuery("FROM User as user WHERE user.facebookuid='"+Str.cleanForSQL(facebookuid)+"'").setMaxResults(1).setCacheable(true).list();
+            if (users.size()>0){
+                try{user = (User)users.get(0);}catch(Exception ex){logger.error("", ex);}
+            }
+            if (user!=null){
+                //Make sure session key's valid
+                isFacebookAuthSuccess = isFacebookSessionKeyValid(facebook_session_key, facebookuid);
+                if (!isFacebookAuthSuccess){
+                    logger.debug("!isFacebookAuthSuccess");
+                    //If it's a failed facebook session, null the user to prevent access
+                    user = null;
+                    errorMsg.append("Sorry, username/password incorrect or this account is disabled.");
+                    errorcode = "FACEBOOKAUTHFAILSESSIONKEYINVALID";
+                }  else {
+                    logger.debug("isFacebookAuthSuccess");
+                }
+            } else {
+                errorMsg.append("No user found with that facebookuid.");
+                errorcode = "FACEBOOKAUTHFAILFACEBOOKUIDNOTFOUND";
+            }
+        }
+        //See whether this call requires an authenticated user
+        boolean callRequiresAuthenticatedUser = true;
+        if (method.equals("signUp")){callRequiresAuthenticatedUser=false;}
+        if (method.equals("getPl")){callRequiresAuthenticatedUser=false;}
+        if (method.equals("getUserByFacebookuid")){callRequiresAuthenticatedUser=false;}
         //Build the response
-        if (!(method.equals("signUp") || method.equals("getPl")) && (user==null || user.getUserid()<=0 || !user.getIsenabled())){
-            Element root = new Element("result");
-            root.setAttribute("success", "false");
-            root.addContent(XMLConverters.resultXml(false, "Sorry, username/password incorrect or this account is disabled."));
-            outDoc = new Document(root);
+        if (callRequiresAuthenticatedUser && (user==null || user.getUserid()<=0 || !user.getIsenabled() || errorMsg.length()>0)){
+            logger.debug("API requirements not met.  errorMsg="+errorMsg);
+            //Element root = new Element("result");
+            //root.setAttribute("success", "false");
+            if (errorMsg.length()==0){errorMsg.append("Sorry, username/password incorrect, account disabled or unauthorized access detected.");}
+            //root.addContent(XMLConverters.resultXml(false, errorMsg.toString(), errorcode));
+            outDoc = new Document(XMLConverters.resultXml(false, errorMsg.toString(), errorcode));
         } else {
+            logger.debug("API requirements met... will respond with dataz");
             String nameInCache = "xmlapi";
             String cacheGroup =  "xmlapi"+"/"+"method-"+method;
             Object fromCache = CacheFactory.getCacheProvider("DbcacheProvider").get(nameInCache, cacheGroup);
@@ -108,7 +155,7 @@ public class RESTXmlApi extends HttpServlet {
                             if (Num.isinteger(request.getParameter("plid"))){
                                 plid = Integer.parseInt(request.getParameter("plid"));
                             }
-                            element = CoreMethodsReturningXML.signUp(signupemail, signuppassword, signuppasswordverify, firstname, lastname, nickname, plid);
+                            element = CoreMethodsReturningXML.signUp(signupemail, signuppassword, signuppasswordverify, firstname, lastname, nickname, facebookuid, plid);
                         } else if (method.equalsIgnoreCase("testApi")){
                             element = CoreMethodsReturningXML.testApi(user);
                         } else if (method.equalsIgnoreCase("getCurrentEula")){
@@ -140,6 +187,8 @@ public class RESTXmlApi extends HttpServlet {
                                 userid = Integer.parseInt(request.getParameter("userid"));
                             }
                             element = CoreMethodsReturningXML.getUser(userid);
+                        } else if (method.equalsIgnoreCase("getUserByFacebookuid")){
+                            element = CoreMethodsReturningXML.getUserByFacebookuid(request.getParameter("facebookuid"));
                         } else if (method.equalsIgnoreCase("inviteByEmail")){
                             String emailtoinvite = request.getParameter("emailtoinvite");
                             String custommessage = "";
@@ -357,10 +406,11 @@ public class RESTXmlApi extends HttpServlet {
                         }
                         //Add to doc and cache
                         if (element==null){
-                            outDoc.addContent(XMLConverters.resultXml(false, "There was some sort of error building the response."));
+                            outDoc.addContent(XMLConverters.resultXml(false, "There was some sort of error building the response.", ""));
                         } else {
                             //Add to the outDoc
                             Element root = new Element("result");
+                            root.setAttribute("success", "true");
                             root.addContent(element);
                             outDoc = new Document(root);
                             //outDoc.addContent(element);
@@ -398,6 +448,25 @@ public class RESTXmlApi extends HttpServlet {
         } catch (Exception ex) {
             logger.error("", ex);
         }
+    }
+
+    private static boolean isFacebookSessionKeyValid(String facebook_session_key, String facebookuid){
+        Logger logger = Logger.getLogger(RESTXmlApi.class);
+        try{
+            //@todo need to cache this request so that I don't have to go back to facebook every request from the user
+            logger.debug("isFacebookSessionKeyValid("+facebook_session_key+", "+facebookuid+") called");
+            FacebookRestClient facebookRestClient = new FacebookRestClient(SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_KEY), SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_SECRET), facebook_session_key);
+            long loggedInUserUid = facebookRestClient.users_getLoggedInUser();
+            logger.debug("facebookuid="+facebookuid+" loggedInUserUid="+loggedInUserUid);
+            if (facebookuid.trim().equals(String.valueOf(loggedInUserUid))){
+                logger.debug("return true... this is a valid facebook session");
+                return true;
+            }
+        } catch (Exception ex){
+            logger.error("", ex);
+        }
+        logger.debug("return false... not valid facebook session");
+        return false;
     }
 
 }

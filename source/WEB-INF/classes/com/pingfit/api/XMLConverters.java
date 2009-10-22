@@ -19,17 +19,29 @@ import java.util.Iterator;
 public class XMLConverters {
 
 
-    public static Element resultXml(boolean issuccessful, String message) {
+    public static Element resultXml(boolean issuccessful, String message, String errorcode) {
         Element element = new Element("result");
         if (issuccessful){
             element.setAttribute("success", "true");
+            Element succ = new Element("success");
+            succ.setContent(new Text("true"));
+            element.addContent(succ);
         } else {
+            //Fail
             element.setAttribute("success", "false");
-        }
-        if (message!=null && !message.equals("")){
+            Element succ = new Element("success");
+            succ.setContent(new Text("false"));
+            element.addContent(succ);
+            //Message
+            if (message==null || message.equals("")){message="Unspecified Error";}
             Element msg = new Element("apimessage");
             msg.setContent(new Text(message));
             element.addContent(msg);
+            //Errorcode
+            if (errorcode==null || errorcode.equals("")){errorcode="0";}
+            Element errcd = new Element("errorcode");
+            errcd.setContent(new Text(errorcode));
+            element.addContent(errcd);
         }
         return element;
     }

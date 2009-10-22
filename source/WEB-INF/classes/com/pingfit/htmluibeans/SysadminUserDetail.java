@@ -70,7 +70,7 @@ public class SysadminUserDetail implements Serializable {
             isenabled = user.getIsenabled();
             issysadmin = false;
             ispladmin = false;
-            facebookuid = String.valueOf(user.getFacebookuserid());
+            facebookuid = String.valueOf(user.getFacebookuid());
             for (Iterator<Userrole> iterator = user.getUserroles().iterator(); iterator.hasNext();) {
                 Userrole userrole = iterator.next();
                 if (userrole.getRoleid()== Userrole.SYSADMIN){
@@ -149,7 +149,7 @@ public class SysadminUserDetail implements Serializable {
             user.setPassword(password);
             user.setNickname(nickname);
             if (Num.isinteger(facebookuid)){
-                user.setFacebookuserid(Integer.parseInt(facebookuid));
+                user.setFacebookuid(facebookuid);
             }
             try{user.save();}catch (Exception ex){logger.error("",ex);}
         }

@@ -162,15 +162,9 @@ public class FacebookAuthorizationJsp {
                         //Is already a dNeero user
                         Pagez.getUserSession().setUser(user);
                         Pagez.getUserSession().setIsloggedin(true);
-                        logger.debug("dNeero Facebook Login: "+ user.getFirstname() + " " + user.getLastname() + " ("+user.getEmail()+") (Facebook.userid="+user.getFacebookuserid()+")");
-                        //If their account is marked as having removed the app but facebook says they've got it added, update the User object
-                        if (Pagez.getUserSession().getFacebookUser().getHas_added_app() && user.getIsfacebookappremoved()){
-                            user.setIsfacebookappremoved(false);
-                            user.setFacebookappremoveddate(user.getCreatedate());
-                            try {user.save();} catch (Exception ex) {logger.error("",ex);}
-                        }
+                        logger.debug("dNeero Facebook Login: "+ user.getFirstname() + " " + user.getLastname() + " ("+user.getEmail()+") (Facebook.userid="+user.getFacebookuid()+")");
                         //Notify via XMPP
-                        SendXMPPMessage xmpp = new SendXMPPMessage(SendXMPPMessage.GROUP_DEBUG, "Facebook Login: "+ user.getFirstname() + " " + user.getLastname() + " (email="+user.getEmail()+") (facebook.uid="+user.getFacebookuserid()+")");
+                        SendXMPPMessage xmpp = new SendXMPPMessage(SendXMPPMessage.GROUP_DEBUG, "Facebook Login: "+ user.getFirstname() + " " + user.getLastname() + " (email="+user.getEmail()+") (facebook.uid="+user.getFacebookuid()+")");
                         xmpp.send();
                     } else {
                         //Is not a dNeero user yet... make sure there's no user in the session
