@@ -41,6 +41,7 @@ public class User extends BasePersistentClass implements java.io.Serializable, A
      private int roomid;
      private int plid;
 
+
     //Association
     private Set<Userrole> userroles = new HashSet<Userrole>();
     private Set<Usereula> usereulas = new HashSet<Usereula>();
@@ -279,4 +280,6 @@ public class User extends BasePersistentClass implements java.io.Serializable, A
     public void setFacebookuid(String facebookuid) {
         this.facebookuid=facebookuid;
     }
+
+
 }

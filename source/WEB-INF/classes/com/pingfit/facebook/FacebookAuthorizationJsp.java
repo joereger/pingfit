@@ -12,8 +12,8 @@ import com.pingfit.xmpp.SendXMPPMessage;
 import com.pingfit.htmlui.Pagez;
 import com.pingfit.htmlui.UserSession;
 import com.pingfit.cache.providers.CacheFactory;
-import com.facebook.api.FacebookRestClient;
-import com.facebook.api.FacebookException;
+import com.google.code.facebookapi.FacebookXmlRestClient;
+import com.google.code.facebookapi.FacebookException;
 
 import java.util.List;
 import java.util.Iterator;
@@ -65,7 +65,7 @@ public class FacebookAuthorizationJsp {
             if ((Pagez.getRequest().getParameter("auth_token")!=null && !Pagez.getRequest().getParameter("auth_token").trim().equals(""))){
                 logger.debug("auth_token found in request... will try to convert to session_key");
                 try{
-                    FacebookRestClient facebookRestClient = new FacebookRestClient(SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_KEY), SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_SECRET), Pagez.getUserSession().getFacebookSessionKey());
+                    FacebookXmlRestClient facebookRestClient = new FacebookXmlRestClient(SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_KEY), SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_SECRET), Pagez.getUserSession().getFacebookSessionKey());
                     String facebooksessionkey = facebookRestClient.auth_getSession(Pagez.getRequest().getParameter("auth_token").trim());
                     if (facebooksessionkey!=null && !facebooksessionkey.equals("")){
                         Pagez.getUserSession().setFacebookSessionKey(facebooksessionkey);
@@ -123,9 +123,9 @@ public class FacebookAuthorizationJsp {
                 logger.debug("running heavy Facebook user setup with api calls due to new facebooksessionkey");
 
                 //Go get some details on this facebookuser
-                FacebookRestClient facebookRestClient = null;
+                FacebookXmlRestClient facebookRestClient = null;
                 try {
-                    facebookRestClient = new FacebookRestClient(SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_KEY), SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_SECRET), Pagez.getUserSession().getFacebookSessionKey());
+                    facebookRestClient = new FacebookXmlRestClient(SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_KEY), SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_SECRET), Pagez.getUserSession().getFacebookSessionKey());
                     int loggedinfacebookuid = 0;
                     Long loggedinfacebookuidLong = facebookRestClient.users_getLoggedInUser();
                     if (Num.isinteger(String.valueOf(loggedinfacebookuidLong))){

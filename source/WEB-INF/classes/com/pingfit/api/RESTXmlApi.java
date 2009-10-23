@@ -23,7 +23,7 @@ import com.pingfit.systemprops.SystemProperty;
 import com.pingfit.dao.hibernate.HibernateUtil;
 import com.pingfit.dao.User;
 import com.pingfit.session.UrlSplitter;
-import com.facebook.api.FacebookRestClient;
+import com.google.code.facebookapi.FacebookXmlRestClient;
 
 
 /**
@@ -55,7 +55,9 @@ public class RESTXmlApi extends HttpServlet {
         String password = request.getParameter("password");
         String method = request.getParameter("method");
         String facebook_session_key = request.getParameter("facebook_session_key");
+        String facebook_session_secret = request.getParameter("facebook_session_secret");
         String facebookuid = request.getParameter("facebookuid");
+        String facebookapikey = request.getParameter("facebookapikey");
         //Cache off for now
         boolean cache = false;
 //        if (request.getParameter("cache")!=null && request.getParameter("cache").equals("true")){
@@ -88,12 +90,12 @@ public class RESTXmlApi extends HttpServlet {
             }
             if (user!=null){
                 //Make sure session key's valid
-                isFacebookAuthSuccess = isFacebookSessionKeyValid(facebook_session_key, facebookuid);
+                isFacebookAuthSuccess = isFacebookSessionKeyValid(facebookapikey, facebook_session_key, facebook_session_secret, facebookuid);
                 if (!isFacebookAuthSuccess){
                     logger.debug("!isFacebookAuthSuccess");
                     //If it's a failed facebook session, null the user to prevent access
                     user = null;
-                    errorMsg.append("Sorry, username/password incorrect or this account is disabled.");
+                    errorMsg.append("Facebook session_key invalid.");
                     errorcode = "FACEBOOKAUTHFAILSESSIONKEYINVALID";
                 }  else {
                     logger.debug("isFacebookAuthSuccess");
@@ -450,12 +452,19 @@ public class RESTXmlApi extends HttpServlet {
         }
     }
 
-    private static boolean isFacebookSessionKeyValid(String facebook_session_key, String facebookuid){
+    private static boolean isFacebookSessionKeyValid(String facebookapikey, String facebook_session_key, String facebook_session_secret, String facebookuid){
         Logger logger = Logger.getLogger(RESTXmlApi.class);
         try{
             //@todo need to cache this request so that I don't have to go back to facebook every request from the user
             logger.debug("isFacebookSessionKeyValid("+facebook_session_key+", "+facebookuid+") called");
-            FacebookRestClient facebookRestClient = new FacebookRestClient(SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_KEY), SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_SECRET), facebook_session_key);
+
+            //if (apikey==null || apikey.equals("")){apikey = SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_KEY);}
+            logger.debug("facebookapikey="+facebookapikey);
+            logger.debug("facebook_session_key="+facebook_session_key);
+            logger.debug("facebook_session_secret="+facebook_session_secret);
+            logger.debug("facebookuid="+facebookuid);
+
+            FacebookXmlRestClient facebookRestClient = new FacebookXmlRestClient(facebookapikey, facebook_session_secret, facebook_session_key);
             long loggedInUserUid = facebookRestClient.users_getLoggedInUser();
             logger.debug("facebookuid="+facebookuid+" loggedInUserUid="+loggedInUserUid);
             if (facebookuid.trim().equals(String.valueOf(loggedInUserUid))){
@@ -463,7 +472,7 @@ public class RESTXmlApi extends HttpServlet {
                 return true;
             }
         } catch (Exception ex){
-            logger.error("", ex);
+            logger.debug("", ex);
         }
         logger.debug("return false... not valid facebook session");
         return false;

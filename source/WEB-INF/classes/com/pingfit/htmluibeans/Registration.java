@@ -90,37 +90,44 @@ public class Registration implements Serializable {
         }
         
 
-        if (nickname!=null && nickname.length()>15){
-            vex.addValidationError("Nickname must be 15 characters or less.");
-            haveErrors = true;
-        }
 
-        EmailValidator ev = EmailValidator.getInstance();
-        if (!ev.isValid(email)){
-            vex.addValidationError("Not a valid email address.");
-            haveErrors = true;
-        }
 
-        List<User> users = HibernateUtil.getSession().createQuery("from User where email='"+ Str.cleanForSQL(email)+"'").list();
-        if (users.size()>0){
-            vex.addValidationError("That email address is already in use.");
-            haveErrors = true;
-        }
+        //These validations only happen if it's not a facebookuid signup
+        if (facebookuid==null || facebookuid.equals("")){
 
-        List<User> usersByNickname = HibernateUtil.getSession().createQuery("from User where nickname='"+ Str.cleanForSQL(nickname)+"'").list();
-        if (usersByNickname.size()>0){
-            vex.addValidationError("That Nickname is already in use.");
-            haveErrors = true;
-        }
+            List<User> users = HibernateUtil.getSession().createQuery("from User where email='"+ Str.cleanForSQL(email)+"'").list();
+            if (users.size()>0){
+                vex.addValidationError("That email address is already in use.");
+                haveErrors = true;
+            }
 
-        if (password==null || password.equals("") || password.length()<5){
-            vex.addValidationError("Password must be at least five characters long.");
-            haveErrors = true;
-        }
+            if (nickname!=null && nickname.length()>15){
+                vex.addValidationError("Nickname must be 15 characters or less.");
+                haveErrors = true;
+            }
 
-        if (!password.equals(passwordverify)){
-            vex.addValidationError("Password and Verify Password must match.");
-            haveErrors = true;
+            List<User> usersByNickname = HibernateUtil.getSession().createQuery("from User where nickname='"+ Str.cleanForSQL(nickname)+"'").list();
+            if (usersByNickname.size()>0){
+                vex.addValidationError("That Nickname is already in use.");
+                haveErrors = true;
+            }
+
+            EmailValidator ev = EmailValidator.getInstance();
+            if (!ev.isValid(email)){
+                vex.addValidationError("Not a valid email address.");
+                haveErrors = true;
+            }
+
+            if (password==null || password.equals("") || password.length()<5){
+                vex.addValidationError("Password must be at least five characters long.");
+                haveErrors = true;
+            }
+
+            if (!password.equals(passwordverify)){
+                vex.addValidationError("Password and Verify Password must match.");
+                haveErrors = true;
+            }
+
         }
 
         //@todo need to check for lcase(firstname), lcase(lastname), email in the database... people are changing caps on name and creating another account.

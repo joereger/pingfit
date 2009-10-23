@@ -2,26 +2,19 @@ package com.pingfit.facebook;
 
 
 import com.pingfit.systemprops.SystemProperty;
-import com.pingfit.systemprops.BaseUrl;
 import com.pingfit.dao.User;
-import com.pingfit.dao.hibernate.HibernateUtil;
-import com.pingfit.util.Str;
 import com.pingfit.util.Num;
 import com.pingfit.htmlui.UserSession;
 import com.pingfit.htmlui.Pagez;
-import com.facebook.api.FacebookRestClient;
-import com.facebook.api.FacebookSignatureUtil;
-import com.facebook.api.TemplatizedAction;
+import com.google.code.facebookapi.FacebookXmlRestClient;
+import com.google.code.facebookapi.TemplatizedAction;
 import org.apache.log4j.Logger;
-import org.hibernate.criterion.Restrictions;
-import org.hibernate.criterion.Order;
 import org.w3c.dom.Document;
 import org.jdom.input.DOMBuilder;
 import org.jdom.output.XMLOutputter;
 import org.jdom.Element;
 
 import java.util.*;
-import java.net.URLEncoder;
 import java.net.URL;
 
 /**
@@ -43,7 +36,7 @@ public class FacebookApiWrapper {
         if (userSession.getFacebookSessionKey()!=null && !userSession.getFacebookSessionKey().trim().equals("")){
             facebookSessionKey = userSession.getFacebookSessionKey().trim();
             try{
-                FacebookRestClient facebookRestClient = new FacebookRestClient(SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_KEY), SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_SECRET), facebookSessionKey);
+                FacebookXmlRestClient facebookRestClient = new FacebookXmlRestClient(SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_KEY), SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_SECRET), facebookSessionKey);
                 if (userSession.getUser()!=null && userSession.getUser().getUserid()>0){
                     if (!userSession.getUser().getFacebookuid().equals("")){
                         if (userSession.getUser().getFacebookuid().equals(String.valueOf(facebookRestClient.users_getLoggedInUser()))){
@@ -79,7 +72,7 @@ public class FacebookApiWrapper {
                 action.addTitleParam("earnings", "");
                 action.addTitleParam("forcharity", fbApiClean(""));
 
-                FacebookRestClient facebookRestClient = new FacebookRestClient(SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_KEY), SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_SECRET), facebookSessionKey);
+                FacebookXmlRestClient facebookRestClient = new FacebookXmlRestClient(SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_KEY), SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_SECRET), facebookSessionKey);
                 facebookRestClient.feed_PublishTemplatizedAction(action);
             } catch (Exception ex){logger.error("",ex);}
         } else {logger.debug("Can't execute because issessionok = false");}
@@ -108,8 +101,8 @@ public class FacebookApiWrapper {
 
 
                 CharSequence cs = fbml.subSequence(0, fbml.length());
-                FacebookRestClient facebookRestClient = new FacebookRestClient(SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_KEY), SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_SECRET), facebookSessionKey);
-                boolean success = facebookRestClient.profile_setFBML(cs, Long.parseLong(user.getFacebookuid()));
+                FacebookXmlRestClient facebookRestClient = new FacebookXmlRestClient(SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_KEY), SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_SECRET), facebookSessionKey);
+                boolean success = facebookRestClient.profile_setFBML(cs, user.getFacebookuid());
                 if (success){
                     logger.debug("Apparently the setFBML was successful.");
                 } else {
@@ -140,7 +133,7 @@ public class FacebookApiWrapper {
 
                 logger.debug("making an api call to get friends");
                 //Set up the facebook rest client
-                FacebookRestClient facebookRestClient = new FacebookRestClient(SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_KEY), SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_SECRET), facebookSessionKey);
+                FacebookXmlRestClient facebookRestClient = new FacebookXmlRestClient(SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_KEY), SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_SECRET), facebookSessionKey);
                 //Get a list of uids
                 Document w3cDoc = facebookRestClient.friends_get();
                 DOMBuilder builder = new DOMBuilder();
@@ -174,7 +167,7 @@ public class FacebookApiWrapper {
         if (issessionok){
             try{
                 //Set up the facebook rest client
-                FacebookRestClient facebookRestClient = new FacebookRestClient(SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_KEY), SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_SECRET), facebookSessionKey);
+                FacebookXmlRestClient facebookRestClient = new FacebookXmlRestClient(SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_KEY), SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_SECRET), facebookSessionKey);
                 //Get the list of uids
                 ArrayList<Integer> uids = getFriendUids();
 
@@ -240,7 +233,7 @@ public class FacebookApiWrapper {
 
     public String inviteFriendsTodNeero(ArrayList<Long> uids){
         Logger logger = Logger.getLogger(this.getClass().getName());
-        FacebookRestClient facebookRestClient = new FacebookRestClient(SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_KEY), SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_SECRET), facebookSessionKey);
+        FacebookXmlRestClient facebookRestClient = new FacebookXmlRestClient(SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_KEY), SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_SECRET), facebookSessionKey);
         String type = "dNeero";
         CharSequence typeChars = type.subSequence(0, type.length());
         StringBuffer content = new StringBuffer();
@@ -254,11 +247,12 @@ public class FacebookApiWrapper {
             logger.error("",ex);
         }
         try{
-            URL url = facebookRestClient.notifications_sendRequest(uids, typeChars, contentChars, imgUrl, true);
-            if (url!=null){
-                logger.debug("FacebookAPI returned: " + url.toString());
-                return url.toString();
-            }
+        //@todo update with latest api
+//            URL url = facebookRestClient.notifications_sendRequest(uids, typeChars, contentChars, imgUrl, true);
+//            if (url!=null){
+//                logger.debug("FacebookAPI returned: " + url.toString());
+//                return url.toString();
+//            }
 
         } catch (Exception ex){
             logger.error("",ex);

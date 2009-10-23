@@ -5,9 +5,9 @@ import org.w3c.dom.Document;
 import org.jdom.input.DOMBuilder;
 import org.jdom.output.XMLOutputter;
 import org.jdom.Element;
-import com.facebook.api.FacebookRestClient;
 import com.pingfit.systemprops.SystemProperty;
 import com.pingfit.systemprops.BaseUrl;
+import com.google.code.facebookapi.FacebookXmlRestClient;
 
 import java.io.Serializable;
 
@@ -37,7 +37,7 @@ public class FacebookUser implements Serializable {
     public void refreshFromFacebookApi(int facebookuserid, String facebookSessionKey){
         Logger logger = Logger.getLogger(this.getClass().getName());
         try{
-            FacebookRestClient facebookRestClient = new FacebookRestClient(SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_KEY), SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_SECRET), facebookSessionKey);
+            FacebookXmlRestClient facebookRestClient = new FacebookXmlRestClient(SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_KEY), SystemProperty.getProp(SystemProperty.PROP_FACEBOOK_API_SECRET), facebookSessionKey);
             String fql = "SELECT "+sqlListOfCols+" FROM user WHERE uid="+facebookuserid;
             Document w3cDoc = facebookRestClient.fql_query(fql.subSequence(0,fql.length()));
             DOMBuilder builder = new DOMBuilder();
