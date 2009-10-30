@@ -9,6 +9,7 @@ import org.jdom.input.SAXBuilder;
 import javax.servlet.http.Cookie;
 import java.util.*;
 import java.io.ByteArrayOutputStream;
+import java.net.URLEncoder;
 
 import sun.reflect.Reflection;
 
@@ -229,6 +230,16 @@ public class Util {
             logger.error("", ex);
         }
         return null;
+    }
+
+    public static String urlEncodeNameAndValue(String name, String value){
+        Logger logger = Logger.getLogger(Util.class);
+        try{
+            return URLEncoder.encode(name, "UTF-8")+"="+URLEncoder.encode(value, "UTF-8");
+        }catch(Exception ex){
+            logger.error("", ex);
+            return name+"="+value;
+        }
     }
 
 }
