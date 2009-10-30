@@ -320,6 +320,9 @@ public class CoreMethodsReturningXML {
     public static Element getUser(int userid) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         try{
+            if (userid<=0){
+                return XMLConverters.resultXml(false, "User unknown.", "");
+            }
             return XMLConverters.userAsXML(User.get(userid));
         } catch (Exception ex) {
             logger.error("", ex);

@@ -109,9 +109,12 @@ public class XMLConverters {
         element.addContent(nameValueElement("exerciselistid", String.valueOf(user.getExerciselistid())));
         element.addContent(nameValueElement("exercisechooserid", String.valueOf(user.getExercisechooserid())));
         element.addContent(nameValueElement("exerciseeveryxminutes", String.valueOf(user.getExerciseeveryxminutes())));
-        element.addContent(nameValueElement("createdate", String.valueOf(Time.dateformatUtc(Time.getCalFromDate(user.getCreatedate())))));
+        String createdate = "";
+        try{createdate=String.valueOf(Time.dateformatUtc(Time.getCalFromDate(user.getCreatedate())));}catch(Exception ex){logger.error("");}
+        element.addContent(nameValueElement("createdate", createdate));
         element.addContent(nameValueElement("plid", String.valueOf(user.getPlid())));
         element.addContent(nameValueElement("roomid", String.valueOf(user.getRoomid())));
+        element.addContent(nameValueElement("facebookuid", String.valueOf(user.getFacebookuid())));
         element.addContent(CoreMethodsReturningXML.isUserEulaUpToDate(user));
         element.addContent(CoreMethodsReturningXML.getRecentExercises(user, user.getUserid(), 20));
         try{
