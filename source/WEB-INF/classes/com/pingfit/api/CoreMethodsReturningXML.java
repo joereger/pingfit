@@ -471,6 +471,19 @@ public class CoreMethodsReturningXML {
         }
     }
 
+    public static Element addFriendsByFacebookuid(User user, String commasepfacebookuids){
+        Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
+        try{
+            CoreMethods.addFriendsByFacebookuid(user, commasepfacebookuids);
+            return XMLConverters.resultXml(true, "", "");
+        } catch (GeneralException gex) {
+            return XMLConverters.resultXml(false, gex.getErrorsAsSingleStringNoHtml(), "");
+        } catch (Exception ex) {
+            logger.error("", ex);
+            return XMLConverters.resultXml(false, "Sorry, an unknown error occurred.", "");
+        }
+    }
+
     public static Element breakFriendship(User user, int useridoffriend){
         Logger logger = Logger.getLogger(CoreMethodsReturningXML.class);
         try{

@@ -115,6 +115,7 @@ public class XMLConverters {
         element.addContent(nameValueElement("plid", String.valueOf(user.getPlid())));
         element.addContent(nameValueElement("roomid", String.valueOf(user.getRoomid())));
         element.addContent(nameValueElement("facebookuid", String.valueOf(user.getFacebookuid())));
+        element.addContent(nameValueElement("profileimageurl", ""));
         element.addContent(CoreMethodsReturningXML.isUserEulaUpToDate(user));
         element.addContent(CoreMethodsReturningXML.getRecentExercises(user, user.getUserid(), 20));
         try{

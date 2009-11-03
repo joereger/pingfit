@@ -93,7 +93,9 @@
     </tr>
     <tr>
         <td valign="top" colspan="2">
-        <font style="font-size: 20px;">pingFit is a social fitness application.  Every 20 minutes we'll ask you to do a simple exercise.  You'll do it and then go back to your day.  Over the course of the day you'll get a high quality workout.<br/><br/>Simple.  Give it a go.</font>
+        <font style="font-size: 20px;">pingFit is a social fitness application.  Every 20 minutes we'll ask you to do a simple exercise.  You'll do it and then go back to your day.  Over the course of the day you'll get a high quality workout.<br/><br/>Simple.  Give it a go.  Click Install Now.</font>
+        <br/><br/>
+        <font style="font-size: 15px;">Or, visit the <a href="http://www.facebook.com/apps/application.php?id=160194959586">Fan Page</a>.</font>
         </td>
     </tr>
 </table>

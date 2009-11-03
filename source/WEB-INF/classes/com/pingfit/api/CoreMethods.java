@@ -779,6 +779,54 @@ public class CoreMethods {
         }
     }
 
+
+    public static void addFriendsByFacebookuid(User user, String commasepfacebookuids) throws GeneralException {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        if (commasepfacebookuids==null){return;}
+        try{
+            ArrayList<String> facebookuids = new ArrayList<String>();
+            String[] split = commasepfacebookuids.split(",");
+            if (split.length>0){
+                for (int i=0; i<split.length; i++) {
+                    String s=split[i];
+                    facebookuids.add(s);
+                }
+                addFriendsByFacebookuid(user, facebookuids);
+            }
+            return;
+        } catch (Exception ex) {
+            logger.error("", ex);
+            throw new GeneralException("Error... sorry... please try again.");
+        }
+    }
+
+
+    public static void addFriendsByFacebookuid(User user, List<String> facebookuids) throws GeneralException {
+        Logger logger = Logger.getLogger(CoreMethods.class);
+        logger.debug("addFriendsByFacebookuid() facebookuids="+facebookuids);
+        try{
+            List<User> fbUsers = HibernateUtil.getSession().createCriteria(User.class)
+                                               .add(Restrictions.in("facebookuid", facebookuids))
+                                               .add(Restrictions.eq("isenabled", true))
+                                               .setCacheable(true)
+                                               .list();
+            for (Iterator<User> userIterator=fbUsers.iterator(); userIterator.hasNext();) {
+                User fbUser = userIterator.next();
+                //If they're not already friends
+                if (!areFriends(user.getUserid(), fbUser.getUserid())){
+                    logger.debug("adding friend "+fbUser.getNickname()+" for "+user.getNickname());
+                    addFriend(user, fbUser.getUserid());
+                }
+            }
+            return;
+        } catch (Exception ex) {
+            logger.error("", ex);
+            throw new GeneralException("Error... sorry... please try again.");
+        }
+    }
+
+
+
     public static void breakFriendship(User user, int useridoffriend) throws GeneralException {
         Logger logger = Logger.getLogger(CoreMethods.class);
         if (!isUserOk(user)){

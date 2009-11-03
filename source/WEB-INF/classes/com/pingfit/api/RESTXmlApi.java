@@ -265,6 +265,8 @@ public class RESTXmlApi extends HttpServlet {
                                 useridoffriend = Integer.parseInt(request.getParameter("useridoffriend"));
                             }
                             element = CoreMethodsReturningXML.addFriend(user, useridoffriend);
+                        } else if (method.equalsIgnoreCase("addFriendsByFacebookuid")){
+                            element = CoreMethodsReturningXML.addFriendsByFacebookuid(user, request.getParameter("facebookuids"));
                         } else if (method.equalsIgnoreCase("breakFriendship")){
                             int useridoffriend = 0;
                             if (Num.isinteger(request.getParameter("useridoffriend"))){
