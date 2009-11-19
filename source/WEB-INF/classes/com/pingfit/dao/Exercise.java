@@ -23,6 +23,7 @@ public class Exercise extends BasePersistentClass implements java.io.Serializabl
      private int useridofcreator;
      private boolean ispublic;
      private String imagecredit;
+     private String imagecrediturl;
      private Set<Exercisemusclegroup> exercisemusclegroups = new HashSet<Exercisemusclegroup>();
      private Set<Exerciseequipment> exerciseequipments = new HashSet<Exerciseequipment>();
      private Set<Exercisegenre> exercisegenres = new HashSet<Exercisegenre>();
@@ -158,5 +159,13 @@ public class Exercise extends BasePersistentClass implements java.io.Serializabl
 
     public void setExercisegenres(Set<Exercisegenre> exercisegenres) {
         this.exercisegenres=exercisegenres;
+    }
+
+    public String getImagecrediturl() {
+        return imagecrediturl;
+    }
+
+    public void setImagecrediturl(String imagecrediturl) {
+        this.imagecrediturl=imagecrediturl;
     }
 }

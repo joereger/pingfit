@@ -30,6 +30,7 @@ String acl = "sysadmin";
     exercise.setIssystem(true);
     exercise.setIspublic(true);
     exercise.setImagecredit("");
+    exercise.setImagecrediturl("");
     exercise.setUseridofcreator(Pagez.getUserSession().getUser().getUserid());
     if (request.getParameter("exerciseid") != null && !request.getParameter("exerciseid").equals("0") && Num.isinteger(request.getParameter("exerciseid"))) {
         exercise = Exercise.get(Integer.parseInt(request.getParameter("exerciseid")));
@@ -49,6 +50,7 @@ String acl = "sysadmin";
             exercise.setTitle(Textbox.getValueFromRequest("title", "Title", true, DatatypeString.DATATYPEID));
             exercise.setImage(Textbox.getValueFromRequest("image", "Image", false, DatatypeString.DATATYPEID));
             exercise.setImagecredit(Textbox.getValueFromRequest("imagecredit", "Image Credit", false, DatatypeString.DATATYPEID));
+            exercise.setImagecrediturl(Textbox.getValueFromRequest("imagecrediturl", "Image Credit URL", false, DatatypeString.DATATYPEID));
             exercise.setReps(Textbox.getIntFromRequest("reps", "Reps", true, DatatypeInteger.DATATYPEID));
             exercise.setDescription(Textarea.getValueFromRequest("description", "Description", true));
             exercise.getExercisemusclegroups().removeAll(exercise.getExercisemusclegroups());
@@ -186,6 +188,15 @@ String acl = "sysadmin";
                     </td>
                     <td valign="top">
                         <%=Textbox.getHtml("imagecredit", exercise.getImagecredit(), 255, 50, "", "")%>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td valign="top">
+                        <font class="formfieldnamefont">Image/Animation Credit URL</font>
+                    </td>
+                    <td valign="top">
+                        <%=Textbox.getHtml("imagecrediturl", exercise.getImagecrediturl(), 255, 50, "", "")%>
                     </td>
                 </tr>
 

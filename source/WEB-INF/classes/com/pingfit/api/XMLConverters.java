@@ -81,6 +81,7 @@ public class XMLConverters {
         String imageUrl = "http://"+ SystemProperty.getProp(SystemProperty.PROP_BASEURL) + "/images/exercises/" + exercise.getImage();
         element.addContent(nameValueElement("image", imageUrl));
         element.addContent(nameValueElement("imagecredit", String.valueOf(exercise.getImagecredit())));
+        element.addContent(nameValueElement("imagecrediturl", String.valueOf(exercise.getImagecrediturl())));
         element.addContent(nameValueElement("reps", String.valueOf(exercise.getReps())));
         element.addContent(nameValueElement("ispublic", String.valueOf(exercise.getIspublic())));
         element.addContent(nameValueElement("issystem", String.valueOf(exercise.getIssystem())));
@@ -138,6 +139,7 @@ public class XMLConverters {
             String imageUrl = "http://"+ SystemProperty.getProp(SystemProperty.PROP_BASEURL) + "/images/exercises/" + exExt.getExercise().getImage();
             element.addContent(nameValueElement("image", imageUrl));
             element.addContent(nameValueElement("imagecredit", String.valueOf(exExt.getExercise().getImagecredit())));
+            element.addContent(nameValueElement("imagecrediturl", String.valueOf(exExt.getExercise().getImagecrediturl())));
             element.addContent(nameValueElement("reps", String.valueOf(exExt.getReps())));
             element.addContent(nameValueElement("ispublic", String.valueOf(exExt.getExercise().getIspublic())));
             element.addContent(nameValueElement("issystem", String.valueOf(exExt.getExercise().getIssystem())));

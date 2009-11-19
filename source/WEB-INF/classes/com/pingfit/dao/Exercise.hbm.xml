@@ -56,5 +56,8 @@
         <property name="imagecredit" type="text">
             <column name="imagecredit" not-null="true" />
         </property>
+        <property name="imagecrediturl" type="text">
+            <column name="imagecrediturl" not-null="true" />
+        </property>
     </class>
 </hibernate-mapping>
