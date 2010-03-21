@@ -15,7 +15,7 @@
 <%@ page import="com.pingfit.dao.Exercisemusclegroup" %>
 <%@ page import="com.pingfit.dao.Exerciseequipment" %>
 <%@ page import="com.pingfit.exerciseattributes.*" %>
-<%@ page import="com.pingfit.dao.Exercisegenre" %>
+<%@ page import="com.pingfit.dao.*" %>
 <%
 Logger logger = Logger.getLogger(this.getClass().getName());
 String pagetitle = "Exercise";
@@ -43,6 +43,27 @@ String acl = "sysadmin";
     List<Equipment> equipmentObjs= ExercisePropertyValues.getEquipments();
     ArrayList<String> genres = ExercisePropertyValues.getGenresAsStrings();
     List<Genre> genreObjs = ExercisePropertyValues.getGenres();
+%>
+<%
+    ArrayList<String> selectedexerciselists = new ArrayList<String>();
+    ArrayList<String> allsystemlists = new ArrayList<String>();
+    List<Exerciselist> exerciselistsObjs = new ArrayList<Exerciselist>();
+    List<Exerciselist> systemlists = HibernateUtil.getSession().createCriteria(Exerciselist.class)
+                                       .add(Restrictions.eq("issystem", true))
+                                       .setCacheable(true)
+                                       .list();
+    for (Iterator<Exerciselist> exerciselistIterator=systemlists.iterator(); exerciselistIterator.hasNext();) {
+        Exerciselist exerciselist=exerciselistIterator.next();
+        allsystemlists.add(exerciselist.getTitle());
+        exerciselistsObjs.add(exerciselist);
+        //Figure out whether or not this exercise is in this list
+        for (Iterator<Exerciselistitem> objIt=exerciselist.getExerciselistitems().iterator(); objIt.hasNext();) {
+            Exerciselistitem exerciselistitem=objIt.next();
+            if (exerciselistitem.getExerciseid()==exercise.getExerciseid()){
+                selectedexerciselists.add(exerciselist.getTitle());
+            }
+        }
+    }
 %>
 <%
     if (request.getParameter("action") != null && request.getParameter("action").equals("save")) {
@@ -105,8 +126,22 @@ String acl = "sysadmin";
                     }
                 }
             }
+            if (1==1){
+                ArrayList<String> chosenexerciselists = Checkboxes.getValueFromRequest("exerciselists", "Exercise Lists", false);
+                for (Iterator<String> stringIterator=chosenexerciselists.iterator(); stringIterator.hasNext();) {
+                    String s=stringIterator.next();
+                    for (Iterator<Exerciselist> objIt=exerciselistsObjs.iterator(); objIt.hasNext();) {
+                        Exerciselist exerciselist=objIt.next();
+                        if (exerciselist.getTitle().equals(s)){
+                            //Make sure it's in the list'
+                        }
+                    }
+                }
+            }
 
             exercise.save();
+
+
 
             Pagez.getUserSession().setMessage("Exercise saved.");
             //Pagez.sendRedirect("/sysadmin/exerciselist.jsp");
@@ -179,6 +214,7 @@ String acl = "sysadmin";
                     </td>
                     <td valign="top">
                         <%=Textbox.getHtml("image", exercise.getImage(), 255, 50, "", "")%>
+                        <br/><font class="tinyfont">Ex: http://foo.com/dir/imagename.gif (not having http: in this field will make the server append /images/exercises/ to url)</font>
                     </td>
                 </tr>
 
@@ -225,7 +261,16 @@ String acl = "sysadmin";
                     </td>
                 </tr>
 
-
+               <tr>
+                    <td valign="top">
+                        <font class="formfieldnamefont">Exercise Lists</font>
+                        <br/>
+                        <font class="formfieldnamefont">(Not Editable)</font>
+                    </td>
+                    <td valign="top">
+                        <%=Checkboxes.getHtml("exerciselists", selectedexerciselists, allsystemlists, "", "")%>
+                    </td>
+                </tr>
 
                 <tr>
                     <td valign="top">

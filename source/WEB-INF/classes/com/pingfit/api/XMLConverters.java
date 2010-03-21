@@ -131,12 +131,19 @@ public class XMLConverters {
    
 
     public static Element exerciseAsXML(ExerciseExtended exExt) {
+        Logger logger = Logger.getLogger(XMLConverters.class);
         Element element = new Element("exercise");
         if (exExt!=null && exExt.getExercise()!=null){
             element.addContent(nameValueElement("exerciseid", String.valueOf(exExt.getExercise().getExerciseid())));
             element.addContent(nameValueElement("title", String.valueOf(exExt.getExercise().getTitle())));
             element.addContent(nameValueElement("description", String.valueOf(exExt.getExercise().getDescription())));
             String imageUrl = "http://"+ SystemProperty.getProp(SystemProperty.PROP_BASEURL) + "/images/exercises/" + exExt.getExercise().getImage();
+            if (exExt.getExercise().getImage()!=null && !exExt.getExercise().getImage().equals("")){
+                if (exExt.getExercise().getImage().indexOf("http:")>-1){
+                    logger.debug("found http: in exExt.getExercise().getImage() so imageUrl will be '"+exExt.getExercise().getImage()+"'");
+                    imageUrl = exExt.getExercise().getImage();
+                }
+            }
             element.addContent(nameValueElement("image", imageUrl));
             element.addContent(nameValueElement("imagecredit", String.valueOf(exExt.getExercise().getImagecredit())));
             element.addContent(nameValueElement("imagecrediturl", String.valueOf(exExt.getExercise().getImagecrediturl())));

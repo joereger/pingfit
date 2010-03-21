@@ -1,27 +1,26 @@
 package com.pingfit.htmlui;
 
+import com.pingfit.cache.providers.CacheFactory;
+import com.pingfit.dao.Pl;
+import com.pingfit.dao.User;
+import com.pingfit.eula.EulaHelper;
+import com.pingfit.facebook.FacebookAuthorizationJsp;
+import com.pingfit.privatelabel.PlFinder;
+import com.pingfit.session.PersistentLogin;
+import com.pingfit.session.UrlSplitter;
+import com.pingfit.systemprops.BaseUrl;
+import com.pingfit.systemprops.SystemProperty;
+import com.pingfit.util.Time;
+import com.pingfit.xmpp.SendXMPPMessage;
 import org.apache.log4j.Logger;
 
 import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Calendar;
-
-import com.pingfit.cache.providers.CacheFactory;
-import com.pingfit.session.UrlSplitter;
-import com.pingfit.session.PersistentLogin;
-import com.pingfit.dao.User;
-import com.pingfit.dao.Pl;
-import com.pingfit.util.Time;
-import com.pingfit.systemprops.SystemProperty;
-import com.pingfit.systemprops.BaseUrl;
-import com.pingfit.facebook.FacebookAuthorizationJsp;
-import com.pingfit.eula.EulaHelper;
-import com.pingfit.xmpp.SendXMPPMessage;
-import com.pingfit.privatelabel.PlFinder;
 
 
 /**
@@ -61,6 +60,9 @@ public class FilterMain implements Filter {
 //                logger.debug("---------------------------START REQUEST: "+httpServletRequest.getRequestURL());
 //                logger.debug("httpServletRequest.getSession().getId()="+httpServletRequest.getSession().getId());
 
+                //Find the PL
+                Pl pl = PlFinder.find(httpServletRequest);
+
                 //Find the userSession
                 Object obj = CacheFactory.getCacheProvider().get(httpServletRequest.getSession().getId(), "userSession");
                 if (obj!=null && (obj instanceof UserSession)){
@@ -69,9 +71,14 @@ public class FilterMain implements Filter {
                 } else {
                     logger.debug("no userSession in cache");
                     UserSession userSession = new UserSession();
+                    userSession.setPl(pl);                    
                     Pagez.setUserSessionAndUpdateCache(userSession);
+                    //Make sure the pl is set properly before AssignAdNetwork
+                    Pagez.getUserSession().setPl(pl); 
                 }
 
+                //Set Private Label (Pl)
+                Pagez.getUserSession().setPl(pl);
 
                 //Production redirect to www.pingfit.com for https
                 //@todo make this configurable... i.e. no hard-coded urls
@@ -98,7 +105,6 @@ public class FilterMain implements Filter {
                 }
 
                 //Set Private Label (Pl)
-                Pl pl = PlFinder.find(httpServletRequest);
                 Pagez.getUserSession().setPl(pl);
 
                 //Facebook start
@@ -135,6 +141,7 @@ public class FilterMain implements Filter {
                                             newUserSession.setUser(user);
                                             newUserSession.setIsloggedin(true);
                                             newUserSession.setIsLoggedInToBeta(true);
+                                            newUserSession.setPl(pl);
                                             //Check the eula
                                             if (!EulaHelper.isUserUsingMostRecentEula(user)){
                                                 newUserSession.setIseulaok(false);
