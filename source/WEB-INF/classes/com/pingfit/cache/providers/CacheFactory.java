@@ -1,5 +1,6 @@
 package com.pingfit.cache.providers;
 
+import com.pingfit.cache.providers.ehcache.EhcacheProvider;
 import com.pingfit.cache.providers.jboss.JbossTreeCacheAOPProvider;
 import com.pingfit.cache.providers.oscache.OsCacheProvider;
 import com.pingfit.cache.providers.oscache.OsCacheClusteredProvider;
@@ -10,12 +11,13 @@ import com.pingfit.cache.providers.oscache.OsCacheClusteredProvider;
 public class CacheFactory {
 
     public static CacheProvider getCacheProvider(){
-        //return getCacheProvider("OsCacheProvider");
-        return getCacheProvider("JbossTreeCacheAOPProvider");
+        return getCacheProvider("EhcacheProvider");
     }
 
     public static CacheProvider getCacheProvider(String providername){
-        if (providername.equals("JbossTreeCacheAOPProvider")){
+        if (providername.equals("EhcacheProvider")){
+            return new EhcacheProvider();
+        } else if (providername.equals("JbossTreeCacheAOPProvider")){
             return new JbossTreeCacheAOPProvider();
         } else if (providername.equals("OsCacheProvider")){
             return new OsCacheProvider();

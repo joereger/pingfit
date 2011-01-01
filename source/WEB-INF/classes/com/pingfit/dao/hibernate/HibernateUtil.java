@@ -49,7 +49,11 @@ public class HibernateUtil {
 
                     //Misc
                     //conf.setProperty("hibernate.current_session_context_class", "thread");
-                    conf.setProperty("hibernate.show_sql", "true");
+                    if (InstanceProperties.getHibernateshowsql()){
+                        conf.setProperty("hibernate.show_sql", "true");
+                    } else {
+                        conf.setProperty("hibernate.show_sql", "false");
+                    }
                     conf.setProperty("hibernate.generate_statistics", "true");                    
 
                     //Connection pool
@@ -61,16 +65,22 @@ public class HibernateUtil {
 
                     //Second level cache
                     conf.setProperty("hibernate.cache.use_second_level_cache", "true");
-                    //@If on jboss use cache.provider_class=org.jboss.ejb3.entity.TreeCacheProviderHook - see http://docs.jboss.com/jbossas/guides/clusteringguide/r2/en/html_single/#clustering-intro 1.4.2.2
-                    //conf.setProperty("hibernate.cache.provider_class", "org.hibernate.cache.OSCacheProvider");
-                    conf.setProperty("hibernate.cache.provider_class", "org.hibernate.cache.TreeCacheProvider");
-                    //conf.setProperty("hibernate.cache.provider_class", "org.jboss.ejb3.entity.TreeCacheProviderHook");
-                    conf.setProperty("hibernate.cache.use_structured_entries", "true");
                     conf.setProperty("hibernate.cache.use_query_cache", "true");
-                    conf.setProperty("hibernate.cache.usage", "transactional");
+                    conf.setProperty("hibernate.cache.region.factory_class", "net.sf.ehcache.hibernate.EhCacheRegionFactory");
+                    String ehcacheHibernateConfigFile = "/ehcache-hibernate.xml";
+                    String ehcacheHibernateConfigFilePlusPath = WebAppRootDir.getWebAppRootPath() + "WEB-INF/classes"+ehcacheHibernateConfigFile;
+                    TerracottaServerConfigFileUpdate.updateFile(ehcacheHibernateConfigFilePlusPath);
+                    //String previousValue = System.setProperty("tcserver01", "localhost"); //set host to ${tcserver01} to have it replaced with this value
+                    conf.setProperty("net.sf.ehcache.configurationResourceName", ehcacheHibernateConfigFile);
 
-                    //Session context mgr
-                    //conf.setProperty("hibernate.current_session_context_class", "thread");
+
+                    //Second level cache
+                    //conf.setProperty("hibernate.cache.use_second_level_cache", "true");
+                    //conf.setProperty("hibernate.cache.provider_class", "org.hibernate.cache.TreeCacheProvider");
+                    //conf.setProperty("hibernate.cache.use_structured_entries", "true");
+                    //conf.setProperty("hibernate.cache.use_query_cache", "true");
+                    //conf.setProperty("hibernate.cache.usage", "transactional");
+
 
                     //Update the schema in the database
                     try{

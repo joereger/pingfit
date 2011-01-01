@@ -4,7 +4,7 @@
 <!-- Generated Apr 17, 2006 3:45:28 PM by Hibernate Tools 3.1.0.beta4 -->
 <hibernate-mapping>
     <class name="com.pingfit.dao.Invitebyemail" table="invitebyemail">
-        <cache usage="transactional"/>
+        <cache usage="read-write"/>
         <id name="invitebyemailid" type="int">
             <column name="invitebyemailid" />
             <generator class="native" />
