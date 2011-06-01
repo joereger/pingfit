@@ -4,7 +4,7 @@
 <!-- Generated Apr 17, 2006 3:45:28 PM by Hibernate Tools 3.1.0.beta4 -->
 <hibernate-mapping>
     <class name="com.pingfit.dao.Betainvite" table="betainvite">
-        <cache usage="read-write"/>
+        <cache usage="transactional"/>
         <id name="betainviteid" type="int">
             <column name="betainviteid" />
             <generator class="native" />

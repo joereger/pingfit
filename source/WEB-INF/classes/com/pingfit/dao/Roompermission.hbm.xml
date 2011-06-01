@@ -4,7 +4,7 @@
 <!-- Generated Apr 17, 2006 3:45:28 PM by Hibernate Tools 3.1.0.beta4 -->
 <hibernate-mapping>
     <class name="com.pingfit.dao.Roompermission" table="roompermission">
-        <cache usage="read-write"/>
+        <cache usage="transactional"/>
         <id name="roompermissionid" type="int">
             <column name="roompermissionid" />
             <generator class="native" />

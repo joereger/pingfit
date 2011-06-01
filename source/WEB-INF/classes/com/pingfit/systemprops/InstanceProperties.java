@@ -34,6 +34,10 @@ public class InstanceProperties {
     private static String terracottahost02;
     private static String terracottahost03;
     private static String hibernateshowsql;
+    private static String infinispanconfigfileobjectcache;
+    private static String infinispanconfigfilehibernate;
+    private static String jgroupstcppinginitialhosts;
+    private static String jgroupstcpport;
 
 
 
@@ -107,6 +111,10 @@ public class InstanceProperties {
             terracottahost02 = properties.getProperty("terracottahost02", "");
             terracottahost03 = properties.getProperty("terracottahost03", "");
             hibernateshowsql = properties.getProperty("hibernateshowsql", "0");
+            infinispanconfigfilehibernate = properties.getProperty("infinispanconfigfilehibernate", "");
+            infinispanconfigfileobjectcache = properties.getProperty("infinispanconfigfileobjectcache", "");
+            jgroupstcppinginitialhosts = properties.getProperty("jgroupstcppinginitialhosts", "localhost[7800]");
+            jgroupstcpport = properties.getProperty("jgroupstcpport", "7800");
 
             haveAttemptedToLoadDefaultPropsFile = true;
             haveNewConfigToTest = true;
@@ -173,6 +181,18 @@ public class InstanceProperties {
             }
             if (hibernateshowsql!=null){
                 properties.setProperty("hibernateshowsql", hibernateshowsql);
+            }
+            if (infinispanconfigfilehibernate!=null){
+                properties.setProperty("infinispanconfigfilehibernate", infinispanconfigfilehibernate);
+            }
+            if (infinispanconfigfileobjectcache!=null){
+                properties.setProperty("infinispanconfigfileobjectcache", infinispanconfigfileobjectcache);
+            }
+            if (jgroupstcppinginitialhosts!=null){
+                properties.setProperty("jgroupstcppinginitialhosts", jgroupstcppinginitialhosts);
+            }
+            if (jgroupstcpport!=null){
+                properties.setProperty("jgroupstcpport", jgroupstcpport);
             }
 
             if (testConfig()){
@@ -437,4 +457,48 @@ public class InstanceProperties {
             InstanceProperties.hibernateshowsql = "0";
         }
     }
+
+
+
+    public static String getInfinispanconfigfilehibernate() {
+        load();
+        return infinispanconfigfilehibernate;
+    }
+
+    public static void setInfinispanconfigfilehibernate(String infinispanconfigfilehibernate) {
+        InstanceProperties.infinispanconfigfilehibernate = infinispanconfigfilehibernate;
+    }
+
+
+
+    public static String getInfinispanconfigfileobjectcache() {
+        load();
+        return infinispanconfigfileobjectcache;
+    }
+
+    public static void setInfinispanconfigfileobjectcache(String infinispanconfigfileobjectcache) {
+        InstanceProperties.infinispanconfigfileobjectcache = infinispanconfigfileobjectcache;
+    }
+
+
+    public static String getJgroupstcppinginitialhosts() {
+        load();
+        return jgroupstcppinginitialhosts;
+    }
+
+    public static void setJgroupstcppinginitialhosts(String jgroupstcppinginitialhosts) {
+        InstanceProperties.jgroupstcppinginitialhosts = jgroupstcppinginitialhosts;
+    }
+
+
+    public static String getJgroupstcpport() {
+        load();
+        return jgroupstcpport;
+    }
+
+    public static void setJgroupstcpport(String jgroupstcpport) {
+        InstanceProperties.jgroupstcpport = jgroupstcpport;
+    }
+
+
 }
